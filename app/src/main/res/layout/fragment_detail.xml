@@ -1,0 +1,97 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0e1147"
+    android:fillViewport="false">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        tools:context="work.technie.popularmovies.DetailActivity.DetailFragment"
+        android:background="#0e1147">
+
+        <ImageView
+            android:layout_width="@dimen/poster_width"
+            android:layout_height="@dimen/poster_height"
+            android:id="@+id/poster"
+            android:foregroundGravity="center_vertical|center_horizontal"
+            android:layout_centerHorizontal="true"
+            />
+        <TextView android:text="title"
+            android:layout_width="wrap_content"
+            android:id="@+id/orgTitle"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/poster"
+            android:layout_centerHorizontal="true"
+            android:textColor="#84FFFF"
+            android:layout_marginTop="30dp"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:textSize="20dp"
+
+            />
+
+        <TextView android:layout_width="wrap_content"
+            android:id="@+id/orgLang"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/orgTitle"
+            android:textColor="#00B8D4"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:layout_marginTop="30dp"
+            android:textSize="10dp"
+            android:text="orgTitle" />
+
+        <TextView android:layout_width="wrap_content"
+            android:id="@+id/relDate"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/orgLang"
+            android:textColor="#00B8D4"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:textSize="10dp"
+            android:text="relDate"
+            />
+
+        <TextView android:layout_width="wrap_content"
+            android:id="@+id/popularity"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relDate"
+            android:textColor="#00B8D4"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:textSize="10dp"
+            android:text="popularity"/>
+
+            <TextView android:layout_width="wrap_content"
+                android:id="@+id/voteAvg"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/popularity"
+                android:textColor="#00B8D4"
+                android:layout_marginTop="25dp"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:textSize="10dp"
+                android:text="VoteAvg"/>
+
+            <TextView android:layout_width="wrap_content"
+                android:id="@+id/overview"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/voteAvg"
+                android:textColor="#00B8D4"
+                android:layout_marginTop="25dp"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:textSize="10dp"
+                android:text="Overview" />
+
+
+
+
+    </RelativeLayout>
+</ScrollView>
