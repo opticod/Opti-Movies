@@ -32,7 +32,7 @@ import java.util.ArrayList;
  */
 public class MainActivityFragment extends Fragment {
     private MovieArrayAdapter movieListAdapter;
-
+    private ArrayList<MovieInfo> movieList;
     public MainActivityFragment(){
 
     }
@@ -48,7 +48,19 @@ public class MainActivityFragment extends Fragment {
         super.onStart();
         updateMovieList();
     }
-
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList("movieList",movieList );
+        super.onSaveInstanceState(outState);
+    }
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        if(savedInstanceState==null||!savedInstanceState.containsKey("movieList")){
+            movieList=new ArrayList<>();
+        }else {
+            movieList=savedInstanceState.getParcelableArrayList("movieList");
+        }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState){
 
@@ -57,7 +69,7 @@ public class MainActivityFragment extends Fragment {
         movieListAdapter =
                 new MovieArrayAdapter(
                         getActivity(), // The current context (this activity)
-                        new ArrayList<MovieInfo>());
+                        movieList);
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -198,7 +210,7 @@ public class MainActivityFragment extends Fragment {
 
                 Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                         .appendQueryParameter(SORT_PARAM, params[0])
-                       .appendQueryParameter(APPID_PARAM, BuildConfig.MOVIE_DB_API_KEY)
+                        .appendQueryParameter(APPID_PARAM, BuildConfig.MOVIE_DB_API_KEY)
                         .build();
 
                 URL url = new URL(builtUri.toString());
