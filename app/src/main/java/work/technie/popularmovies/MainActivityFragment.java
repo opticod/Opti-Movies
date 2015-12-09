@@ -76,7 +76,6 @@ public class MainActivityFragment extends Fragment {
         // Get a reference to the ListView, and attach this adapter to it.
         final GridView gridView = (GridView) rootView.findViewById(R.id.gridview_movie);
         gridView.setAdapter(movieListAdapter);
-        Log.d("MainActivityFrag", "Value: " + gridView.getWidth());
 
         gridView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -85,11 +84,9 @@ public class MainActivityFragment extends Fragment {
                 final int size= gridView.getWidth();
                 int numCol=(int)Math.round((double)size /(double) getResources().getDimensionPixelSize(R.dimen.poster_width));
                 gridView.setNumColumns(numCol);
-                //Log.d("MainActivityFrag", "Value: " +size+" "+numCol+" "+getResources().getDimensionPixelSize(R.dimen.poster_width)+" "+test);
-            }
+                     }
         });
 
-        //gridView.setNumColumns(5);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
