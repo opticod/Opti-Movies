@@ -47,12 +47,15 @@ public class MovieArrayAdapter  extends ArrayAdapter<MovieInfo> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_movie, parent, false);
         }
+        ImageView imageView = (ImageView) convertView.findViewById(R.id.grid_item_poster);
         Picasso
                 .with(context)
                 .load(url)
                 .error(R.mipmap.ic_launcher)
                 .fit()
-                .into((ImageView) convertView);
+                .into(imageView);
+
+        imageView.setAdjustViewBounds(true);
 
         return convertView;
     }
