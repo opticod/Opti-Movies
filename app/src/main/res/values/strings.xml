@@ -15,5 +15,6 @@
     <string name="pref_sort_popular" translatable="false">popularity.desc</string>
     <string name="pref_sort_rated" translatable="false">vote_average.desc</string>
     <string name="action_share" translatable="false">Share</string>
+    <string name="loadingMSG">loading</string>
 
 </resources>
