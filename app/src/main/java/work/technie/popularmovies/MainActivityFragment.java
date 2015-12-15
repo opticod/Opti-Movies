@@ -12,8 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,8 +33,14 @@ import java.util.ArrayList;
  * Created by anupam on 4/12/15.
  */
 public class MainActivityFragment extends Fragment {
+
     private MovieArrayAdapter movieListAdapter;
     private ArrayList<MovieInfo> movieList;
+    private static final int MAX_PAGE=100;
+    private int PAGE_LOADED=0;
+    private boolean isLoading=false;
+    private TextView loading;
+
     public MainActivityFragment(){
 
     }
@@ -41,16 +49,12 @@ public class MainActivityFragment extends Fragment {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortingOrder = prefs.getString(getString(R.string.pref_sort_key),
                 getString(R.string.pref_sort_default));
-        weatherTask.execute(sortingOrder);
+        weatherTask.execute(sortingOrder, String.valueOf(PAGE_LOADED + 1));
     }
-    @Override
-    public void onStart() {
-        super.onStart();
-        updateMovieList();
-    }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList("movieList",movieList );
+        outState.putParcelableArrayList("movieList", movieList);
         super.onSaveInstanceState(outState);
     }
     public void onCreate(Bundle savedInstanceState){
@@ -76,7 +80,11 @@ public class MainActivityFragment extends Fragment {
         // Get a reference to the ListView, and attach this adapter to it.
         final GridView gridView = (GridView) rootView.findViewById(R.id.gridview_movie);
         gridView.setAdapter(movieListAdapter);
-        Log.d("MainActivityFrag", "Value: " + gridView.getWidth());
+        loading=(TextView)rootView.findViewById(R.id.loading);
+
+        //startLoad();
+
+       // Log.d("MainActivityFrag", "Value: " + gridView.getWidth());
 
         gridView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -118,7 +126,46 @@ public class MainActivityFragment extends Fragment {
             }
         });
 
+        gridView.setOnScrollListener(
+                new AbsListView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+                    }
+
+                    @Override
+                    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                        int lastInScreen = firstVisibleItem + visibleItemCount;
+                        if (lastInScreen == totalItemCount) {
+                            startLoad();
+                        }
+                    }
+                }
+
+        );
+
         return rootView;
+    }
+
+    private void startLoad(){
+        if(isLoading||PAGE_LOADED>=MAX_PAGE){
+            return;
+        }
+        isLoading=true;
+        if (loading!=null){
+            loading.setVisibility(View.VISIBLE);
+        }
+
+        updateMovieList();
+    }
+    private void stopLoad(){
+        if(!isLoading){
+            return;
+        }
+        isLoading=false;
+        if (loading!=null){
+            loading.setVisibility(View.GONE);
+        }
     }
 
     public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieInfo>> {
@@ -207,10 +254,12 @@ public class MainActivityFragment extends Fragment {
                         "http://api.themoviedb.org/3/discover/movie?";
                 final String SORT_PARAM = "sort_by";
                 final String APPID_PARAM = "api_key";
+                final String PAGE_PARAM = "page";
 
                 Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                         .appendQueryParameter(SORT_PARAM, params[0])
                         .appendQueryParameter(APPID_PARAM, BuildConfig.MOVIE_DB_API_KEY)
+                        .appendQueryParameter(PAGE_PARAM,params[1])
                         .build();
 
                 URL url = new URL(builtUri.toString());
@@ -269,15 +318,18 @@ public class MainActivityFragment extends Fragment {
             // This will only happen if there was an error getting or parsing the forecast.
             return null;
         }
-
         @Override
         protected void onPostExecute(ArrayList<MovieInfo> result) {
             if (result != null) {
-                movieListAdapter.clear();
+                //movieListAdapter.clear();
                 for(MovieInfo movieInfo : result) {
                     movieListAdapter.add(movieInfo);
                 }
+                PAGE_LOADED++;
+
+               // Log.v(LOG_TAG,String.valueOf(PAGE_LOADED));
             }
+            stopLoad();
         }
     }
 }
