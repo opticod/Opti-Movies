@@ -40,6 +40,7 @@ public class MainActivityFragment extends Fragment {
     private int PAGE_LOADED=0;
     private boolean isLoading=false;
     private TextView loading;
+    private String lastSortingOrder="initial";
 
     public MainActivityFragment(){
 
@@ -49,9 +50,23 @@ public class MainActivityFragment extends Fragment {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortingOrder = prefs.getString(getString(R.string.pref_sort_key),
                 getString(R.string.pref_sort_default));
+
+        if(!sortingOrder.equals(lastSortingOrder)){
+            PAGE_LOADED=0;
+            lastSortingOrder=sortingOrder;
+        }
         weatherTask.execute(sortingOrder, String.valueOf(PAGE_LOADED + 1));
     }
-
+    @Override
+    public void onStart(){
+        super.onStart();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String sortingOrder = prefs.getString(getString(R.string.pref_sort_key),
+                getString(R.string.pref_sort_default));
+        if(!sortingOrder.equals(lastSortingOrder)){
+            movieListAdapter.clear();
+        }
+    }
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList("movieList", movieList);
@@ -82,16 +97,16 @@ public class MainActivityFragment extends Fragment {
         gridView.setAdapter(movieListAdapter);
         loading=(TextView)rootView.findViewById(R.id.loading);
 
-        //startLoad();
+        startLoad();
 
-       // Log.d("MainActivityFrag", "Value: " + gridView.getWidth());
+        // Log.d("MainActivityFrag", "Value: " + gridView.getWidth());
 
         gridView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
 
-                final int size= gridView.getWidth();
-                int numCol=(int)Math.round((double)size /(double) getResources().getDimensionPixelSize(R.dimen.poster_width));
+                final int size = gridView.getWidth();
+                int numCol = (int) Math.round((double) size / (double) getResources().getDimensionPixelSize(R.dimen.poster_width));
                 gridView.setNumColumns(numCol);
                 //Log.d("MainActivityFrag", "Value: " +size+" "+numCol+" "+getResources().getDimensionPixelSize(R.dimen.poster_width)+" "+test);
             }
@@ -104,13 +119,13 @@ public class MainActivityFragment extends Fragment {
                 MovieInfo movieInfo = (MovieInfo) adapterView.getItemAtPosition(position);
 
                 String MOVIEID = movieInfo.id;
-                String ORGLANG=movieInfo.orgLang;
-                String ORGTITLE=movieInfo.orgTitle;
-                String OVER=movieInfo.overview;
-                String RELDATE=movieInfo.relDate;
-                String POSTURL=movieInfo.postURL;
-                String POPULARITY=movieInfo.popularity;
-                String VOTAVG=movieInfo.votAvg;
+                String ORGLANG = movieInfo.orgLang;
+                String ORGTITLE = movieInfo.orgTitle;
+                String OVER = movieInfo.overview;
+                String RELDATE = movieInfo.relDate;
+                String POSTURL = movieInfo.postURL;
+                String POPULARITY = movieInfo.popularity;
+                String VOTAVG = movieInfo.votAvg;
 
                 Intent intent = new Intent(getActivity(), DetailActivity.class)
                         .putExtra("movieId", MOVIEID)
@@ -120,8 +135,7 @@ public class MainActivityFragment extends Fragment {
                         .putExtra("relDate", RELDATE)
                         .putExtra("postUrl", POSTURL)
                         .putExtra("popularity", POPULARITY)
-                        .putExtra("voteAvg", VOTAVG)
-                        ;
+                        .putExtra("voteAvg", VOTAVG);
                 startActivity(intent);
             }
         });
@@ -137,6 +151,7 @@ public class MainActivityFragment extends Fragment {
                     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                         int lastInScreen = firstVisibleItem + visibleItemCount;
                         if (lastInScreen == totalItemCount) {
+                            //Log.e("time to scroll","scroll");
                             startLoad();
                         }
                     }
@@ -320,14 +335,16 @@ public class MainActivityFragment extends Fragment {
         }
         @Override
         protected void onPostExecute(ArrayList<MovieInfo> result) {
+            //Log.e(LOG_TAG,String.valueOf(PAGE_LOADED)+result.size()+movieListAdapter.getCount());
             if (result != null) {
                 //movieListAdapter.clear();
                 for(MovieInfo movieInfo : result) {
                     movieListAdapter.add(movieInfo);
                 }
+                //Log.e(LOG_TAG,String.valueOf(PAGE_LOADED));
                 PAGE_LOADED++;
 
-               // Log.v(LOG_TAG,String.valueOf(PAGE_LOADED));
+
             }
             stopLoad();
         }
