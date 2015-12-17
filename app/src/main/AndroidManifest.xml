@@ -21,7 +21,7 @@
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="work.technie.popularmovies.MainActivity" />
+                android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".SettingsActivity"
@@ -29,8 +29,10 @@
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="work.technie.popularmovies.MainActivity" />
+                android:value=".MainActivity" />
         </activity>
-
+        <provider
+            android:authorities="work.technie.popularmovies"
+            android:name=".data.MovieProvider"/>
     </application>
 </manifest>
