@@ -35,7 +35,8 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 Movies.POPULARITY + "  TEXT,"+
                 Movies.VOTE_COUNT + "  TEXT,"+
                 Movies.VOTE_AVERAGE + "  TEXT,"+
-                Movies.FAVOURED + " INTEGER NOT NULL DEFAULT 0,"
+                Movies.FAVOURED + " INTEGER NOT NULL DEFAULT 0,"+
+                Movies.SORT_BY+" TEXT,"
                 + "UNIQUE (" + Movies.MOVIE_ID + ") ON CONFLICT REPLACE)";
 
         sqLiteDatabase.execSQL(SQL_CREATE__TABLE);

@@ -31,6 +31,8 @@ public class MovieContract{
         public static final String  VOTE_COUNT= "vote_count";
         public static final String  VOTE_AVERAGE= "vote_average";
         public static final String FAVOURED="favoured";
+        public static final String SORT_BY="sort_by";
+
 
         public static final Uri CONTENT_URI =
                     BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIES).build();
@@ -40,10 +42,17 @@ public class MovieContract{
         public static final String CONTENT_ITEM_TYPE =
                     ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_MOVIES;
 
-        public static Uri buildPopularUri(long id) {
+        public static Uri buildMoviesUri(long id) {
                 return ContentUris.withAppendedId(CONTENT_URI, id);
-
         }
+        //content://work....../movies/MovieId
+        public static Uri buildMoviesUriWithMovieId(String MovieId) {
+            return CONTENT_URI.buildUpon().appendPath(MovieId).build();
+        }
+        public static Uri buildMovieUri() {
+            return CONTENT_URI.buildUpon().build();
+        }
+
         public static String getIDFromUri(Uri uri) {
             return uri.getPathSegments().get(1);
         }

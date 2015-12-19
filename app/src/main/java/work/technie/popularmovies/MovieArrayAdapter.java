@@ -1,53 +1,41 @@
 package work.technie.popularmovies;
 
-import android.app.Activity;
 import android.content.Context;
+import android.database.Cursor;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.CursorAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
 
-
-public class MovieArrayAdapter  extends ArrayAdapter<MovieInfo> {
+public class MovieArrayAdapter  extends CursorAdapter {
     private static final String LOG_TAG = MovieArrayAdapter.class.getSimpleName();
-    private Context context;
-    public MovieArrayAdapter(Activity context, List<MovieInfo> movieInfoList) {
-        // Here, we initialize the ArrayAdapter's internal storage for the context and the list.
-        // the second argument is used when the ArrayAdapter is populating a single TextView.
-        // Because this is a custom adapter for two TextViews and an ImageView, the adapter is not
-        // going to use this second argument, so it can be any value. Here, we used 0.
-        super(context, R.layout.list_item_movie, movieInfoList);
-        this.context=context;
+    private View view;
+
+    public MovieArrayAdapter(Context context, Cursor c, int flags) {
+        super(context, c, flags);
     }
 
-    /**
-     * Provides a view for an AdapterView (ListView, GridView, etc.)
-     *
-     * @param position    The AdapterView position that is requesting a view
-     * @param convertView The recycled view to populate.
-     *                    (search online for "android view recycling" to learn more)
-     * @param parent The parent ViewGroup that is used for inflation.
-     * @return The View for the position in the AdapterView.
-     */
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        // Gets the MovieInfo object from the ArrayAdapter at the appropriate position
-        MovieInfo movieInfo = getItem(position);
-        String url=movieInfo.postURL;
-        // Adapters recycle views to AdapterViews.
-        // If this is a new View object we're getting, then inflate the layout.
-        // If not, this view already has the layout inflated from a previous call to getView,
-        // and we modify the View widgets as usual.
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_movie, parent, false);
-        }
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.grid_item_poster);
+    public View newView(Context context, Cursor cursor, ViewGroup parent) {
+        view = LayoutInflater.from(context).inflate(R.layout.list_item_movie, parent, false);
+        return view;
+    }
+
+    /*
+       This is where we fill-in the views with the contents of the cursor.
+    */
+    @Override
+    public void bindView(View view, Context context, Cursor cursor) {
+        ImageView imageView = (ImageView) view.findViewById(R.id.grid_item_poster);
+        String url=cursor.getString(MainActivityFragment.COL_POSTER_PATH);
+        //Log.e("url" , url);
         Picasso
                 .with(context)
                 .load(url)
@@ -57,6 +45,5 @@ public class MovieArrayAdapter  extends ArrayAdapter<MovieInfo> {
 
         imageView.setAdjustViewBounds(true);
 
-        return convertView;
     }
 }

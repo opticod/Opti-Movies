@@ -100,7 +100,7 @@ public class MovieProvider extends ContentProvider {
             case MOVIE: {
                 long _id = db.insert(MovieContract.Movies.TABLE_NAME, null, values);
                 if ( _id > 0 )
-                    returnUri = MovieContract.Movies.buildPopularUri(_id);
+                    returnUri = MovieContract.Movies.buildMoviesUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
@@ -129,10 +129,6 @@ public class MovieProvider extends ContentProvider {
                 rowsDeleted = db.delete(MovieContract.Movies.TABLE_NAME,
                         MovieContract.Movies.MOVIE_ID + " = ?",
                         new String[]{String.valueOf(ContentUris.parseId(uri))});
-              /*  // reset _ID
-                db.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '" +
-                        MovieContract.Movies.TABLE_NAME + "'");
-*/
                 break;
 
             default:
@@ -198,12 +194,7 @@ public class MovieProvider extends ContentProvider {
             default:
                 return super.bulkInsert(uri, values);
         }
-    }
-
-    // This is a method specifically to assist the testing
-    // framework in running smoothly. You can read more at:
-    // http://developer.android.com/reference/android/content/ContentProvider.html#shutdown()
-    @Override
+    }  @Override
     @TargetApi(11)
     public void shutdown() {
         mOpenHelper.close();
