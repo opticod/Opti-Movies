@@ -4,4 +4,5 @@
     android:layout_height="@dimen/poster_height"
     android:paddingBottom="10dp"
     android:paddingTop="15dp"
-    android:id="@+id/grid_item_poster"/>
+    android:id="@+id/grid_item_poster"
+    android:background="@drawable/touch_selector"/>

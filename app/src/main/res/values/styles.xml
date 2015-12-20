@@ -7,5 +7,24 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    <!-- Main activity theme. -->
+    <style name="MovieTheme" parent="AppTheme">
+        <item name="actionBarStyle">@style/ActionBar.Solid.Movie.NoTitle</item>
+    </style>
 
+    <!-- Settings activity theme. -->
+    <style name="SettingsTheme" parent="AppTheme">
+    </style>
+
+    <!-- main activity action bar styles -->
+    <style name="ActionBar.Solid.Movie.NoTitle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="displayOptions">useLogo|showHome</item>
+        <item name="logo">@mipmap/ic_launcher</item>
+    </style>
+
+    <!-- Style for movie listview -->
+    <style name="MovieGridStyle">
+        <!-- Here it's a stub.  In screens of sufficient width, this style includes modifications
+        for two-pane layout -->
+    </style>
 </resources>

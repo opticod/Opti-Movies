@@ -1,9 +1,7 @@
 package work.technie.popularmovies;
 
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -18,7 +16,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Vector;
 
 import work.technie.popularmovies.data.MovieContract;
@@ -159,7 +156,6 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
 
                 postURL = Uri.parse(POSTER_BASE_URL).buildUpon().
                         appendEncodedPath(movieInfo.getString(POSTERPATH)).build().toString();
-                //Log.d("MainActivity", "Value: " + postURL);
                 popularity = movieInfo.getString(POPULARITY);
                 votAvg = movieInfo.getString(VOTAVG);
                 vote_count=movieInfo.getString(VOTE_COUNT);

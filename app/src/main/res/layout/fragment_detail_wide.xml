@@ -43,7 +43,7 @@
             android:textAllCaps="true"
             android:layout_marginTop="30dp"
             android:textSize="10dp"
-             />
+            />
 
         <TextView android:layout_width="wrap_content"
             android:id="@+id/relDate"
@@ -66,29 +66,29 @@
             android:textStyle="bold"
             android:textAllCaps="true"
             android:textSize="10dp"
-           />
+            />
 
-            <TextView android:layout_width="wrap_content"
-                android:id="@+id/voteAvg"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/popularity"
-                android:textColor="#00B8D4"
-                android:layout_marginTop="25dp"
-                android:textStyle="bold"
-                android:textAllCaps="true"
-                android:textSize="10dp"
-                />
+        <TextView android:layout_width="wrap_content"
+            android:id="@+id/voteAvg"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/popularity"
+            android:textColor="#00B8D4"
+            android:layout_marginTop="25dp"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:textSize="10dp"
+            />
 
-            <TextView android:layout_width="wrap_content"
-                android:id="@+id/overview"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/voteAvg"
-                android:textColor="#00B8D4"
-                android:layout_marginTop="25dp"
-                android:textStyle="bold"
-                android:textAllCaps="true"
-                android:textSize="10dp"
-                />
+        <TextView android:layout_width="wrap_content"
+            android:id="@+id/overview"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/voteAvg"
+            android:textColor="#00B8D4"
+            android:layout_marginTop="25dp"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:textSize="10dp"
+            />
 
 
 

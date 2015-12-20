@@ -31,6 +31,8 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     private MovieArrayAdapter movieListAdapter;
     private int mPosition = ListView.INVALID_POSITION;
+    private static final String SELECTED_KEY = "selected_position";
+    private GridView gridView;
     private ArrayList<MovieInfo> movieList;
     //private static final int MAX_PAGE=100;
     private int PAGE_LOADED=0;
@@ -75,6 +77,17 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     public static int COL_VOTE_AVERAGE=13;
     public static int COL_FAVOURED=14;
 
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     */
+    public interface Callback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         */
+        public void onItemSelected(Uri movieUri);
+    }
 
     public MainActivityFragment(){
 
@@ -94,6 +107,12 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList("movieList", movieList);
+        // When tablets rotate, the currently selected list item needs to be saved.
+        // When no item is selected, mPosition will be set to GridView.INVALID_POSITION,
+        // so check for that before storing.
+        if (mPosition != ListView.INVALID_POSITION) {
+            outState.putInt(SELECTED_KEY, mPosition);
+        }
         super.onSaveInstanceState(outState);
     }
     @Override
@@ -118,7 +137,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // Get a reference to the GridView, and attach this adapter to it.
-        final GridView gridView = (GridView) rootView.findViewById(R.id.gridview_movie);
+        gridView = (GridView) rootView.findViewById(R.id.gridview_movie);
         gridView.setAdapter(movieListAdapter);
         //loading=(TextView)rootView.findViewById(R.id.loading);
 
@@ -143,13 +162,25 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
-                if(cursor!=null){
-                    Intent intent=new Intent(getActivity(),DetailActivity.class)
-                            .setData(MovieContract.Movies.buildMoviesUriWithMovieId(cursor.getString(COL_MOVIE_ID)));
-                    startActivity(intent);
+                if (cursor != null) {
+                    ((Callback) getActivity())
+                            .onItemSelected(MovieContract.Movies.buildMoviesUriWithMovieId(cursor.getString(COL_MOVIE_ID)));
                 }
+                mPosition = position;
             }
         });
+        // If there's instance state, mine it for useful information.
+        // The end-goal here is that the user never knows that turning their device sideways
+        // does crazy lifecycle related things.  It should feel like some stuff stretched out,
+        // or magically appeared to take advantage of room, but data or place in the app was never
+        // actually *lost*.
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
+            // The listview probably hasn't even been populated yet.  Actually perform the
+            // swapout in onLoadFinished.
+            mPosition = savedInstanceState.getInt(SELECTED_KEY);
+        }
+
+
        /*gridView.setOnScrollListener(
                 new AbsListView.OnScrollListener() {
                     @Override
@@ -223,6 +254,11 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
        movieListAdapter.swapCursor(cursor);
+        if (mPosition != ListView.INVALID_POSITION) {
+            // If we don't need to restart the loader, and there's a desired position to restore
+            // to, do so now.
+            gridView.smoothScrollToPosition(mPosition);
+        }
     }
 
     @Override

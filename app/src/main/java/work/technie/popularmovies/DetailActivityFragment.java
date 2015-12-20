@@ -3,13 +3,13 @@ package work.technie.popularmovies;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,7 +24,6 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import work.technie.popularmovies.data.MovieContract;
-import work.technie.popularmovies.utils.Utility;
 
 
 public class DetailActivityFragment extends Fragment implements LoaderCallbacks<Cursor> {
@@ -33,6 +32,8 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     private View rootView;
     private static final String MOVIE_SHARE_HASHTAG = " #PopularMovieApp #ByAnupam ";
     private ShareActionProvider mShareActionProvider;
+    static final String DETAIL_URI = "URI";
+    private Uri mUri;
 
     private static final int DETAIL_LOADER = 0;
     private static final String[] MOVIE_COLUMNS = {
@@ -86,13 +87,17 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mUri = arguments.getParcelable(DetailActivityFragment.DETAIL_URI);
+        }
         rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         return rootView;
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_detail, menu);
+        inflater.inflate(R.menu.menu_detail_frag, menu);
         MenuItem menuItem = menu.findItem(R.id.action_share);
         mShareActionProvider =
                 (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
@@ -118,24 +123,28 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         getLoaderManager().initLoader(DETAIL_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
+    void onSortingChanged() {
+        Uri uri = mUri;
+        if (null != uri) {
+            getLoaderManager().restartLoader(DETAIL_LOADER, null, this);
+        }
+    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.v(LOG_TAG, "In onCreateLoader");
-        Intent intent = getActivity().getIntent();
-        if (intent == null) {
-            return null;
+        if(null!=mUri) {
+            // Now create and return a CursorLoader that will take care of
+            // creating a Cursor for the data being displayed.
+            return new CursorLoader(
+                    getActivity(),
+                    mUri,
+                    MOVIE_COLUMNS,
+                    null,
+                    null,
+                    null
+            );
         }
-        // Now create and return a CursorLoader that will take care of
-        // creating a Cursor for the data being displayed.
-        return new CursorLoader(
-                getActivity(),
-                intent.getData(),
-                MOVIE_COLUMNS,
-                null,
-                null,
-                null
-        );
+        return null;
     }
 
     @Override
