@@ -1,25 +1,23 @@
 package work.technie.popularmovies;
 
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -31,7 +29,6 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     private static final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
     private View rootView;
     private static final String MOVIE_SHARE_HASHTAG = " #PopularMovieApp #ByAnupam ";
-    private ShareActionProvider mShareActionProvider;
     static final String DETAIL_URI = "URI";
     private Uri mUri;
 
@@ -79,10 +76,12 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     String postURL;
     String popularity;
     String votAvg;
+    String favourite;
 
     public DetailActivityFragment() {
         setHasOptionsMenu(true);
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -94,29 +93,6 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         return rootView;
     }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_detail_frag, menu);
-        MenuItem menuItem = menu.findItem(R.id.action_share);
-        mShareActionProvider =
-                (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
-        if (mShareActionProvider != null) {
-            mShareActionProvider.setShareIntent(createShareForecastIntent());
-        } else {
-            Log.d(LOG_TAG, "Share Action Provider is null?");
-        }
-    }
-
-    private Intent createShareForecastIntent() {
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT,
-                "Title: " + orgTitle + ". Release Dt.:  " + relDate + ". Vote Avg.: " + votAvg + " " + MOVIE_SHARE_HASHTAG);
-        return shareIntent;
-    }
-
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -148,7 +124,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(Loader<Cursor> loader, final Cursor data) {
         Log.v(LOG_TAG, "In onLoadFinished");
         if (!data.moveToFirst()) { return; }
 
@@ -183,11 +159,52 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             votAvg = data.getString(COL_VOTE_AVERAGE);
             ((TextView) rootView.findViewById(R.id.voteAvg))
                     .setText("User Rating :     " + votAvg);
+            FloatingActionButton share = (FloatingActionButton) rootView.findViewById(R.id.share);
+            share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_SEND);
+                    intent.putExtra(Intent.EXTRA_TEXT,
+                            "Title: " + orgTitle + ". Release Dt.:  " + relDate + ". Vote Avg.: " + votAvg + " " + MOVIE_SHARE_HASHTAG);
+                    intent.setType("text/plain");
+                    startActivity(Intent.createChooser(intent, getString(R.string.share_links)));
 
-        // If onCreateOptionsMenu has already happened, we need to update the share intent now.
-        if (mShareActionProvider != null) {
-            mShareActionProvider.setShareIntent(createShareForecastIntent());
+                }
+            });
+            favourite=data.getString(COL_FAVOURED);
+        FloatingActionButton fab ;
+        if(favourite.equalsIgnoreCase("1")){
+            rootView.findViewById(R.id.bookmark).setVisibility(View.VISIBLE);
+            fab = (FloatingActionButton) rootView.findViewById(R.id.bookmark);
+        }else {
+            rootView.findViewById(R.id.border_bookmark).setVisibility(View.VISIBLE);
+            fab = (FloatingActionButton) rootView.findViewById(R.id.border_bookmark);
         }
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String movieId=data.getString(COL_MOVIE_ID);
+                ContentValues fav = new ContentValues();
+                if(favourite.equalsIgnoreCase("1")) {
+                    fav.put(MovieContract.Movies.FAVOURED, "0");
+                    Toast.makeText(getContext(), "REMOVED FROM FAVOURITES!", Toast.LENGTH_LONG).show();
+                    rootView.findViewById(R.id.bookmark).setVisibility(View.GONE);
+                    rootView.findViewById(R.id.border_bookmark).setVisibility(View.VISIBLE);
+
+                }else{
+                    fav.put(MovieContract.Movies.FAVOURED, "1");
+                    Toast.makeText(getContext(), "ADDED TO FAVOURITES!", Toast.LENGTH_LONG).show();
+                    rootView.findViewById(R.id.bookmark).setVisibility(View.VISIBLE);
+                    rootView.findViewById(R.id.border_bookmark).setVisibility(View.GONE);
+                }
+                getContext().getContentResolver().update(
+                        MovieContract.Movies.CONTENT_URI.buildUpon().appendPath(movieId).build(),
+                        fav, null, new String[]{movieId});
+
+            }
+        });
+
     }
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {

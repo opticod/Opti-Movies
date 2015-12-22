@@ -16,5 +16,6 @@
     <string name="pref_sort_rated" translatable="false">vote_average.desc</string>
     <string name="action_share" translatable="false">Share</string>
     <string name="loadingMSG">loading</string>
+    <string name="share_links">Sharing Movie Details</string>
 
 </resources>

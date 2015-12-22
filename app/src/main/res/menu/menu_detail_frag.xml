@@ -4,8 +4,4 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="work.technie.popularmovies.DetailActivty">
 
-    <item android:id="@+id/action_share"
-        android:title="@string/action_share"
-        app:showAsAction="always"
-        app:actionProviderClass="android.support.v7.widget.ShareActionProvider" />
 </menu>

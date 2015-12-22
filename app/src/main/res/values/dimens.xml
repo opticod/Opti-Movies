@@ -5,5 +5,6 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="poster_width">185dp</dimen>
     <dimen name="poster_height">278dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
 </resources>

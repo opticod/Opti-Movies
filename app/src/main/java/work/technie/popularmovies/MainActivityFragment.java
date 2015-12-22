@@ -95,7 +95,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     private void updateMovieList() {
         FetchMovieTask weatherTask = new FetchMovieTask(getActivity());
         String sortingOrder = Utility.getPreferredSorting(getActivity());
-        if(!sortingOrder.equals(getResources().getString(R.string.pref_sort_favourite))){/*
+        if(true){/*
             if(!sortingOrder.equals(lastSortingOrder)){
                 PAGE_LOADED=0;
                 lastSortingOrder=sortingOrder;
@@ -242,7 +242,14 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         String sortOrder = MovieContract.Movies._ID + " ASC";
         Uri movie =MovieContract.Movies.buildMovieUri();
         String sorting=Utility.getPreferredSorting(getActivity());
-
+        if(sorting.equalsIgnoreCase(getResources().getString(R.string.pref_sort_favourite))){
+            return new CursorLoader(getActivity(),
+                    movie,
+                    MOVIE_COLUMNS,
+                    MovieContract.Movies.FAVOURED+" = ?",
+                    new String[] {"1"},
+                    sortOrder);
+        }
         return new CursorLoader(getActivity(),
                 movie,
                 MOVIE_COLUMNS,

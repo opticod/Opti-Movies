@@ -1,6 +1,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#0e1147"
     android:fillViewport="false">
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -33,6 +34,39 @@
             android:textSize="20dp"
 
             />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:clickable="true"
+            android:src="@drawable/ic_share_white_24dp"
+            app:backgroundTint="@color/colorPrimary"
+            app:layout_anchorGravity="bottom|right|end" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/border_bookmark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:clickable="true"
+            android:layout_below="@+id/share"
+            app:backgroundTint="@color/colorPrimary"
+            app:layout_anchorGravity="bottom|right|end"
+            android:src="@drawable/ic_star_border_bookmark"
+            android:visibility="gone"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/bookmark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:clickable="true"
+            android:layout_below="@+id/share"
+            app:backgroundTint="@color/colorPrimary"
+            app:layout_anchorGravity="bottom|right|end"
+            android:src="@drawable/ic_star_bookmark"
+            android:visibility="gone"/>
 
         <TextView android:layout_width="wrap_content"
             android:id="@+id/orgLang"
