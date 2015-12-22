@@ -188,13 +188,13 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                 ContentValues fav = new ContentValues();
                 if(favourite.equalsIgnoreCase("1")) {
                     fav.put(MovieContract.Movies.FAVOURED, "0");
-                    Toast.makeText(getContext(), "REMOVED FROM FAVOURITES!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "REMOVED FROM FAVOURITES!", Toast.LENGTH_SHORT).show();
                     rootView.findViewById(R.id.bookmark).setVisibility(View.GONE);
                     rootView.findViewById(R.id.border_bookmark).setVisibility(View.VISIBLE);
 
                 }else{
                     fav.put(MovieContract.Movies.FAVOURED, "1");
-                    Toast.makeText(getContext(), "ADDED TO FAVOURITES!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "ADDED TO FAVOURITES!", Toast.LENGTH_SHORT).show();
                     rootView.findViewById(R.id.bookmark).setVisibility(View.VISIBLE);
                     rootView.findViewById(R.id.border_bookmark).setVisibility(View.GONE);
                 }

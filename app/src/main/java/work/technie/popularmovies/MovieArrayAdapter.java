@@ -11,7 +11,12 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
+
+import work.technie.popularmovies.utils.Utility;
 
 
 public class MovieArrayAdapter  extends CursorAdapter {
@@ -28,21 +33,45 @@ public class MovieArrayAdapter  extends CursorAdapter {
         return view;
     }
 
+
     /*
        This is where we fill-in the views with the contents of the cursor.
     */
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
-        ImageView imageView = (ImageView) view.findViewById(R.id.grid_item_poster);
-        String url=cursor.getString(MainActivityFragment.COL_POSTER_PATH);
-        //Log.e("url" , url);
-        Picasso
-                .with(context)
-                .load(url)
-                .error(R.mipmap.ic_launcher)
-                .fit()
-                .into(imageView);
+    public void bindView(View view, final Context context, Cursor cursor) {
+        final ImageView imageView = (ImageView) view.findViewById(R.id.grid_item_poster);
+        final String url=cursor.getString(MainActivityFragment.COL_POSTER_PATH);
+            Picasso
+                    .with(context)
+                    .load(url)
+                    .networkPolicy(NetworkPolicy.OFFLINE)
+                    .fit()
+                    .into(imageView, new Callback() {
+                        @Override
+                        public void onSuccess() {
 
+                        }
+
+                        @Override
+                        public void onError() {
+                            Picasso
+                                    .with(context)
+                                    .load(url)
+                                    .error(R.mipmap.ic_launcher)
+                                    .fit()
+                                    .into(imageView, new Callback() {
+                                        @Override
+                                        public void onSuccess() {
+
+                                        }
+
+                                        @Override
+                                        public void onError() {
+                                            Log.v("Error Loading Images","'");
+                                        }
+                                    });
+                        }
+                    });
         imageView.setAdjustViewBounds(true);
 
     }
