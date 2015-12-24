@@ -5,6 +5,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import work.technie.popularmovies.data.MovieContract.Movies;
+import work.technie.popularmovies.data.MovieContract.Trailers;
+import work.technie.popularmovies.data.MovieContract.Genres;
+import work.technie.popularmovies.data.MovieContract.Reviews;
+
+
+
 
 
 
@@ -39,13 +45,44 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 Movies.SORT_BY+" TEXT,"
                 + "UNIQUE (" + Movies.MOVIE_ID + ") ON CONFLICT REPLACE)";
 
+        final String SQL_CREATE__TABLE_TRAILERS = "CREATE TABLE " + Trailers.TABLE_NAME + " (" +
+                Trailers._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                Trailers.NAME + "  TEXT,"+
+                Trailers.SIZE + "  TEXT,"+
+                Trailers.SOURCE + "  TEXT,"+
+                Trailers.TYPE + "  TEXT,"+
+                Trailers.MOVIE_ID + "  TEXT )";
+        final String SQL_CREATE__TABLE_REVIEWS = "CREATE TABLE " + Reviews.TABLE_NAME + " (" +
+                Reviews._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                Reviews.PAGE + "  TEXT,"+
+                Reviews.TOTAL_PAGE + "  TEXT,"+
+                Reviews.TOTAL_RESULTS + "  TEXT,"+
+                Reviews.ID_REVIEWS + "  TEXT,"+
+                Reviews.AUTHOR + "  TEXT ,"+
+                Reviews.CONTENT + "  TEXT,"+
+                Reviews.URL + "  TEXT,"+
+                Reviews.MOVIE_ID + "  TEXT )";
+        final String SQL_CREATE__TABLE_GENRES = "CREATE TABLE " + Genres.TABLE_NAME + " (" +
+                Genres._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                Genres.NAME + "  TEXT,"+
+                Genres.ID_GENRES + "  TEXT,"+
+                Genres.MOVIE_ID + "  TEXT )";
+
         sqLiteDatabase.execSQL(SQL_CREATE__TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE__TABLE_TRAILERS);
+        sqLiteDatabase.execSQL(SQL_CREATE__TABLE_REVIEWS);
+        sqLiteDatabase.execSQL(SQL_CREATE__TABLE_GENRES);
+
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
          sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Movies.TABLE_NAME);
-         onCreate(sqLiteDatabase);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Trailers.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Reviews.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Genres.TABLE_NAME);
+
+        onCreate(sqLiteDatabase);
     }
 }
