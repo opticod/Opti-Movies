@@ -124,10 +124,8 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
             JSONObject movieJson = new JSONObject(movieJsonStr);
             JSONArray movieArray = movieJson.getJSONArray(RESULT);
 
-            JSONObject movieJsonPage = new JSONObject(movieJsonStr);
-            String page=movieJsonPage.getString(PAGE);
-            Log.e(LOG_TAG,page);
-            // Insert the new weather information into the database
+            String page=movieJson.getString(PAGE);
+
             Vector<ContentValues> cVVector = new Vector<ContentValues>(movieArray.length());
 
             for (int i = 0; i < movieArray.length(); i++) {

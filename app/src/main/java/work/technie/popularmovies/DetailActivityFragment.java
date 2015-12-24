@@ -51,7 +51,10 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             MovieContract.Movies.VOTE_AVERAGE,
             MovieContract.Movies.FAVOURED
     };
-
+    private void updateMovieList(String MovieId) {
+        FetchTrailReview weatherTask = new FetchTrailReview(getActivity());
+            weatherTask.execute(MovieId);
+    }
     public static int COL_ID = 0;
     public static int COL_PAGE = 1;
     public static int COL_POSTER_PATH = 2;
@@ -77,6 +80,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     String popularity;
     String votAvg;
     String favourite;
+    String movieId;
 
     public DetailActivityFragment() {
         setHasOptionsMenu(true);
@@ -151,6 +155,9 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                     .load(postURL)
                     .fit()
                     .into(poster);
+
+            movieId=data.getString(COL_MOVIE_ID);
+            updateMovieList(movieId);
 
             popularity = data.getString(COL_POPULARITY);
             ((TextView) rootView.findViewById(R.id.popularity))
