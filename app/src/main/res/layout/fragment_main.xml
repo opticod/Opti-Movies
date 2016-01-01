@@ -3,19 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity$MainActivityFragment">
-    <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
+    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/main_swipe_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
     <GridView xmlns:android="http://schemas.android.com/apk/res/android"
         style="@style/MovieGridStyle"
         android:id="@+id/gridview_movie"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:background="#0e1147" />
+        android:background="@color/background_grey2" />
 
     <TextView
         android:id="@+id/loading"
@@ -34,6 +32,6 @@
         android:paddingBottom="@dimen/activity_horizontal_margin"
         android:gravity="center"/>
 
+        </android.support.v4.widget.SwipeRefreshLayout>
 
-</RelativeLayout>
 </FrameLayout>
