@@ -13,9 +13,14 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        Bundle extras = getIntent().getExtras();
+        String movieId=null;
+        if(extras!=null){
+            movieId = extras.getString(Intent.EXTRA_TEXT);
+        }
         if (savedInstanceState == null) {
             Bundle arguments = new Bundle();
-            arguments.putParcelable(DetailActivityFragment.DETAIL_URI, getIntent().getData());
+            arguments.putString(Intent.EXTRA_TEXT, movieId);
 
             DetailActivityFragment fragment = new DetailActivityFragment();
             fragment.setArguments(arguments);

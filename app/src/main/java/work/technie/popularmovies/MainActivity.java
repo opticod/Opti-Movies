@@ -1,16 +1,11 @@
 package work.technie.popularmovies;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.crashlytics.android.Crashlytics;
-import com.facebook.stetho.Stetho;
-
-import io.fabric.sdk.android.Fabric;
 import work.technie.popularmovies.utils.Utility;
 
 public class MainActivity extends AppCompatActivity implements MainActivityFragment.Callback {
@@ -23,7 +18,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
     protected void onCreate(Bundle savedInstanceState) {
         mSorting=Utility.getPreferredSorting(this);
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
         if (findViewById(R.id.movie_detail_container) != null) {
              mTwoPane = true;
@@ -35,13 +29,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         } else {
             mTwoPane = false;
         }
-        Stetho.initialize(
-                Stetho.newInitializerBuilder(this)
-                        .enableDumpapp(
-                                Stetho.defaultDumperPluginsProvider(this))
-                        .enableWebKitInspector(
-                                Stetho.defaultInspectorModulesProvider(this))
-                        .build());
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -78,13 +65,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         }
     }
     @Override
-     public void onItemSelected(Uri contentUri) {
+     public void onItemSelected(String movieId) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle args = new Bundle();
-            args.putParcelable(DetailActivityFragment.DETAIL_URI, contentUri);
+            args.putString(Intent.EXTRA_TEXT, movieId);
 
             DetailActivityFragment fragment = new DetailActivityFragment();
             fragment.setArguments(args);
@@ -94,7 +81,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
                     .commit();
         } else {
             Intent intent = new Intent(this, DetailActivity.class)
-                    .setData(contentUri);
+                    .setType("text/plain")
+                    .putExtra(Intent.EXTRA_TEXT, movieId);
             startActivity(intent);
         }
     }

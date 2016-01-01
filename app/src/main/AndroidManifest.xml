@@ -35,6 +35,5 @@
         <provider
             android:authorities="work.technie.popularmovies"
             android:name=".data.MovieProvider"/>
-
     </application>
 </manifest>

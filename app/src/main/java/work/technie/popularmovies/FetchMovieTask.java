@@ -35,61 +35,6 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
     }
 
     private boolean DEBUG = true;
-
-    /**long addMoviePopular(String page,String poster_path,String adult,String overview,String release_date,
-                  String movie_id,String original_title,String original_language,String title,
-                  String backdrop_path,String popularity,String vote_count,String vote_average) {
-
-        long movieTableID;
-
-        // First, check if the movie with this movie name exists in the db
-        Cursor movieCursor = mContext.getContentResolver().query(
-                MovieContract.Movies.CONTENT_URI,
-                new String[]{MovieContract.Movies._ID},
-                MovieContract.Movies.MOVIE_ID + " = ?",
-                new String[]{movie_id},
-                null);
-
-        if (movieCursor.moveToFirst()) {
-            int IdIndex = movieCursor.getColumnIndex(MovieContract.Movies._ID);
-            movieTableID = movieCursor.getLong(IdIndex);
-        } else {
-            // Now that the content provider is set up, inserting rows of data is pretty simple.
-            // First create a ContentValues object to hold the data you want to insert.
-            ContentValues movieValues = new ContentValues();
-
-            // Then add the data, along with the corresponding name of the data type,
-            // so the content provider knows what kind of value is being inserted.
-            movieValues.put(MovieContract.Movies.PAGE,page );
-            movieValues.put(MovieContract.Movies.POSTER_PATH,poster_path );
-            movieValues.put(MovieContract.Movies.ADULT,adult );
-            movieValues.put(MovieContract.Movies.OVERVIEW,overview );
-            movieValues.put(MovieContract.Movies.RELEASE_DATE,release_date );
-            movieValues.put(MovieContract.Movies.MOVIE_ID,movie_id );
-            movieValues.put(MovieContract.Movies.ORIGINAL_TITLE,original_title );
-            movieValues.put(MovieContract.Movies.ORIGINAL_LANGUAGE,original_language );
-            movieValues.put(MovieContract.Movies.TITLE,title );
-            movieValues.put(MovieContract.Movies.BACKDROP_PATH,backdrop_path );
-            movieValues.put(MovieContract.Movies.POPULARITY,popularity );
-            movieValues.put(MovieContract.Movies.VOTE_COUNT,vote_count );
-            movieValues.put(MovieContract.Movies.VOTE_AVERAGE,vote_average );
-
-
-            // Finally, insert movie data into the database.
-            Uri insertedUri = mContext.getContentResolver().insert(
-                    MovieContract.Movies.CONTENT_URI,
-                    movieValues
-            );
-
-            // The resulting URI contains the ID for the row.  Extract the movieTableId from the Uri.
-            movieTableID = ContentUris.parseId(insertedUri);
-        }
-
-        movieCursor.close();
-        return movieTableID;
-    }
-**/
-
     /**
      * Take the String representing the complete movie list in JSON Format and
      * pull out the data we need to construct the Strings needed for the wireframes.
@@ -118,7 +63,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
 
         final String RESULT="results";
         final String POSTER_BASE_URL="http://image.tmdb.org/t/p/w185";
-        final String BACKDROP_BASE_URL="http://image.tmdb.org/t/p/w342";
+        final String BACKDROP_BASE_URL="http://image.tmdb.org/t/p/w780";
 
         try {
             JSONObject movieJson = new JSONObject(movieJsonStr);

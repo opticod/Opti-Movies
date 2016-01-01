@@ -1,7 +1,6 @@
 package work.technie.popularmovies;
 
-import android.content.ContentUris;
-import android.content.Intent;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,15 +8,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -34,6 +32,8 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     private static final String SELECTED_KEY = "selected_position";
     private GridView gridView;
     private ArrayList<MovieInfo> movieList;
+    private static boolean firstTime=true;
+    private SwipeRefreshLayout swipeRefreshLayout;
     //private static final int MAX_PAGE=100;
     private int PAGE_LOADED=0;
     //private boolean isLoading=false;
@@ -41,6 +41,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     //private String lastSortingOrder="initial";
 
     private static final int MOVIE_LOADER = 0;
+
 
     private static final String[] MOVIE_COLUMNS = {
             
@@ -59,6 +60,24 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             MovieContract.Movies.VOTE_COUNT,
             MovieContract.Movies.VOTE_AVERAGE,
             MovieContract.Movies.FAVOURED
+    };
+    private static final String[] FAVOURITE_MOVIE_COLUMNS = {
+
+            MovieContract.Favourites.TABLE_NAME + "." + MovieContract.Favourites._ID,
+            MovieContract.Favourites.PAGE,
+            MovieContract.Favourites.POSTER_PATH,
+            MovieContract.Favourites.ADULT,
+            MovieContract.Favourites.OVERVIEW,
+            MovieContract.Favourites.RELEASE_DATE,
+            MovieContract.Favourites.MOVIE_ID,
+            MovieContract.Favourites.ORIGINAL_TITLE,
+            MovieContract.Favourites.ORIGINAL_LANGUAGE,
+            MovieContract.Favourites.TITLE,
+            MovieContract.Favourites.BACKDROP_PATH,
+            MovieContract.Favourites.POPULARITY,
+            MovieContract.Favourites.VOTE_COUNT,
+            MovieContract.Favourites.VOTE_AVERAGE,
+            MovieContract.Favourites.FAVOURED
     };
 
     public static int COL_ID=0;
@@ -85,8 +104,9 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     public interface Callback {
         /**
          * DetailFragmentCallback for when an item has been selected.
+         * @param movieUri
          */
-        public void onItemSelected(Uri movieUri);
+        void onItemSelected(String movieUri);
     }
 
     public MainActivityFragment(){
@@ -95,12 +115,16 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     private void updateMovieList() {
         FetchMovieTask weatherTask = new FetchMovieTask(getActivity());
         String sortingOrder = Utility.getPreferredSorting(getActivity());
-        if(true){/*
+        if (!sortingOrder.equalsIgnoreCase(getResources().getString(R.string.pref_sort_favourite))) {
+            {/*
             if(!sortingOrder.equals(lastSortingOrder)){
                 PAGE_LOADED=0;
                 lastSortingOrder=sortingOrder;
             }*/
-            weatherTask.execute(sortingOrder, String.valueOf(PAGE_LOADED + 1));
+                weatherTask.execute(sortingOrder, String.valueOf(PAGE_LOADED + 1));
+            }
+        }else if (swipeRefreshLayout!=null){
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -118,6 +142,27 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        if (firstTime==true){
+            updateMovieList();
+            ContentValues movieValues = new ContentValues();
+            movieValues.put(MovieContract.Favourites.PAGE,"0" );
+            movieValues.put(MovieContract.Favourites.POSTER_PATH,"0" );
+            movieValues.put(MovieContract.Favourites.ADULT,"0" );
+            movieValues.put(MovieContract.Favourites.OVERVIEW,"0" );
+            movieValues.put(MovieContract.Favourites.RELEASE_DATE,"0" );
+            movieValues.put(MovieContract.Favourites.MOVIE_ID,"0" );
+            movieValues.put(MovieContract.Favourites.ORIGINAL_TITLE,"0" );
+            movieValues.put(MovieContract.Favourites.ORIGINAL_LANGUAGE,"0" );
+            movieValues.put(MovieContract.Favourites.TITLE,"0");
+            movieValues.put(MovieContract.Favourites.BACKDROP_PATH,"0" );
+            movieValues.put(MovieContract.Favourites.POPULARITY,"0" );
+            movieValues.put(MovieContract.Favourites.VOTE_COUNT,"0");
+            movieValues.put(MovieContract.Favourites.VOTE_AVERAGE, "0");
+            movieValues.put(MovieContract.Favourites.SORT_BY,"0");
+            getActivity().getContentResolver().insert(MovieContract.Favourites.buildMovieUri(), movieValues);
+            firstTime=!firstTime;
+        }
+
         if(savedInstanceState==null||!savedInstanceState.containsKey("movieList")){
             movieList=new ArrayList<>();
         }else {
@@ -142,9 +187,6 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         //loading=(TextView)rootView.findViewById(R.id.loading);
 
         //startLoad();
-
-        // Log.d("MainActivityFrag", "Value: " + gridView.getWidth());
-
         gridView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -164,7 +206,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (cursor != null) {
                     ((Callback) getActivity())
-                            .onItemSelected(MovieContract.Movies.buildMoviesUriWithMovieId(cursor.getString(COL_MOVIE_ID)));
+                            .onItemSelected(cursor.getString(COL_MOVIE_ID));
                 }
                 mPosition = position;
             }
@@ -200,7 +242,14 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
         );
 */
-
+        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.main_swipe_refresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getActivity().getContentResolver().delete(MovieContract.Movies.CONTENT_URI, null, null);
+                updateMovieList();
+            }
+        });
         return rootView;
     }
 /*
@@ -232,6 +281,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     // since we read the new soring order when we create the loader, all we need to do is restart things
     void onSortingChanged( ) {
+        String sorting=Utility.getPreferredSorting(getActivity());
         updateMovieList();
         getLoaderManager().restartLoader(MOVIE_LOADER, null, this);
     }
@@ -241,13 +291,14 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
         String sortOrder = MovieContract.Movies._ID + " ASC";
         Uri movie =MovieContract.Movies.buildMovieUri();
+        Uri fav =MovieContract.Favourites.buildMovieUri();
         String sorting=Utility.getPreferredSorting(getActivity());
         if(sorting.equalsIgnoreCase(getResources().getString(R.string.pref_sort_favourite))){
             return new CursorLoader(getActivity(),
-                    movie,
-                    MOVIE_COLUMNS,
-                    MovieContract.Movies.FAVOURED+" = ?",
-                    new String[] {"1"},
+                    fav,
+                    FAVOURITE_MOVIE_COLUMNS,
+                    MovieContract.Favourites.FAVOURED+" = ?",
+                    new String[]{"1"},
                     sortOrder);
         }
         return new CursorLoader(getActivity(),
@@ -261,6 +312,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
        movieListAdapter.swapCursor(cursor);
+        swipeRefreshLayout.setRefreshing(false);
         if (mPosition != ListView.INVALID_POSITION) {
             // If we don't need to restart the loader, and there's a desired position to restore
             // to, do so now.
