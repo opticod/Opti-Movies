@@ -1,6 +1,6 @@
 # PopularMovies
 
-Here is a fully functional and user friendly android app which I made from scratch for Android Developer Nanodegree program. This app reveals the power of adaptive UI both for phone and tablet devices.This app includes various new Lollipop+ features.
+Here is a fully functional and user friendly android app which I made from scratch for [Android Developer Nanodegree](https://www.udacity.com/course/android-developer-nanodegree--nd801) program. This app reveals the power of adaptive UI both for phone and tablet devices.This app includes various new Lollipop+ features.
 
 Popular Movies was highly evaluated by certified Udacity code reviewer and was graded as "Exceeds Specifications".
 
@@ -17,6 +17,7 @@ With this app, you can:
 * Watch trailers
 * Read reviews
 * Sharing movie details with your friends
+
 
 #License
 
