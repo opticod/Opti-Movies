@@ -4,9 +4,6 @@ Here is a fully functional and user friendly android app which I made from scrat
 
 Popular Movies was highly evaluated by certified Udacity code reviewer and was graded as "Exceeds Specifications".
 
-#Development Setup
-This app uses The Movie Database API to retrieve movies. You must provide your own API key in order to build the app. When you get it, just paste it to:  _app/build.gradle_ 
-
 #Features
 
 With this app, you can:
@@ -18,6 +15,10 @@ With this app, you can:
 * Read reviews
 * Sharing movie details with your friends
 
+#Development Setup
+This app uses The Movie Database API to retrieve movies. You must provide your own API key in order to build the app. When you get it, just paste it to:  _app/build.gradle_ 
+
+![Image of TMDB](https://assets.tmdb.org/images/logos/var_1_0_PoweredByTMDB_Blk_Antitled.png)
 
 #License
 
