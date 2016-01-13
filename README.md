@@ -2,7 +2,7 @@
 
 Here is a fully functional and user friendly android app which I made from scratch for [Android Developer Nanodegree](https://www.udacity.com/course/android-developer-nanodegree--nd801) program. This app reveals the power of adaptive UI both for phone and tablet devices.This app includes various new Lollipop+ features.
 
-Popular Movies was highly evaluated by certified Udacity code reviewer and was graded as "Exceeds Specifications".
+Popular Movies was highly evaluated by certified Udacity code reviewer and was graded as **"Exceeds Specifications"**.
 
 #Features
 
@@ -14,6 +14,13 @@ With this app, you can:
 * Watch trailers
 * Read reviews
 * Sharing movie details with your friends
+
+#Demo
+![Popular Movies](https://github.com/opticod/PopularMovies/blob/Stage2/extras/animated.gif)
+
+See More at:<br>
+[YouTube Demo 1](https://youtu.be/YoyXolO2hhU)<br>
+[YouTube Demo 2](https://youtu.be/uHlaXrYLm6s)
 
 #Development Setup
 This app uses The Movie Database API to retrieve movies. You must provide your own API key in order to build the app. When you get it, just paste it to:  _app/build.gradle_ 
