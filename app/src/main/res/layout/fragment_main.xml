@@ -32,6 +32,23 @@
         android:paddingBottom="@dimen/activity_horizontal_margin"
         android:gravity="center"/>
 
+
         </android.support.v4.widget.SwipeRefreshLayout>
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Loading"
+        style="@style/TextAppearance.AppCompat.Button"
+        android:background="@android:color/background_light"
+        android:alpha="0.4"
+        android:enabled="true"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false"
+        android:paddingTop="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:gravity="center"/>
 
 </FrameLayout>
