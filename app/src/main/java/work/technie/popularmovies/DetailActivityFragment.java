@@ -43,6 +43,7 @@ import com.squareup.picasso.Picasso;
 
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 import work.technie.popularmovies.data.MovieContract;
+import work.technie.popularmovies.utils.Utility;
 
 
 public class DetailActivityFragment extends Fragment implements LoaderCallbacks<Cursor> {
@@ -241,12 +242,17 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Log.v(LOG_TAG, "refresh");
-                getActivity().getContentResolver().delete(MovieContract.Trailers.buildMoviesUriWithMovieId(movie_Id), null, null);
-                getActivity().getContentResolver().delete(MovieContract.Reviews.buildMoviesUriWithMovieId(movie_Id), null, null);
-                getActivity().getContentResolver().delete(MovieContract.Genres.buildMoviesUriWithMovieId(movie_Id), null, null);
-                genre = "Genre : ";
-                updateMovieList();
+                if(Utility.hasNetworkConnection(getActivity())) {
+                    getActivity().getContentResolver().delete(MovieContract.Trailers.buildMoviesUriWithMovieId(movie_Id), null, null);
+                    getActivity().getContentResolver().delete(MovieContract.Reviews.buildMoviesUriWithMovieId(movie_Id), null, null);
+                    getActivity().getContentResolver().delete(MovieContract.Genres.buildMoviesUriWithMovieId(movie_Id), null, null);
+                    genre = "Genre : ";
+                    updateMovieList();
+                    Log.v(LOG_TAG,"refreshed");
+                }else{
+                    Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_SHORT).show();
+                    swipeRefreshLayout.setRefreshing(false);
+                }
             }
         });
         FloatingActionButton play= (FloatingActionButton) rootView.findViewById(R.id.play);
@@ -289,6 +295,15 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             // creating a Cursor for the data being displayed.
             switch (id) {
                 case DETAIL_LOADER:
+                    String sorting=Utility.getPreferredSorting(getActivity());
+                    if(sorting.equalsIgnoreCase(getResources().getString(R.string.pref_sort_favourite))){
+                        return new CursorLoader(getActivity(),
+                                MovieContract.Favourites.buildMovieUri(),
+                                FAVOURITE_MOVIE_COLUMNS,
+                                MovieContract.Favourites.MOVIE_ID+" = ?",
+                                new String[]{movie_Id},
+                                null);
+                    }
                     return new CursorLoader(
                             getActivity(),
                             MovieContract.Movies.buildMoviesUriWithMovieId(movie_Id),
@@ -463,11 +478,15 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                         } else {
                             sh.put(MovieContract.Movies.SHOWED, "1");
                             if (downloaded.equalsIgnoreCase("0")){
-                                updateMovieList();
-                                sh.put(MovieContract.Movies.DOWNLOADED, "1");
+                                if(Utility.hasNetworkConnection(getActivity())) {
+                                    updateMovieList();
+                                    sh.put(MovieContract.Movies.DOWNLOADED, "1");
+                                    Toast.makeText(getContext(), "TRAILERS and REVIEWS shown!", Toast.LENGTH_SHORT).show();
+                                    show();
+                                }else{
+                                    Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_LONG).show();
+                                }
                             }
-                            Toast.makeText(getContext(), "TRAILERS and REVIEWS shown!", Toast.LENGTH_SHORT).show();
-                            show();
                         }
                         getContext().getContentResolver().update(
                                 MovieContract.Movies.CONTENT_URI.buildUpon().appendPath(movieId).build(),
@@ -482,13 +501,16 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                     public void onClick(View view) {
                         if (downloaded.equalsIgnoreCase("0")){
                             ContentValues sh = new ContentValues();
-                            updateMovieList();
-                            sh.put(MovieContract.Movies.DOWNLOADED, "1");
-                            getContext().getContentResolver().update(
-                                    MovieContract.Movies.CONTENT_URI.buildUpon().appendPath(movieId).build(),
-                                    sh, null, new String[]{movieId});
+                            if(Utility.hasNetworkConnection(getActivity())) {
+                                updateMovieList();
+                                sh.put(MovieContract.Movies.DOWNLOADED, "1");
+                                getContext().getContentResolver().update(
+                                        MovieContract.Movies.CONTENT_URI.buildUpon().appendPath(movieId).build(),
+                                        sh, null, new String[]{movieId});
                                 Toast.makeText(getContext(), "Click One More Time to Play!", Toast.LENGTH_SHORT).show();
-
+                            }else{
+                                Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_LONG).show();
+                            }
                         }else{
                             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(playTrailer));
                             startActivity(intent);
@@ -501,12 +523,16 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                     public void onClick(View view) {
                         if (downloaded.equalsIgnoreCase("0")) {
                             ContentValues sh = new ContentValues();
-                            updateMovieList();
-                            sh.put(MovieContract.Movies.DOWNLOADED, "1");
-                            getContext().getContentResolver().update(
-                                    MovieContract.Movies.CONTENT_URI.buildUpon().appendPath(movieId).build(),
-                                    sh, null, new String[]{movieId});
-                            Toast.makeText(getContext(), "Click One More Time to Share!", Toast.LENGTH_SHORT).show();
+                            if(Utility.hasNetworkConnection(getActivity())) {
+                                updateMovieList();
+                                sh.put(MovieContract.Movies.DOWNLOADED, "1");
+                                getContext().getContentResolver().update(
+                                        MovieContract.Movies.CONTENT_URI.buildUpon().appendPath(movieId).build(),
+                                        sh, null, new String[]{movieId});
+                                Toast.makeText(getContext(), "Click One More Time to Share!", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_LONG).show();
+                            }
                         } else {
                             Intent intent = new Intent();
                             intent.setAction(Intent.ACTION_SEND);
@@ -598,6 +624,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             case GENRE_LOADER:
                 if (data.moveToFirst()) {
                     do {
+                        if(genre.length()<9)
                         genre+=data.getString(COL_GENRE_NAME)+" ";
                         genreListAdapter.swapCursor(data);
                     }

@@ -78,7 +78,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
 
         final String RESULT="results";
         final String POSTER_BASE_URL="http://image.tmdb.org/t/p/w185";
-        final String BACKDROP_BASE_URL="http://image.tmdb.org/t/p/w780";
+        final String BACKDROP_BASE_URL="http://image.tmdb.org/t/p/w500";
 
         try {
             JSONObject movieJson = new JSONObject(movieJsonStr);

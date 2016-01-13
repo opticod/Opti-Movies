@@ -25,6 +25,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,8 @@ import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -52,6 +55,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     private SwipeRefreshLayout swipeRefreshLayout;
     //private static final int MAX_PAGE=100;
     private int PAGE_LOADED=0;
+    private View rootView;
     //private boolean isLoading=false;
     //private TextView loading;
     //private String lastSortingOrder="initial";
@@ -159,6 +163,9 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         if (firstTime==true){
+            if(!Utility.hasNetworkConnection(getActivity())) {
+                Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_LONG).show();
+            }
             updateMovieList();
             ContentValues movieValues = new ContentValues();
             movieValues.put(MovieContract.Favourites.PAGE,"0" );
@@ -195,7 +202,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                 new MovieArrayAdapter(
                         getActivity(), null,0);
 
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // Get a reference to the GridView, and attach this adapter to it.
         gridView = (GridView) rootView.findViewById(R.id.gridview_movie);
@@ -262,8 +269,13 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getActivity().getContentResolver().delete(MovieContract.Movies.CONTENT_URI, null, null);
-                updateMovieList();
+                if(Utility.hasNetworkConnection(getActivity())) {
+                    getActivity().getContentResolver().delete(MovieContract.Movies.CONTENT_URI, null, null);
+                    updateMovieList();
+                }else{
+                    Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_SHORT).show();
+                    swipeRefreshLayout.setRefreshing(false);
+                }
             }
         });
         return rootView;
@@ -334,6 +346,18 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             // to, do so now.
             gridView.smoothScrollToPosition(mPosition);
         }
+        try{
+            TextView info=(TextView)rootView.findViewById(R.id.empty);
+            if(movieListAdapter.getCount()==0){
+                String sorting=Utility.getPreferredSorting(getActivity());
+                if(sorting.equalsIgnoreCase(getResources().getString(R.string.pref_sort_favourite))) {
+                    info.setText("Favourite List is Empty!");
+                }
+                info.setVisibility(View.VISIBLE);
+            }else{
+                info.setVisibility(View.GONE);
+            }
+        }catch (Exception e){}
     }
 
     @Override
