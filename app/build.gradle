@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "work.technie.popularmovies"
         minSdkVersion 15
-        targetSdkVersion 23
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
     }
@@ -17,7 +17,7 @@ android {
         }
     }
     buildTypes.each {
-        it.buildConfigField 'String', 'MOVIE_DB_API_KEY', '"#MOVIE DB API KEY"'
+        it.buildConfigField 'String', 'MOVIE_DB_API_KEY', '"TMDB MOVIE API KEY"'
     }
 }
 repositories {
