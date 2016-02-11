@@ -1,6 +1,9 @@
 # PopularMovies
 
-Here is a fully functional and user friendly android app which I made from scratch for [Android Developer Nanodegree](https://www.udacity.com/course/android-developer-nanodegree--nd801) program. This app reveals the power of adaptive UI both for phone and tablet devices.This app includes various new Lollipop+ features.
+Here is a fully functional and user friendly android app which I made from scratch for [Android Developer Nanodegree](https://www.udacity.com/course/android-developer-nanodegree--nd801) program. 
+
+This app help users to discover the most popular, the highest rated and the highest-grossing movies.
+It reveals the power of adaptive UI both for phone and tablet devices.It includes various new Lollipop+ features.
 
 Popular Movies was highly evaluated by certified Udacity code reviewer and was graded as **"Exceeds Specifications"**.
 
@@ -8,7 +11,7 @@ Popular Movies was highly evaluated by certified Udacity code reviewer and was g
 
 With this app, you can:
 
-* Discover the most popular, the most rated or the highest rated movies
+* Discover the most popular, the highest rated and the highest-grossing movies
 * See their ratings,popularity,release date,genere types
 * Save favorite movies locally to view them even when offline
 * Watch trailers
