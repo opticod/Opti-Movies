@@ -25,7 +25,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,27 +43,12 @@ import work.technie.popularmovies.utils.Utility;
 /**
  * Created by anupam on 4/12/15.
  */
-public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private MovieArrayAdapter movieListAdapter;
-    private int mPosition = ListView.INVALID_POSITION;
     private static final String SELECTED_KEY = "selected_position";
-    private GridView gridView;
-    private ArrayList<MovieInfo> movieList;
-    private static boolean firstTime=true;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    //private static final int MAX_PAGE=100;
-    private int PAGE_LOADED=0;
-    private View rootView;
-    //private boolean isLoading=false;
-    //private TextView loading;
-    //private String lastSortingOrder="initial";
-
     private static final int MOVIE_LOADER = 0;
-
-
     private static final String[] MOVIE_COLUMNS = {
-            
+
             MovieContract.Movies.TABLE_NAME + "." + MovieContract.Movies._ID,
             MovieContract.Movies.PAGE,
             MovieContract.Movies.POSTER_PATH,
@@ -99,39 +83,38 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             MovieContract.Favourites.VOTE_AVERAGE,
             MovieContract.Favourites.FAVOURED
     };
+    public static int COL_ID = 0;
+    public static int COL_PAGE = 1;
+    public static int COL_POSTER_PATH = 2;
+    public static int COL_ADULT = 3;
+    public static int COL_OVERVIEW = 4;
+    //private boolean isLoading=false;
+    //private TextView loading;
+    //private String lastSortingOrder="initial";
+    public static int COL_RELEASE_DATE = 5;
+    public static int COL_MOVIE_ID = 6;
+    public static int COL_ORIGINAL_TITLE = 7;
+    public static int COL_ORIGINAL_LANG = 8;
+    public static int COL_TITLE = 9;
+    public static int COL_BACKDROP_PATH = 10;
+    public static int COL_POPULARITY = 11;
+    public static int COL_VOTE_COUNT = 12;
+    public static int COL_VOTE_AVERAGE = 13;
+    public static int COL_FAVOURED = 14;
+    private static boolean firstTime = true;
+    private MovieArrayAdapter movieListAdapter;
+    private int mPosition = ListView.INVALID_POSITION;
+    private GridView gridView;
+    private ArrayList<MovieInfo> movieList;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    //private static final int MAX_PAGE=100;
+    private int PAGE_LOADED = 0;
+    private View rootView;
 
-    public static int COL_ID=0;
-    public static int COL_PAGE=1;
-    public static int COL_POSTER_PATH=2;
-    public static int COL_ADULT=3;
-    public static int COL_OVERVIEW=4;
-    public static int COL_RELEASE_DATE=5;
-    public static int COL_MOVIE_ID=6;
-    public static int COL_ORIGINAL_TITLE=7;
-    public static int COL_ORIGINAL_LANG=8;
-    public static int COL_TITLE=9;
-    public static int COL_BACKDROP_PATH=10;
-    public static int COL_POPULARITY=11;
-    public static int COL_VOTE_COUNT=12;
-    public static int COL_VOTE_AVERAGE=13;
-    public static int COL_FAVOURED=14;
-
-    /**
-     * A callback interface that all activities containing this fragment must
-     * implement. This mechanism allows activities to be notified of item
-     * selections.
-     */
-    public interface Callback {
-        /**
-         * DetailFragmentCallback for when an item has been selected.
-         * @param movieUri
-         */
-        void onItemSelected(String movieUri);
-    }
-
-    public MainActivityFragment(){
+    public MainActivityFragment() {
 
     }
+
     private void updateMovieList() {
         FetchMovieTask weatherTask = new FetchMovieTask(getActivity());
         String sortingOrder = Utility.getPreferredSorting(getActivity());
@@ -143,7 +126,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             }*/
                 weatherTask.execute(sortingOrder, String.valueOf(PAGE_LOADED + 1));
             }
-        }else if (swipeRefreshLayout!=null){
+        } else if (swipeRefreshLayout != null) {
             swipeRefreshLayout.setRefreshing(false);
         }
     }
@@ -159,48 +142,50 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         }
         super.onSaveInstanceState(outState);
     }
+
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (firstTime==true){
-            if(!Utility.hasNetworkConnection(getActivity())) {
+        if (firstTime == true) {
+            if (!Utility.hasNetworkConnection(getActivity())) {
                 Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_LONG).show();
             }
             updateMovieList();
             ContentValues movieValues = new ContentValues();
-            movieValues.put(MovieContract.Favourites.PAGE,"0" );
-            movieValues.put(MovieContract.Favourites.POSTER_PATH,"0" );
-            movieValues.put(MovieContract.Favourites.ADULT,"0" );
-            movieValues.put(MovieContract.Favourites.OVERVIEW,"0" );
-            movieValues.put(MovieContract.Favourites.RELEASE_DATE,"0" );
-            movieValues.put(MovieContract.Favourites.MOVIE_ID,"0" );
-            movieValues.put(MovieContract.Favourites.ORIGINAL_TITLE,"0" );
-            movieValues.put(MovieContract.Favourites.ORIGINAL_LANGUAGE,"0" );
-            movieValues.put(MovieContract.Favourites.TITLE,"0");
-            movieValues.put(MovieContract.Favourites.BACKDROP_PATH,"0" );
-            movieValues.put(MovieContract.Favourites.POPULARITY,"0" );
-            movieValues.put(MovieContract.Favourites.VOTE_COUNT,"0");
+            movieValues.put(MovieContract.Favourites.PAGE, "0");
+            movieValues.put(MovieContract.Favourites.POSTER_PATH, "0");
+            movieValues.put(MovieContract.Favourites.ADULT, "0");
+            movieValues.put(MovieContract.Favourites.OVERVIEW, "0");
+            movieValues.put(MovieContract.Favourites.RELEASE_DATE, "0");
+            movieValues.put(MovieContract.Favourites.MOVIE_ID, "0");
+            movieValues.put(MovieContract.Favourites.ORIGINAL_TITLE, "0");
+            movieValues.put(MovieContract.Favourites.ORIGINAL_LANGUAGE, "0");
+            movieValues.put(MovieContract.Favourites.TITLE, "0");
+            movieValues.put(MovieContract.Favourites.BACKDROP_PATH, "0");
+            movieValues.put(MovieContract.Favourites.POPULARITY, "0");
+            movieValues.put(MovieContract.Favourites.VOTE_COUNT, "0");
             movieValues.put(MovieContract.Favourites.VOTE_AVERAGE, "0");
-            movieValues.put(MovieContract.Favourites.SORT_BY,"0");
+            movieValues.put(MovieContract.Favourites.SORT_BY, "0");
             getActivity().getContentResolver().insert(MovieContract.Favourites.buildMovieUri(), movieValues);
-            firstTime=!firstTime;
+            firstTime = !firstTime;
         }
 
-        if(savedInstanceState==null||!savedInstanceState.containsKey("movieList")){
-            movieList=new ArrayList<>();
-        }else {
-            movieList=savedInstanceState.getParcelableArrayList("movieList");
+        if (savedInstanceState == null || !savedInstanceState.containsKey("movieList")) {
+            movieList = new ArrayList<>();
+        } else {
+            movieList = savedInstanceState.getParcelableArrayList("movieList");
         }
     }
+
     @Override
-    public View onCreateView(LayoutInflater inflater,ViewGroup container,
-                             Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
         // The ArrayAdapter will take data from a source and
         // use it to populate the ListView it's attached to.
         movieListAdapter =
                 new MovieArrayAdapter(
-                        getActivity(), null,0);
+                        getActivity(), null, 0);
 
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -269,10 +254,10 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if(Utility.hasNetworkConnection(getActivity())) {
+                if (Utility.hasNetworkConnection(getActivity())) {
                     getActivity().getContentResolver().delete(MovieContract.Movies.CONTENT_URI, null, null);
                     updateMovieList();
-                }else{
+                } else {
                     Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_SHORT).show();
                     swipeRefreshLayout.setRefreshing(false);
                 }
@@ -280,27 +265,28 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         });
         return rootView;
     }
-/*
-    private void startLoad(){
-        if(isLoading||PAGE_LOADED>=MAX_PAGE){
-            return;
-        }
-        isLoading=true;
-        if (loading!=null){
-            loading.setVisibility(View.VISIBLE);
-        }
 
-        updateMovieList();
-    }
-    private void stopLoad(){
-        if(!isLoading){
-            return;
+    /*
+        private void startLoad(){
+            if(isLoading||PAGE_LOADED>=MAX_PAGE){
+                return;
+            }
+            isLoading=true;
+            if (loading!=null){
+                loading.setVisibility(View.VISIBLE);
+            }
+
+            updateMovieList();
         }
-        isLoading=false;
-        if (loading!=null){
-            loading.setVisibility(View.GONE);
-        }
-    }*/
+        private void stopLoad(){
+            if(!isLoading){
+                return;
+            }
+            isLoading=false;
+            if (loading!=null){
+                loading.setVisibility(View.GONE);
+            }
+        }*/
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         getLoaderManager().initLoader(MOVIE_LOADER, null, this);
@@ -308,8 +294,8 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     }
 
     // since we read the new soring order when we create the loader, all we need to do is restart things
-    void onSortingChanged( ) {
-        String sorting=Utility.getPreferredSorting(getActivity());
+    void onSortingChanged() {
+        String sorting = Utility.getPreferredSorting(getActivity());
         updateMovieList();
         getLoaderManager().restartLoader(MOVIE_LOADER, null, this);
     }
@@ -318,50 +304,65 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
 
         String sortOrder = MovieContract.Movies._ID + " ASC";
-        Uri movie =MovieContract.Movies.buildMovieUri();
-        Uri fav =MovieContract.Favourites.buildMovieUri();
-        String sorting=Utility.getPreferredSorting(getActivity());
-        if(sorting.equalsIgnoreCase(getResources().getString(R.string.pref_sort_favourite))){
+        Uri movie = MovieContract.Movies.buildMovieUri();
+        Uri fav = MovieContract.Favourites.buildMovieUri();
+        String sorting = Utility.getPreferredSorting(getActivity());
+        if (sorting.equalsIgnoreCase(getResources().getString(R.string.pref_sort_favourite))) {
             return new CursorLoader(getActivity(),
                     fav,
                     FAVOURITE_MOVIE_COLUMNS,
-                    MovieContract.Favourites.FAVOURED+" = ?",
+                    MovieContract.Favourites.FAVOURED + " = ?",
                     new String[]{"1"},
                     sortOrder);
         }
         return new CursorLoader(getActivity(),
                 movie,
                 MOVIE_COLUMNS,
-                MovieContract.Movies.SORT_BY+" = ?",
-                new String[] {sorting},
+                MovieContract.Movies.SORT_BY + " = ?",
+                new String[]{sorting},
                 sortOrder);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-       movieListAdapter.swapCursor(cursor);
+        movieListAdapter.swapCursor(cursor);
         swipeRefreshLayout.setRefreshing(false);
         if (mPosition != ListView.INVALID_POSITION) {
             // If we don't need to restart the loader, and there's a desired position to restore
             // to, do so now.
             gridView.smoothScrollToPosition(mPosition);
         }
-        try{
-            TextView info=(TextView)rootView.findViewById(R.id.empty);
-            if(movieListAdapter.getCount()==0){
-                String sorting=Utility.getPreferredSorting(getActivity());
-                if(sorting.equalsIgnoreCase(getResources().getString(R.string.pref_sort_favourite))) {
+        try {
+            TextView info = (TextView) rootView.findViewById(R.id.empty);
+            if (movieListAdapter.getCount() == 0) {
+                String sorting = Utility.getPreferredSorting(getActivity());
+                if (sorting.equalsIgnoreCase(getResources().getString(R.string.pref_sort_favourite))) {
                     info.setText("Favourite List is Empty!");
                 }
                 info.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 info.setVisibility(View.GONE);
             }
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
         movieListAdapter.swapCursor(null);
+    }
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     */
+    public interface Callback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         *
+         * @param movieUri
+         */
+        void onItemSelected(String movieUri);
     }
 }

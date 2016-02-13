@@ -18,6 +18,7 @@ public class Utility {
         return prefs.getString(context.getString(R.string.pref_sort_key),
                 context.getString(R.string.pref_sort_default));
     }
+
     public static boolean hasNetworkConnection(Context context) {
         boolean hasConnectedWifi = false;
         boolean hasConnectedMobile = false;

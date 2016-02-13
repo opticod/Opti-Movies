@@ -59,6 +59,7 @@ public class SettingsActivity extends PreferenceActivity
         }
         return true;
     }
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public Intent getParentActivityIntent() {

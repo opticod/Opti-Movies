@@ -43,16 +43,6 @@ public class GenreMovieAdapter extends CursorAdapter {
         return view;
     }
 
-    public static class ViewHolder {
-
-        public final TextView genre;
-
-        public ViewHolder(View view) {
-            genre = (TextView) view.findViewById(R.id.genre);
-        }
-    }
-
-
     /*
        This is where we fill-in the views with the contents of the cursor.
     */
@@ -63,5 +53,14 @@ public class GenreMovieAdapter extends CursorAdapter {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
         viewHolder.genre.setText("Genre: " + genre);
 
+    }
+
+    public static class ViewHolder {
+
+        public final TextView genre;
+
+        public ViewHolder(View view) {
+            genre = (TextView) view.findViewById(R.id.genre);
+        }
     }
 }

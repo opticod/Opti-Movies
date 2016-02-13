@@ -49,34 +49,17 @@ import work.technie.popularmovies.utils.Utility;
 public class DetailActivityFragment extends Fragment implements LoaderCallbacks<Cursor> {
 
     private static final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
-    private View rootView;
     private static final String MOVIE_SHARE_HASHTAG = " #PopularMovieApp #ByAnupam ";
-    static final String DETAIL_URI = "URI";
-    private String movie_Id;
-    private TrailerMovieAdapter trailerListAdapter;
-    private ReviewMovieAdapter reviewListAdapter;
-    private GenreMovieAdapter genreListAdapter;
-    private ListView listViewTrailers;
-    private ListView listViewReviews;
-    private ListView listViewGenres;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private String genre="Genre : ";
-    private static String showed="0";
-    public static String playTrailer="https://www.youtube.com/watch?v=";
-    private static ContentValues movieValues;
-
     private static final int DETAIL_LOADER = 0;
     private static final int TRAILER_LOADER = 1;
     private static final int REVIEW_LOADER = 2;
     private static final int GENRE_LOADER = 3;
     private static final int FAVOURITE_LOADER = 4;
-
-
     private static final String[] MOVIE_COLUMNS = {
 
             MovieContract.Movies.TABLE_NAME + "." + MovieContract.Movies._ID,
-            MovieContract.Movies.TABLE_NAME + "." +MovieContract.Movies.PAGE,
-            MovieContract.Movies.TABLE_NAME + "." +MovieContract.Movies.POSTER_PATH,
+            MovieContract.Movies.TABLE_NAME + "." + MovieContract.Movies.PAGE,
+            MovieContract.Movies.TABLE_NAME + "." + MovieContract.Movies.POSTER_PATH,
             MovieContract.Movies.TABLE_NAME + "." + MovieContract.Movies.ADULT,
             MovieContract.Movies.TABLE_NAME + "." + MovieContract.Movies.OVERVIEW,
             MovieContract.Movies.TABLE_NAME + "." + MovieContract.Movies.RELEASE_DATE,
@@ -87,18 +70,18 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             MovieContract.Movies.TABLE_NAME + "." + MovieContract.Movies.BACKDROP_PATH,
             MovieContract.Movies.TABLE_NAME + "." + MovieContract.Movies.POPULARITY,
             MovieContract.Movies.TABLE_NAME + "." + MovieContract.Movies.VOTE_COUNT,
-            MovieContract.Movies.TABLE_NAME + "." +MovieContract.Movies.VOTE_AVERAGE,
-            MovieContract.Movies.TABLE_NAME + "." +MovieContract.Movies.FAVOURED,
-            MovieContract.Movies.TABLE_NAME + "." +MovieContract.Movies.SHOWED,
-            MovieContract.Movies.TABLE_NAME + "." +MovieContract.Movies.DOWNLOADED,
-            MovieContract.Movies.TABLE_NAME + "." +MovieContract.Movies.SORT_BY
+            MovieContract.Movies.TABLE_NAME + "." + MovieContract.Movies.VOTE_AVERAGE,
+            MovieContract.Movies.TABLE_NAME + "." + MovieContract.Movies.FAVOURED,
+            MovieContract.Movies.TABLE_NAME + "." + MovieContract.Movies.SHOWED,
+            MovieContract.Movies.TABLE_NAME + "." + MovieContract.Movies.DOWNLOADED,
+            MovieContract.Movies.TABLE_NAME + "." + MovieContract.Movies.SORT_BY
 
     };
     private static final String[] TRAILER_COLUMNS = {
 
             MovieContract.Trailers.TABLE_NAME + "." + MovieContract.Trailers._ID,
-            MovieContract.Trailers.TABLE_NAME + "." +MovieContract.Trailers.NAME,
-            MovieContract.Trailers.TABLE_NAME + "." +MovieContract.Trailers.SIZE,
+            MovieContract.Trailers.TABLE_NAME + "." + MovieContract.Trailers.NAME,
+            MovieContract.Trailers.TABLE_NAME + "." + MovieContract.Trailers.SIZE,
             MovieContract.Trailers.TABLE_NAME + "." + MovieContract.Trailers.SOURCE,
             MovieContract.Trailers.TABLE_NAME + "." + MovieContract.Trailers.TYPE,
             MovieContract.Trailers.TABLE_NAME + "." + MovieContract.Trailers.MOVIE_ID
@@ -106,8 +89,8 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     private static final String[] REVIEW_COLUMNS = {
 
             MovieContract.Reviews.TABLE_NAME + "." + MovieContract.Reviews._ID,
-            MovieContract.Reviews.TABLE_NAME + "." +MovieContract.Reviews.PAGE,
-            MovieContract.Reviews.TABLE_NAME + "." +MovieContract.Reviews.TOTAL_PAGE,
+            MovieContract.Reviews.TABLE_NAME + "." + MovieContract.Reviews.PAGE,
+            MovieContract.Reviews.TABLE_NAME + "." + MovieContract.Reviews.TOTAL_PAGE,
             MovieContract.Reviews.TABLE_NAME + "." + MovieContract.Reviews.TOTAL_RESULTS,
             MovieContract.Reviews.TABLE_NAME + "." + MovieContract.Reviews.ID_REVIEWS,
             MovieContract.Reviews.TABLE_NAME + "." + MovieContract.Reviews.AUTHOR,
@@ -119,8 +102,8 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     private static final String[] GENRE_COLUMNS = {
 
             MovieContract.Genres.TABLE_NAME + "." + MovieContract.Genres._ID,
-            MovieContract.Genres.TABLE_NAME + "." +MovieContract.Genres.NAME,
-            MovieContract.Genres.TABLE_NAME + "." +MovieContract.Genres.ID_GENRES,
+            MovieContract.Genres.TABLE_NAME + "." + MovieContract.Genres.NAME,
+            MovieContract.Genres.TABLE_NAME + "." + MovieContract.Genres.ID_GENRES,
             MovieContract.Genres.TABLE_NAME + "." + MovieContract.Genres.MOVIE_ID
     };
     private static final String[] FAVOURITE_MOVIE_COLUMNS = {
@@ -144,11 +127,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             MovieContract.Favourites.DOWNLOADED,
             MovieContract.Favourites.SORT_BY
     };
-
-    private void updateMovieList() {
-        FetchTrailReview weatherTask = new FetchTrailReview(getActivity());
-        weatherTask.execute(movie_Id);
-    }
+    public static String playTrailer = "https://www.youtube.com/watch?v=";
     public static int COL_ID = 0;
     public static int COL_PAGE = 1;
     public static int COL_POSTER_PATH = 2;
@@ -167,30 +146,27 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     public static int COL_SHOWED = 15;
     public static int COL_DOWNLOADED = 16;
     public static int COL_SORT_BY = 17;
-
-
-    public static int COL_TRAILER_ID=0;
-    public static int COL_TRAILER_NAME=1;
-    public static int COL_TRAILER_SIZE=2;
-    public static int COL_TRAILER_SOURCE=3;
-    public static int COL_TRAILER_TYPE=4;
-    public static int COL_TRAILER_MOVIE_ID=5;
-
-    public static int COL_REVIEW_ID=0;
-    public static int COL_REVIEW_PAGE=1;
-    public static int COL_REVIEW_TOTAL_PAGE=2;
-    public static int COL_REVIEW_TOTAL_RESULTS=3;
-    public static int COL_REVIEW_ID_REVIEWS=4;
-    public static int COL_REVIEW_AUTHOR=5;
-    public static int COL_REVIEW_CONTENT=6;
-    public static int COL_REVIEW_URL=7;
-    public static int COL_REVIEW_MOVIE_ID=8;
-
-    public static int COL_GENRE_ID=0;
-    public static int COL_GENRE_NAME=1;
-    public static int COL_GENRE_ID_GENRE=3;
-    public static int COL_GENRE_MOVIE_ID=4;
-
+    public static int COL_TRAILER_ID = 0;
+    public static int COL_TRAILER_NAME = 1;
+    public static int COL_TRAILER_SIZE = 2;
+    public static int COL_TRAILER_SOURCE = 3;
+    public static int COL_TRAILER_TYPE = 4;
+    public static int COL_TRAILER_MOVIE_ID = 5;
+    public static int COL_REVIEW_ID = 0;
+    public static int COL_REVIEW_PAGE = 1;
+    public static int COL_REVIEW_TOTAL_PAGE = 2;
+    public static int COL_REVIEW_TOTAL_RESULTS = 3;
+    public static int COL_REVIEW_ID_REVIEWS = 4;
+    public static int COL_REVIEW_AUTHOR = 5;
+    public static int COL_REVIEW_CONTENT = 6;
+    public static int COL_REVIEW_URL = 7;
+    public static int COL_REVIEW_MOVIE_ID = 8;
+    public static int COL_GENRE_ID = 0;
+    public static int COL_GENRE_NAME = 1;
+    public static int COL_GENRE_ID_GENRE = 3;
+    public static int COL_GENRE_MOVIE_ID = 4;
+    private static String showed = "0";
+    private static ContentValues movieValues;
     String orgLang;
     String orgTitle;
     String overview;
@@ -201,20 +177,32 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     String favourite;
     String movieId;
     String backdropURL;
-
     String trailerName;
     String trailerSize;
     String trailerSource;
     String trailerType;
     String trailerID;
-
+    private View rootView;
+    private String movie_Id;
+    private TrailerMovieAdapter trailerListAdapter;
+    private ReviewMovieAdapter reviewListAdapter;
+    private GenreMovieAdapter genreListAdapter;
+    private ListView listViewTrailers;
+    private ListView listViewReviews;
+    private ListView listViewGenres;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private String genre = "Genre : ";
 
     public DetailActivityFragment() {
         setHasOptionsMenu(true);
-        playTrailer="https://www.youtube.com/watch?v=";
-        movieValues=new ContentValues();
+        playTrailer = "https://www.youtube.com/watch?v=";
+        movieValues = new ContentValues();
     }
 
+    private void updateMovieList() {
+        FetchTrailReview weatherTask = new FetchTrailReview(getActivity());
+        weatherTask.execute(movie_Id);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -242,20 +230,20 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if(Utility.hasNetworkConnection(getActivity())) {
+                if (Utility.hasNetworkConnection(getActivity())) {
                     getActivity().getContentResolver().delete(MovieContract.Trailers.buildMoviesUriWithMovieId(movie_Id), null, null);
                     getActivity().getContentResolver().delete(MovieContract.Reviews.buildMoviesUriWithMovieId(movie_Id), null, null);
                     getActivity().getContentResolver().delete(MovieContract.Genres.buildMoviesUriWithMovieId(movie_Id), null, null);
                     genre = "Genre : ";
                     updateMovieList();
-                    Log.v(LOG_TAG,"refreshed");
-                }else{
+                    Log.v(LOG_TAG, "refreshed");
+                } else {
                     Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_SHORT).show();
                     swipeRefreshLayout.setRefreshing(false);
                 }
             }
         });
-        FloatingActionButton play= (FloatingActionButton) rootView.findViewById(R.id.play);
+        FloatingActionButton play = (FloatingActionButton) rootView.findViewById(R.id.play);
 
         play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -277,6 +265,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
 
         super.onActivityCreated(savedInstanceState);
     }
+
     void onSortingChanged() {
         String mI = movie_Id;
         if (null != mI) {
@@ -295,12 +284,12 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             // creating a Cursor for the data being displayed.
             switch (id) {
                 case DETAIL_LOADER:
-                    String sorting=Utility.getPreferredSorting(getActivity());
-                    if(sorting.equalsIgnoreCase(getResources().getString(R.string.pref_sort_favourite))){
+                    String sorting = Utility.getPreferredSorting(getActivity());
+                    if (sorting.equalsIgnoreCase(getResources().getString(R.string.pref_sort_favourite))) {
                         return new CursorLoader(getActivity(),
                                 MovieContract.Favourites.buildMovieUri(),
                                 FAVOURITE_MOVIE_COLUMNS,
-                                MovieContract.Favourites.MOVIE_ID+" = ?",
+                                MovieContract.Favourites.MOVIE_ID + " = ?",
                                 new String[]{movie_Id},
                                 null);
                     }
@@ -352,7 +341,8 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         }
         return null;
     }
-    private void hide(){
+
+    private void hide() {
         rootView.findViewById(R.id.TrailerText).setVisibility(View.GONE);
         rootView.findViewById(R.id.ReviewsText).setVisibility(View.GONE);
         rootView.findViewById(R.id.listview_trailer).setVisibility(View.GONE);
@@ -360,7 +350,8 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         rootView.findViewById(R.id.hide).setVisibility(View.GONE);
         rootView.findViewById(R.id.show).setVisibility(View.VISIBLE);
     }
-    private void show(){
+
+    private void show() {
         rootView.findViewById(R.id.TrailerText).setVisibility(View.VISIBLE);
         rootView.findViewById(R.id.ReviewsText).setVisibility(View.VISIBLE);
         rootView.findViewById(R.id.listview_trailer).setVisibility(View.VISIBLE);
@@ -368,7 +359,8 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         rootView.findViewById(R.id.hide).setVisibility(View.VISIBLE);
         rootView.findViewById(R.id.show).setVisibility(View.GONE);
     }
-    private void defaultShow(){
+
+    private void defaultShow() {
         rootView.findViewById(R.id.divisor).setVisibility(View.VISIBLE);
         rootView.findViewById(R.id.ten).setVisibility(View.VISIBLE);
         rootView.findViewById(R.id.share).setVisibility(View.VISIBLE);
@@ -379,7 +371,9 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     public void onLoadFinished(Loader<Cursor> loader, final Cursor data) {
         swipeRefreshLayout.setRefreshing(false);
         Log.v(LOG_TAG, "In onLoadFinished");
-        if (!data.moveToFirst()) { return; }
+        if (!data.moveToFirst()) {
+            return;
+        }
         switch (loader.getId()) {
             case DETAIL_LOADER:
                 defaultShow();
@@ -396,7 +390,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                 relDate = data.getString(COL_RELEASE_DATE);
 
                 ((TextView) rootView.findViewById(R.id.relDate))
-                        .setText("Release Date: "+relDate);
+                        .setText("Release Date: " + relDate);
 
                 postURL = data.getString(COL_POSTER_PATH);
                 ImageView poster = (ImageView) rootView.findViewById(R.id.poster);
@@ -409,18 +403,18 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
 
                 movieId = data.getString(COL_MOVIE_ID);
                 popularity = data.getString(COL_POPULARITY);
-                double pop=Double.parseDouble(popularity);
-                popularity=String.valueOf((double)Math.round(pop*10d)/10d) ;
+                double pop = Double.parseDouble(popularity);
+                popularity = String.valueOf((double) Math.round(pop * 10d) / 10d);
 
                 ((TextView) rootView.findViewById(R.id.popularity))
                         .setText("Popularity : " + popularity);
 
                 votAvg = data.getString(COL_VOTE_AVERAGE);
-                double vote=Double.parseDouble(votAvg);
-                votAvg=String.valueOf((double)Math.round(vote*10d)/10d) ;
-                        ((TextView) rootView.findViewById(R.id.vote))
+                double vote = Double.parseDouble(votAvg);
+                votAvg = String.valueOf((double) Math.round(vote * 10d) / 10d);
+                ((TextView) rootView.findViewById(R.id.vote))
                         .setText(votAvg);
-                backdropURL=data.getString(COL_BACKDROP_PATH);
+                backdropURL = data.getString(COL_BACKDROP_PATH);
                 final ImageView backdrop = (ImageView) rootView.findViewById(R.id.backdropImg);
                 Picasso
                         .with(getActivity())
@@ -455,8 +449,8 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                         });
                 backdrop.setAdjustViewBounds(true);
 
-                final String downloaded= data.getString(COL_DOWNLOADED);
-                showed=data.getString(COL_SHOWED);
+                final String downloaded = data.getString(COL_DOWNLOADED);
+                showed = data.getString(COL_SHOWED);
                 FloatingActionButton show;
                 if (showed.equalsIgnoreCase("1")) {
                     rootView.findViewById(R.id.hide).setVisibility(View.VISIBLE);
@@ -477,13 +471,13 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                             hide();
                         } else {
                             sh.put(MovieContract.Movies.SHOWED, "1");
-                            if (downloaded.equalsIgnoreCase("0")){
-                                if(Utility.hasNetworkConnection(getActivity())) {
+                            if (downloaded.equalsIgnoreCase("0")) {
+                                if (Utility.hasNetworkConnection(getActivity())) {
                                     updateMovieList();
                                     sh.put(MovieContract.Movies.DOWNLOADED, "1");
                                     Toast.makeText(getContext(), "TRAILERS and REVIEWS shown!", Toast.LENGTH_SHORT).show();
                                     show();
-                                }else{
+                                } else {
                                     Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_LONG).show();
                                 }
                             }
@@ -494,24 +488,24 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                     }
                 });
 
-                FloatingActionButton play= (FloatingActionButton) rootView.findViewById(R.id.play);
+                FloatingActionButton play = (FloatingActionButton) rootView.findViewById(R.id.play);
 
                 play.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (downloaded.equalsIgnoreCase("0")){
+                        if (downloaded.equalsIgnoreCase("0")) {
                             ContentValues sh = new ContentValues();
-                            if(Utility.hasNetworkConnection(getActivity())) {
+                            if (Utility.hasNetworkConnection(getActivity())) {
                                 updateMovieList();
                                 sh.put(MovieContract.Movies.DOWNLOADED, "1");
                                 getContext().getContentResolver().update(
                                         MovieContract.Movies.CONTENT_URI.buildUpon().appendPath(movieId).build(),
                                         sh, null, new String[]{movieId});
                                 Toast.makeText(getContext(), "Click One More Time to Play!", Toast.LENGTH_SHORT).show();
-                            }else{
+                            } else {
                                 Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_LONG).show();
                             }
-                        }else{
+                        } else {
                             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(playTrailer));
                             startActivity(intent);
                         }
@@ -523,14 +517,14 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                     public void onClick(View view) {
                         if (downloaded.equalsIgnoreCase("0")) {
                             ContentValues sh = new ContentValues();
-                            if(Utility.hasNetworkConnection(getActivity())) {
+                            if (Utility.hasNetworkConnection(getActivity())) {
                                 updateMovieList();
                                 sh.put(MovieContract.Movies.DOWNLOADED, "1");
                                 getContext().getContentResolver().update(
                                         MovieContract.Movies.CONTENT_URI.buildUpon().appendPath(movieId).build(),
                                         sh, null, new String[]{movieId});
                                 Toast.makeText(getContext(), "Click One More Time to Share!", Toast.LENGTH_SHORT).show();
-                            }else{
+                            } else {
                                 Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_LONG).show();
                             }
                         } else {
@@ -543,19 +537,19 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                         }
                     }
                 });
-                if (movieValues.size()==0){
+                if (movieValues.size() == 0) {
                     movieValues.put(MovieContract.Movies.PAGE, data.getString(COL_PAGE));
-                    movieValues.put(MovieContract.Movies.POSTER_PATH,postURL );
-                    movieValues.put(MovieContract.Movies.ADULT,data.getString(COL_ADULT) );
-                    movieValues.put(MovieContract.Movies.OVERVIEW,overview );
-                    movieValues.put(MovieContract.Movies.RELEASE_DATE,relDate );
-                    movieValues.put(MovieContract.Movies.MOVIE_ID,movie_Id );
-                    movieValues.put(MovieContract.Movies.ORIGINAL_TITLE,orgTitle );
-                    movieValues.put(MovieContract.Movies.ORIGINAL_LANGUAGE,orgLang );
-                    movieValues.put(MovieContract.Movies.TITLE,data.getString(COL_TITLE) );
-                    movieValues.put(MovieContract.Movies.BACKDROP_PATH,backdropURL );
-                    movieValues.put(MovieContract.Movies.POPULARITY,popularity );
-                    movieValues.put(MovieContract.Movies.VOTE_COUNT,data.getString(COL_VOTE_COUNT) );
+                    movieValues.put(MovieContract.Movies.POSTER_PATH, postURL);
+                    movieValues.put(MovieContract.Movies.ADULT, data.getString(COL_ADULT));
+                    movieValues.put(MovieContract.Movies.OVERVIEW, overview);
+                    movieValues.put(MovieContract.Movies.RELEASE_DATE, relDate);
+                    movieValues.put(MovieContract.Movies.MOVIE_ID, movie_Id);
+                    movieValues.put(MovieContract.Movies.ORIGINAL_TITLE, orgTitle);
+                    movieValues.put(MovieContract.Movies.ORIGINAL_LANGUAGE, orgLang);
+                    movieValues.put(MovieContract.Movies.TITLE, data.getString(COL_TITLE));
+                    movieValues.put(MovieContract.Movies.BACKDROP_PATH, backdropURL);
+                    movieValues.put(MovieContract.Movies.POPULARITY, popularity);
+                    movieValues.put(MovieContract.Movies.VOTE_COUNT, data.getString(COL_VOTE_COUNT));
                     movieValues.put(MovieContract.Movies.VOTE_AVERAGE, votAvg);
                     movieValues.put(MovieContract.Movies.FAVOURED, "1");
                     movieValues.put(MovieContract.Movies.SHOWED, data.getString(COL_SHOWED));
@@ -565,11 +559,11 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                 break;
             case FAVOURITE_LOADER:
                 FloatingActionButton fab;
-                boolean favoured=false;
+                boolean favoured = false;
                 if (data.moveToFirst()) {
                     do {
-                        if (data.getString(COL_MOVIE_ID).equalsIgnoreCase(movie_Id)){
-                            favoured=true;
+                        if (data.getString(COL_MOVIE_ID).equalsIgnoreCase(movie_Id)) {
+                            favoured = true;
                         }
                     }
                     while (data.moveToNext());
@@ -600,20 +594,20 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                 });
                 break;
             case TRAILER_LOADER:
-                int iter=0;
+                int iter = 0;
                 if (data.moveToFirst()) {
                     do {
                         trailerListAdapter.swapCursor(data);
                         iter++;
-                        if(iter==1){
-                            playTrailer+=data.getString(DetailActivityFragment.COL_TRAILER_SOURCE);
+                        if (iter == 1) {
+                            playTrailer += data.getString(DetailActivityFragment.COL_TRAILER_SOURCE);
                         }
                     }
                     while (data.moveToNext());
                 }
                 break;
             case REVIEW_LOADER:
-                Log.e(LOG_TAG,"Review");
+                Log.e(LOG_TAG, "Review");
                 if (data.moveToFirst()) {
                     do {
                         reviewListAdapter.swapCursor(data);
@@ -624,12 +618,12 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             case GENRE_LOADER:
                 if (data.moveToFirst()) {
                     do {
-                        if(genre.length()<9)
-                        genre+=data.getString(COL_GENRE_NAME)+" ";
+                        if (genre.length() < 9)
+                            genre += data.getString(COL_GENRE_NAME) + " ";
                         genreListAdapter.swapCursor(data);
                     }
                     while (data.moveToNext());
-                    TextView genreNames=((TextView) rootView.findViewById(R.id.genreNames));
+                    TextView genreNames = ((TextView) rootView.findViewById(R.id.genreNames));
                     genreNames.setText(genre);
                 }
                 break;
@@ -637,6 +631,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                 throw new UnsupportedOperationException("Unknown Loader");
         }
     }
+
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         trailerListAdapter.swapCursor(null);

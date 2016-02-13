@@ -23,15 +23,41 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 /**
  * Created by anupam on 27/12/15.
  */
 public class ReviewMovieAdapter extends CursorAdapter {
-        private static final String LOG_TAG = ReviewMovieAdapter.class.getSimpleName();
+    private static final String LOG_TAG = ReviewMovieAdapter.class.getSimpleName();
 
-        public ReviewMovieAdapter(Context context, Cursor c, int flags) {
-            super(context, c, flags);
-        }
+    public ReviewMovieAdapter(Context context, Cursor c, int flags) {
+        super(context, c, flags);
+    }
+
+    @Override
+    public View newView(Context context, Cursor cursor, ViewGroup parent) {
+        View view = LayoutInflater.from(context).inflate(R.layout.list_review_movie, parent, false);
+        ViewHolder viewHolder = new ViewHolder(view);
+        view.setTag(viewHolder);
+        return view;
+    }
+
+    /*
+       This is where we fill-in the views with the contents of the cursor.
+    */
+    @Override
+    public void bindView(View view, final Context context, Cursor cursor) {
+        final String author_name = cursor.getString(DetailActivityFragment.COL_REVIEW_AUTHOR);
+        final String content = cursor.getString(DetailActivityFragment.COL_REVIEW_CONTENT);
+        final String url = cursor.getString(DetailActivityFragment.COL_REVIEW_URL);
+
+        ViewHolder viewHolder = (ViewHolder) view.getTag();
+
+        viewHolder.author.setText("Author:  " + author_name);
+        viewHolder.contentView.setText("Content:  " + content);
+        viewHolder.urlView.setText("Look more at:  " + url);
+    }
+
     public static class ViewHolder {
 
         public final TextView author;
@@ -45,26 +71,4 @@ public class ReviewMovieAdapter extends CursorAdapter {
 
         }
     }
-        @Override
-        public View newView(Context context, Cursor cursor, ViewGroup parent) {
-            View view = LayoutInflater.from(context).inflate(R.layout.list_review_movie, parent, false);
-            ViewHolder viewHolder = new ViewHolder(view);
-            view.setTag(viewHolder);
-            return view;
-        }
-        /*
-           This is where we fill-in the views with the contents of the cursor.
-        */
-        @Override
-        public void bindView(View view, final Context context, Cursor cursor) {
-            final String author_name=cursor.getString(DetailActivityFragment.COL_REVIEW_AUTHOR);
-            final String content=cursor.getString(DetailActivityFragment.COL_REVIEW_CONTENT);
-            final String url=cursor.getString(DetailActivityFragment.COL_REVIEW_URL);
-
-            ViewHolder viewHolder = (ViewHolder) view.getTag();
-
-            viewHolder.author.setText("Author:  "+author_name);
-            viewHolder.contentView.setText("Content:  "+content);
-            viewHolder.urlView.setText("Look more at:  "+url);
-        }
-    }
+}

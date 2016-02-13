@@ -45,16 +45,16 @@ public class FetchTrailReview extends AsyncTask<String, Void, Void> {
     private final String LOG_TAG = FetchMovieTask.class.getSimpleName();
 
     private final Context mContext;
+    private boolean DEBUG = true;
 
     public FetchTrailReview(Context context) {
         mContext = context;
     }
 
-    private boolean DEBUG = true;
     /**
      * Take the String representing the complete movie list in JSON Format and
      * pull out the data we need to construct the Strings needed for the wireframes.
-     *
+     * <p>
      * Fortunately parsing is easy:  constructor takes the JSON string and converts it
      * into an Object hierarchy for us.
      */
@@ -62,26 +62,24 @@ public class FetchTrailReview extends AsyncTask<String, Void, Void> {
             throws JSONException {
 
         // These are the names of the JSON objects that need to be extracted.
-        final String NAME="name";
-        final String SIZE="size";
-        final String SOURCE="source";
-        final String TYPE="type";
-        final String REVIEW_ID="id";
-        final String GENRE_ID="id";
-        final String AUTHOR="author";
-        final String CONTENT="content";
-        final String URL="url";
-        final String TOTAL_PAGES_REVIEWS="total_pages";
-        final String TOTAL_RESULTS_REVIEWS="total_results";
-        final String PAGE="page";
-        final String MOVIE_ID="id";
+        final String NAME = "name";
+        final String SIZE = "size";
+        final String SOURCE = "source";
+        final String TYPE = "type";
+        final String REVIEW_ID = "id";
+        final String GENRE_ID = "id";
+        final String AUTHOR = "author";
+        final String CONTENT = "content";
+        final String URL = "url";
+        final String TOTAL_PAGES_REVIEWS = "total_pages";
+        final String TOTAL_RESULTS_REVIEWS = "total_results";
+        final String PAGE = "page";
+        final String MOVIE_ID = "id";
 
-        final String RESULT1="trailers";
-        final String RESULT2="reviews";
-        final String RESULT3="genres";
-        final String YOUTUBE="youtube";
-
-
+        final String RESULT1 = "trailers";
+        final String RESULT2 = "reviews";
+        final String RESULT3 = "genres";
+        final String YOUTUBE = "youtube";
 
 
         try {
@@ -101,117 +99,116 @@ public class FetchTrailReview extends AsyncTask<String, Void, Void> {
                 JSONObject trailerInfo = movieArrayTrailer.getJSONObject(i);
 
 
-
-                    String name;
-                    String size;
-                    String source;
-                    String type;
-
-
-                    name = trailerInfo.getString(NAME);
-                    size = trailerInfo.getString(SIZE);
-                    source = trailerInfo.getString(SOURCE);
-                    type = trailerInfo.getString(TYPE);
-
-                    ContentValues movieValues = new ContentValues();
-
-                    // Then add the data, along with the corresponding name of the data type,
-                    // so the content provider knows what kind of value is being inserted.
-
-                    movieValues.put(MovieContract.Trailers.NAME,name );
-                    movieValues.put(MovieContract.Trailers.SIZE,size );
-                    movieValues.put(MovieContract.Trailers.SOURCE,source );
-                    movieValues.put(MovieContract.Trailers.TYPE,type );
-                    movieValues.put(MovieContract.Trailers.MOVIE_ID, movie_id);
-                    cVVectorTrailer.add(movieValues);
-
-                }
-                int inserted = 0;
-                // add to database
-                if ( cVVectorTrailer.size() > 0 ) {
-                    ContentValues[] cvArray = new ContentValues[cVVectorTrailer.size()];
-                    cVVectorTrailer.toArray(cvArray);
-                    inserted = mContext.getContentResolver().bulkInsert(MovieContract.Trailers.CONTENT_URI, cvArray);
-                }
-                Log.d(LOG_TAG, "FetchTrailer Task Complete. " + inserted + " Inserted");
+                String name;
+                String size;
+                String source;
+                String type;
 
 
-                String page=movieArrayReviews.getString(PAGE);
-                String total_page=movieArrayReviews.getString(TOTAL_PAGES_REVIEWS);
-                String total_results=movieArrayReviews.getString(TOTAL_RESULTS_REVIEWS);
+                name = trailerInfo.getString(NAME);
+                size = trailerInfo.getString(SIZE);
+                source = trailerInfo.getString(SOURCE);
+                type = trailerInfo.getString(TYPE);
 
-                JSONArray reviews = movieArrayReviews.getJSONArray("results");
+                ContentValues movieValues = new ContentValues();
 
-                Vector<ContentValues> cVVectorReviews = new Vector<ContentValues>(reviews.length());
+                // Then add the data, along with the corresponding name of the data type,
+                // so the content provider knows what kind of value is being inserted.
 
-                for (int j=0;j<reviews.length();j++){
+                movieValues.put(MovieContract.Trailers.NAME, name);
+                movieValues.put(MovieContract.Trailers.SIZE, size);
+                movieValues.put(MovieContract.Trailers.SOURCE, source);
+                movieValues.put(MovieContract.Trailers.TYPE, type);
+                movieValues.put(MovieContract.Trailers.MOVIE_ID, movie_id);
+                cVVectorTrailer.add(movieValues);
 
-                    JSONObject reviewsInfo = reviews.getJSONObject(j);
+            }
+            int inserted = 0;
+            // add to database
+            if (cVVectorTrailer.size() > 0) {
+                ContentValues[] cvArray = new ContentValues[cVVectorTrailer.size()];
+                cVVectorTrailer.toArray(cvArray);
+                inserted = mContext.getContentResolver().bulkInsert(MovieContract.Trailers.CONTENT_URI, cvArray);
+            }
+            Log.d(LOG_TAG, "FetchTrailer Task Complete. " + inserted + " Inserted");
 
-                    String id_reviews;
-                    String author;
-                    String content;
-                    String url;
+
+            String page = movieArrayReviews.getString(PAGE);
+            String total_page = movieArrayReviews.getString(TOTAL_PAGES_REVIEWS);
+            String total_results = movieArrayReviews.getString(TOTAL_RESULTS_REVIEWS);
+
+            JSONArray reviews = movieArrayReviews.getJSONArray("results");
+
+            Vector<ContentValues> cVVectorReviews = new Vector<ContentValues>(reviews.length());
+
+            for (int j = 0; j < reviews.length(); j++) {
+
+                JSONObject reviewsInfo = reviews.getJSONObject(j);
+
+                String id_reviews;
+                String author;
+                String content;
+                String url;
 
 
-                    id_reviews = reviewsInfo.getString(REVIEW_ID);
-                    author = reviewsInfo.getString(AUTHOR);
-                    content = reviewsInfo.getString(CONTENT);
-                    url = reviewsInfo.getString(URL);
+                id_reviews = reviewsInfo.getString(REVIEW_ID);
+                author = reviewsInfo.getString(AUTHOR);
+                content = reviewsInfo.getString(CONTENT);
+                url = reviewsInfo.getString(URL);
 
-                    ContentValues movieValues = new ContentValues();
+                ContentValues movieValues = new ContentValues();
 
-                    // Then add the data, along with the corresponding name of the data type,
-                    // so the content provider knows what kind of value is being inserted.
+                // Then add the data, along with the corresponding name of the data type,
+                // so the content provider knows what kind of value is being inserted.
 
-                    movieValues.put(MovieContract.Reviews.PAGE,page );
-                    movieValues.put(MovieContract.Reviews.TOTAL_PAGE,total_page );
-                    movieValues.put(MovieContract.Reviews.TOTAL_RESULTS,total_results );
-                    movieValues.put(MovieContract.Reviews.ID_REVIEWS,id_reviews );
-                    movieValues.put(MovieContract.Reviews.AUTHOR, author);
-                    movieValues.put(MovieContract.Reviews.CONTENT, content);
-                    movieValues.put(MovieContract.Reviews.URL, url);
-                    movieValues.put(MovieContract.Reviews.MOVIE_ID, movie_id);
+                movieValues.put(MovieContract.Reviews.PAGE, page);
+                movieValues.put(MovieContract.Reviews.TOTAL_PAGE, total_page);
+                movieValues.put(MovieContract.Reviews.TOTAL_RESULTS, total_results);
+                movieValues.put(MovieContract.Reviews.ID_REVIEWS, id_reviews);
+                movieValues.put(MovieContract.Reviews.AUTHOR, author);
+                movieValues.put(MovieContract.Reviews.CONTENT, content);
+                movieValues.put(MovieContract.Reviews.URL, url);
+                movieValues.put(MovieContract.Reviews.MOVIE_ID, movie_id);
 
-                    cVVectorReviews.add(movieValues);
+                cVVectorReviews.add(movieValues);
 
-                }
-                inserted = 0;
-                // add to database
-                if ( cVVectorReviews.size() > 0 ) {
-                    ContentValues[] cvArray = new ContentValues[cVVectorReviews.size()];
-                    cVVectorReviews.toArray(cvArray);
-                    inserted = mContext.getContentResolver().bulkInsert(MovieContract.Reviews.CONTENT_URI, cvArray);
-                }
-                Log.d(LOG_TAG, "FetchReview Task Complete. " + inserted + " Inserted");
+            }
+            inserted = 0;
+            // add to database
+            if (cVVectorReviews.size() > 0) {
+                ContentValues[] cvArray = new ContentValues[cVVectorReviews.size()];
+                cVVectorReviews.toArray(cvArray);
+                inserted = mContext.getContentResolver().bulkInsert(MovieContract.Reviews.CONTENT_URI, cvArray);
+            }
+            Log.d(LOG_TAG, "FetchReview Task Complete. " + inserted + " Inserted");
 
             Vector<ContentValues> cVVectorGenres = new Vector<ContentValues>(movieArrayGenres.length());
 
             for (int i = 0; i < movieArrayGenres.length(); i++) {
 
                 JSONObject gen = movieArrayGenres.getJSONObject(i);
-                String genre_id=gen.getString(GENRE_ID);
-                String name=gen.getString(NAME);
+                String genre_id = gen.getString(GENRE_ID);
+                String name = gen.getString(NAME);
 
-                    ContentValues movieValues = new ContentValues();
+                ContentValues movieValues = new ContentValues();
 
-                    // Then add the data, along with the corresponding name of the data type,
-                    // so the content provider knows what kind of value is being inserted.
+                // Then add the data, along with the corresponding name of the data type,
+                // so the content provider knows what kind of value is being inserted.
 
-                    movieValues.put(MovieContract.Genres.ID_GENRES,genre_id );
-                    movieValues.put(MovieContract.Genres.NAME,name );
-                    movieValues.put(MovieContract.Genres.MOVIE_ID,movie_id );
-                    cVVectorGenres.add(movieValues);
+                movieValues.put(MovieContract.Genres.ID_GENRES, genre_id);
+                movieValues.put(MovieContract.Genres.NAME, name);
+                movieValues.put(MovieContract.Genres.MOVIE_ID, movie_id);
+                cVVectorGenres.add(movieValues);
 
-                }
-                 inserted = 0;
-                // add to database
-                if ( cVVectorGenres.size() > 0 ) {
-                    ContentValues[] cvArray = new ContentValues[cVVectorGenres.size()];
-                    cVVectorGenres.toArray(cvArray);
-                    inserted = mContext.getContentResolver().bulkInsert(MovieContract.Genres.CONTENT_URI, cvArray);
-                }
-                Log.d(LOG_TAG, "FetchGenres Task Complete. " + inserted + " Inserted");
+            }
+            inserted = 0;
+            // add to database
+            if (cVVectorGenres.size() > 0) {
+                ContentValues[] cvArray = new ContentValues[cVVectorGenres.size()];
+                cVVectorGenres.toArray(cvArray);
+                inserted = mContext.getContentResolver().bulkInsert(MovieContract.Genres.CONTENT_URI, cvArray);
+            }
+            Log.d(LOG_TAG, "FetchGenres Task Complete. " + inserted + " Inserted");
 
 
         } catch (JSONException e) {
@@ -241,12 +238,12 @@ public class FetchTrailReview extends AsyncTask<String, Void, Void> {
             final String MOVIE_BASE_URL =
                     "http://api.themoviedb.org/3/movie/";
             final String APPID_PARAM = "api_key";
-            final String DATA="append_to_response";
+            final String DATA = "append_to_response";
 
             Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                     .appendPath(params[0])
                     .appendQueryParameter(APPID_PARAM, BuildConfig.MOVIE_DB_API_KEY)
-                    .appendQueryParameter(DATA,"trailers,reviews")
+                    .appendQueryParameter(DATA, "trailers,reviews")
                     .build();
 
             URL url = new URL(builtUri.toString());

@@ -49,11 +49,10 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
         mContext = context;
     }
 
-    private boolean DEBUG = true;
     /**
      * Take the String representing the complete movie list in JSON Format and
      * pull out the data we need to construct the Strings needed for the wireframes.
-     *
+     * <p>
      * Fortunately parsing is easy:  constructor takes the JSON string and converts it
      * into an Object hierarchy for us.
      */
@@ -61,30 +60,30 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
             throws JSONException {
 
         // These are the names of the JSON objects that need to be extracted.
-        final String MOVIE_ID="id";
-        final String ORGLANG="original_language";
-        final String ORGTITLE="original_title";
-        final String OVER="overview";
-        final String RELDATE="release_date";
-        final String POSTERPATH="poster_path";
-        final String POPULARITY="popularity";
-        final String VOTAVG="vote_average";
-        final String ADULT="adult";
-        final String TITLE="title";
-        final String BACKDROP_PATH="backdrop_path";
-        final String VOTE_COUNT="vote_count";
-        final String PAGE="page";
+        final String MOVIE_ID = "id";
+        final String ORGLANG = "original_language";
+        final String ORGTITLE = "original_title";
+        final String OVER = "overview";
+        final String RELDATE = "release_date";
+        final String POSTERPATH = "poster_path";
+        final String POPULARITY = "popularity";
+        final String VOTAVG = "vote_average";
+        final String ADULT = "adult";
+        final String TITLE = "title";
+        final String BACKDROP_PATH = "backdrop_path";
+        final String VOTE_COUNT = "vote_count";
+        final String PAGE = "page";
 
 
-        final String RESULT="results";
-        final String POSTER_BASE_URL="http://image.tmdb.org/t/p/w185";
-        final String BACKDROP_BASE_URL="http://image.tmdb.org/t/p/w500";
+        final String RESULT = "results";
+        final String POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185";
+        final String BACKDROP_BASE_URL = "http://image.tmdb.org/t/p/w500";
 
         try {
             JSONObject movieJson = new JSONObject(movieJsonStr);
             JSONArray movieArray = movieJson.getJSONArray(RESULT);
 
-            String page=movieJson.getString(PAGE);
+            String page = movieJson.getString(PAGE);
 
             Vector<ContentValues> cVVector = new Vector<ContentValues>(movieArray.length());
 
@@ -116,13 +115,12 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
                         appendEncodedPath(movieInfo.getString(POSTERPATH)).build().toString();
                 popularity = movieInfo.getString(POPULARITY);
                 votAvg = movieInfo.getString(VOTAVG);
-                vote_count=movieInfo.getString(VOTE_COUNT);
-                title=movieInfo.getString(TITLE);
-                adult=movieInfo.getString(ADULT);
+                vote_count = movieInfo.getString(VOTE_COUNT);
+                title = movieInfo.getString(TITLE);
+                adult = movieInfo.getString(ADULT);
 
-                backdropURL=Uri.parse(BACKDROP_BASE_URL).buildUpon().
+                backdropURL = Uri.parse(BACKDROP_BASE_URL).buildUpon().
                         appendEncodedPath(movieInfo.getString(BACKDROP_PATH)).build().toString();
-
 
 
                 ContentValues movieValues = new ContentValues();
@@ -130,25 +128,25 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
                 // Then add the data, along with the corresponding name of the data type,
                 // so the content provider knows what kind of value is being inserted.
 
-                movieValues.put(MovieContract.Movies.PAGE,page );
-                movieValues.put(MovieContract.Movies.POSTER_PATH,postURL );
-                movieValues.put(MovieContract.Movies.ADULT,adult );
-                movieValues.put(MovieContract.Movies.OVERVIEW,overview );
-                movieValues.put(MovieContract.Movies.RELEASE_DATE,relDate );
-                movieValues.put(MovieContract.Movies.MOVIE_ID,movie_id );
-                movieValues.put(MovieContract.Movies.ORIGINAL_TITLE,orgTitle );
-                movieValues.put(MovieContract.Movies.ORIGINAL_LANGUAGE,orgLang );
-                movieValues.put(MovieContract.Movies.TITLE,title );
-                movieValues.put(MovieContract.Movies.BACKDROP_PATH,backdropURL );
-                movieValues.put(MovieContract.Movies.POPULARITY,popularity );
-                movieValues.put(MovieContract.Movies.VOTE_COUNT,vote_count );
+                movieValues.put(MovieContract.Movies.PAGE, page);
+                movieValues.put(MovieContract.Movies.POSTER_PATH, postURL);
+                movieValues.put(MovieContract.Movies.ADULT, adult);
+                movieValues.put(MovieContract.Movies.OVERVIEW, overview);
+                movieValues.put(MovieContract.Movies.RELEASE_DATE, relDate);
+                movieValues.put(MovieContract.Movies.MOVIE_ID, movie_id);
+                movieValues.put(MovieContract.Movies.ORIGINAL_TITLE, orgTitle);
+                movieValues.put(MovieContract.Movies.ORIGINAL_LANGUAGE, orgLang);
+                movieValues.put(MovieContract.Movies.TITLE, title);
+                movieValues.put(MovieContract.Movies.BACKDROP_PATH, backdropURL);
+                movieValues.put(MovieContract.Movies.POPULARITY, popularity);
+                movieValues.put(MovieContract.Movies.VOTE_COUNT, vote_count);
                 movieValues.put(MovieContract.Movies.VOTE_AVERAGE, votAvg);
                 movieValues.put(MovieContract.Movies.SORT_BY, Utility.getPreferredSorting(mContext));
                 cVVector.add(movieValues);
             }
             int inserted = 0;
             // add to database
-            if ( cVVector.size() > 0 ) {
+            if (cVVector.size() > 0) {
                 ContentValues[] cvArray = new ContentValues[cVVector.size()];
                 cVVector.toArray(cvArray);
                 inserted = mContext.getContentResolver().bulkInsert(MovieContract.Movies.CONTENT_URI, cvArray);
@@ -189,7 +187,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
             Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                     .appendQueryParameter(SORT_PARAM, params[0])
                     .appendQueryParameter(APPID_PARAM, BuildConfig.MOVIE_DB_API_KEY)
-                    .appendQueryParameter(PAGE_PARAM,params[1])
+                    .appendQueryParameter(PAGE_PARAM, params[1])
                     .build();
 
             URL url = new URL(builtUri.toString());

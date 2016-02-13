@@ -34,7 +34,7 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 import work.technie.popularmovies.data.MovieContract;
 
 
-public class MovieArrayAdapter  extends CursorAdapter {
+public class MovieArrayAdapter extends CursorAdapter {
     private static final String LOG_TAG = MovieArrayAdapter.class.getSimpleName();
 
 
@@ -49,22 +49,6 @@ public class MovieArrayAdapter  extends CursorAdapter {
         view.setTag(viewHolder);
         return view;
     }
-    public static class ViewHolder {
-
-        final ImageView imageView;
-        final TextView year;
-        final ImageView favIcon;
-        final TextView userRating;
-        final TextView pop_text;
-
-        public ViewHolder(View view) {
-            imageView = (ImageView) view.findViewById(R.id.grid_item_poster);
-            year=(TextView) view.findViewById(R.id.year);
-            favIcon=(ImageView) view.findViewById(R.id.vote_icon);
-            userRating=(TextView) view.findViewById(R.id.vote_text);
-            pop_text=(TextView) view.findViewById(R.id.pop_text);
-        }
-    }
 
     /*
        This is where we fill-in the views with the contents of the cursor.
@@ -73,13 +57,13 @@ public class MovieArrayAdapter  extends CursorAdapter {
     public void bindView(View view, final Context context, Cursor cursor) {
         final ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        final String url=cursor.getString(MainActivityFragment.COL_POSTER_PATH);
+        final String url = cursor.getString(MainActivityFragment.COL_POSTER_PATH);
         Picasso
-                    .with(context)
-                    .load(url)
-                    .networkPolicy(NetworkPolicy.OFFLINE)
-                    .transform(new RoundedCornersTransformation(10, 10))
-                    .fit()
+                .with(context)
+                .load(url)
+                .networkPolicy(NetworkPolicy.OFFLINE)
+                .transform(new RoundedCornersTransformation(10, 10))
+                .fit()
                 .centerCrop()
                 .into(viewHolder.imageView, new Callback() {
                     @Override
@@ -109,25 +93,42 @@ public class MovieArrayAdapter  extends CursorAdapter {
         viewHolder.imageView.setAdjustViewBounds(true);
 
 
-        String date=cursor.getString(MainActivityFragment.COL_RELEASE_DATE);
-        int pos=date.indexOf('-');
+        String date = cursor.getString(MainActivityFragment.COL_RELEASE_DATE);
+        int pos = date.indexOf('-');
         viewHolder.year.setText(date.substring(0, pos >= 0 ? pos : 0));
-        int fav=context.getContentResolver().query(
-                    MovieContract.Favourites.buildMoviesUriWithMovieId(cursor.getString(MainActivityFragment.COL_MOVIE_ID)),
-                    null,null,null,null).getCount();
-        if (fav==1){
+        int fav = context.getContentResolver().query(
+                MovieContract.Favourites.buildMoviesUriWithMovieId(cursor.getString(MainActivityFragment.COL_MOVIE_ID)),
+                null, null, null, null).getCount();
+        if (fav == 1) {
             viewHolder.favIcon.setImageResource(R.drawable.ic_star_bookmark);
-        }else {
+        } else {
             viewHolder.favIcon.setImageResource(R.drawable.ic_star_border_bookmark);
         }
-        String rating=cursor.getString(MainActivityFragment.COL_VOTE_AVERAGE);
-        double vote=Double.parseDouble(rating);
-        rating=String.valueOf((double)Math.round(vote*10d)/10d) ;
+        String rating = cursor.getString(MainActivityFragment.COL_VOTE_AVERAGE);
+        double vote = Double.parseDouble(rating);
+        rating = String.valueOf((double) Math.round(vote * 10d) / 10d);
 
         viewHolder.userRating.setText(rating + "/10");
 
-       String popularity=cursor.getString(MainActivityFragment.COL_POPULARITY);
-        pos=popularity.indexOf(".");
-        viewHolder.pop_text.setText(popularity.substring(0,pos>=0?pos:0));
+        String popularity = cursor.getString(MainActivityFragment.COL_POPULARITY);
+        pos = popularity.indexOf(".");
+        viewHolder.pop_text.setText(popularity.substring(0, pos >= 0 ? pos : 0));
+    }
+
+    public static class ViewHolder {
+
+        final ImageView imageView;
+        final TextView year;
+        final ImageView favIcon;
+        final TextView userRating;
+        final TextView pop_text;
+
+        public ViewHolder(View view) {
+            imageView = (ImageView) view.findViewById(R.id.grid_item_poster);
+            year = (TextView) view.findViewById(R.id.year);
+            favIcon = (ImageView) view.findViewById(R.id.vote_icon);
+            userRating = (TextView) view.findViewById(R.id.vote_text);
+            pop_text = (TextView) view.findViewById(R.id.pop_text);
+        }
     }
 }

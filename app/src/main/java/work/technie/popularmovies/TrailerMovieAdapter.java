@@ -49,6 +49,38 @@ public class TrailerMovieAdapter extends CursorAdapter {
         view.setTag(viewHolder);
         return view;
     }
+
+    /*
+       This is where we fill-in the views with the contents of the cursor.
+    */
+    @Override
+    public void bindView(View view, final Context context, Cursor cursor) {
+        final String trailer_name = cursor.getString(DetailActivityFragment.COL_TRAILER_NAME);
+        final String source = cursor.getString(DetailActivityFragment.COL_TRAILER_SOURCE);
+        final ViewHolder viewHolder = (ViewHolder) view.getTag();
+        viewHolder.trailer.setText(trailer_name);
+        final String BASE_URL = "http://img.youtube.com/vi/";
+        final String url = BASE_URL + source + "/0.jpg";
+        Picasso
+                .with(context)
+                .load(url)
+                .transform(new RoundedCornersTransformation(10, 10))
+                .fit()
+                .centerCrop()
+                .into(viewHolder.trailerImg);
+        viewHolder.trailerImg.setAdjustViewBounds(true);
+
+        final String trailerUrl = "https://www.youtube.com/watch?v=" + source;
+        ImageView trailerImg = (ImageView) view.findViewById(R.id.youtubeImg);
+        trailerImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(trailerUrl));
+                context.startActivity(intent);
+            }
+        });
+    }
+
     public static class ViewHolder {
 
         public final TextView trailer;
@@ -58,37 +90,5 @@ public class TrailerMovieAdapter extends CursorAdapter {
             trailer = (TextView) view.findViewById(R.id.trailer_name);
             trailerImg = (ImageView) view.findViewById(R.id.youtubeImg);
         }
-    }
-
-
-    /*
-       This is where we fill-in the views with the contents of the cursor.
-    */
-    @Override
-    public void bindView(View view, final Context context, Cursor cursor) {
-        final String trailer_name=cursor.getString(DetailActivityFragment.COL_TRAILER_NAME);
-        final String source=cursor.getString(DetailActivityFragment.COL_TRAILER_SOURCE);
-        final ViewHolder viewHolder = (ViewHolder) view.getTag();
-        viewHolder.trailer.setText(trailer_name);
-        final String BASE_URL="http://img.youtube.com/vi/";
-        final String url=BASE_URL+source+"/0.jpg";
-        Picasso
-                .with(context)
-                .load(url)
-                .transform(new RoundedCornersTransformation(10, 10))
-                .fit()
-                .centerCrop()
-                        .into(viewHolder.trailerImg);
-        viewHolder.trailerImg.setAdjustViewBounds(true);
-
-        final String trailerUrl="https://www.youtube.com/watch?v="+source;
-        ImageView trailerImg = (ImageView) view.findViewById(R.id.youtubeImg);
-        trailerImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(trailerUrl));
-                context.startActivity(intent);
-            }
-        });
     }
 }
