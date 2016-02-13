@@ -18,7 +18,6 @@ package work.technie.popularmovies;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,7 +84,7 @@ public class MovieArrayAdapter extends CursorAdapter {
 
                                     @Override
                                     public void onError() {
-                                        Log.v("Error Loading Images", "'");
+                                        //Log.v("Error Loading Images", "'");
                                     }
                                 });
                     }

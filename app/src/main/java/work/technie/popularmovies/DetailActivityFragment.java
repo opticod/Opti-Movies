@@ -28,7 +28,6 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -236,7 +235,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                     getActivity().getContentResolver().delete(MovieContract.Genres.buildMoviesUriWithMovieId(movie_Id), null, null);
                     genre = "Genre : ";
                     updateMovieList();
-                    Log.v(LOG_TAG, "refreshed");
+                    //Log.v(LOG_TAG, "refreshed");
                 } else {
                     Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_SHORT).show();
                     swipeRefreshLayout.setRefreshing(false);
@@ -370,7 +369,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     @Override
     public void onLoadFinished(Loader<Cursor> loader, final Cursor data) {
         swipeRefreshLayout.setRefreshing(false);
-        Log.v(LOG_TAG, "In onLoadFinished");
+        //Log.v(LOG_TAG, "In onLoadFinished");
         if (!data.moveToFirst()) {
             return;
         }
@@ -442,7 +441,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
 
                                             @Override
                                             public void onError() {
-                                                Log.v("Error Loading Images", "'");
+                                                //Log.v("Error Loading Images", "'");
                                             }
                                         });
                             }
@@ -607,7 +606,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                 }
                 break;
             case REVIEW_LOADER:
-                Log.e(LOG_TAG, "Review");
+                //Log.e(LOG_TAG, "Review");
                 if (data.moveToFirst()) {
                     do {
                         reviewListAdapter.swapCursor(data);

@@ -19,7 +19,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -151,10 +150,10 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
                 cVVector.toArray(cvArray);
                 inserted = mContext.getContentResolver().bulkInsert(MovieContract.Movies.CONTENT_URI, cvArray);
             }
-            Log.d(LOG_TAG, "FetchPopularMovie Task Complete. " + inserted + " Inserted");
+            //Log.d(LOG_TAG, "FetchPopularMovie Task Complete. " + inserted + " Inserted");
 
         } catch (JSONException e) {
-            Log.e(LOG_TAG, e.getMessage(), e);
+            //Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
         }
     }
@@ -220,12 +219,12 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
             movieJsonStr = buffer.toString();
             getMovieDataFromJson(movieJsonStr);
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Error ", e);
+            //Log.e(LOG_TAG, "Error ", e);
             // If the code didn't successfully get the movie data, there's no point in attemping
             // to parse it.
             return null;
         } catch (JSONException e) {
-            Log.e(LOG_TAG, e.getMessage(), e);
+            //Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
         } finally {
             if (urlConnection != null) {
@@ -235,7 +234,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
                 try {
                     reader.close();
                 } catch (final IOException e) {
-                    Log.e(LOG_TAG, "Error closing stream", e);
+                    //Log.e(LOG_TAG, "Error closing stream", e);
                 }
             }
         }

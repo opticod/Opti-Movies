@@ -20,7 +20,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -130,7 +129,7 @@ public class FetchTrailReview extends AsyncTask<String, Void, Void> {
                 cVVectorTrailer.toArray(cvArray);
                 inserted = mContext.getContentResolver().bulkInsert(MovieContract.Trailers.CONTENT_URI, cvArray);
             }
-            Log.d(LOG_TAG, "FetchTrailer Task Complete. " + inserted + " Inserted");
+            //Log.d(LOG_TAG, "FetchTrailer Task Complete. " + inserted + " Inserted");
 
 
             String page = movieArrayReviews.getString(PAGE);
@@ -180,7 +179,7 @@ public class FetchTrailReview extends AsyncTask<String, Void, Void> {
                 cVVectorReviews.toArray(cvArray);
                 inserted = mContext.getContentResolver().bulkInsert(MovieContract.Reviews.CONTENT_URI, cvArray);
             }
-            Log.d(LOG_TAG, "FetchReview Task Complete. " + inserted + " Inserted");
+            //Log.d(LOG_TAG, "FetchReview Task Complete. " + inserted + " Inserted");
 
             Vector<ContentValues> cVVectorGenres = new Vector<ContentValues>(movieArrayGenres.length());
 
@@ -208,11 +207,11 @@ public class FetchTrailReview extends AsyncTask<String, Void, Void> {
                 cVVectorGenres.toArray(cvArray);
                 inserted = mContext.getContentResolver().bulkInsert(MovieContract.Genres.CONTENT_URI, cvArray);
             }
-            Log.d(LOG_TAG, "FetchGenres Task Complete. " + inserted + " Inserted");
+            //Log.d(LOG_TAG, "FetchGenres Task Complete. " + inserted + " Inserted");
 
 
         } catch (JSONException e) {
-            Log.e(LOG_TAG, e.getMessage(), e);
+            //Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
         }
     }
@@ -276,12 +275,12 @@ public class FetchTrailReview extends AsyncTask<String, Void, Void> {
             movieJsonStr = buffer.toString();
             getMovieDataFromJson(movieJsonStr);
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Error ", e);
+            //Log.e(LOG_TAG, "Error ", e);
             // If the code didn't successfully get the movie data, there's no point in attemping
             // to parse it.
             return null;
         } catch (JSONException e) {
-            Log.e(LOG_TAG, e.getMessage(), e);
+            //Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
         } finally {
             if (urlConnection != null) {
@@ -291,7 +290,7 @@ public class FetchTrailReview extends AsyncTask<String, Void, Void> {
                 try {
                     reader.close();
                 } catch (final IOException e) {
-                    Log.e(LOG_TAG, "Error closing stream", e);
+                    //Log.e(LOG_TAG, "Error closing stream", e);
                 }
             }
         }
