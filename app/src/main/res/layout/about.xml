@@ -47,6 +47,14 @@
             android:layout_margin="@dimen/cardview_default_radius"
             android:text="(opticod)" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/cardview_default_radius"
+            android:autoLink="web"
+            android:text="https://github.com/opticod/PopularMovies.git" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="50dp"
