@@ -8,9 +8,9 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:largeHeap="true">
+        android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,8 +35,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="work.technie.popularmovies.MainActivity" />
         </activity>
+        <activity
+            android:name=".About"
+            android:label="@string/title_activity_about"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="work.technie.popularmovies.MainActivity" />
+        </activity>
         <provider
-            android:authorities="work.technie.popularmovies"
-            android:name=".data.MovieProvider"/>
+            android:name=".data.MovieProvider"
+            android:authorities="work.technie.popularmovies" />
     </application>
 </manifest>
