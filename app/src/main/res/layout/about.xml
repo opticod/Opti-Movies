@@ -56,6 +56,7 @@
             android:paddingLeft="45dp"
             android:paddingRight="45dp"
             android:text="@string/about_text" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="50dp"
