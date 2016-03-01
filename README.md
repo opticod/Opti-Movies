@@ -1,3 +1,5 @@
+<a href='https://play.google.com/store/apps/details?id=work.technie.popularmovies&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="200" /></a>
+
 # PopularMovies
 
 Here is a fully functional and user friendly android app which I made from scratch for [Android Developer Nanodegree](https://www.udacity.com/course/android-developer-nanodegree--nd801) program. 
@@ -6,6 +8,8 @@ This app help users to discover the most popular, the highest rated and the high
 It reveals the power of adaptive UI both for phone and tablet devices.It includes various new Lollipop+ features.
 
 Popular Movies was highly evaluated by certified Udacity code reviewer and was graded as **"Exceeds Specifications"**.
+
+![Popular Movies](https://github.com/opticod/PopularMovies/blob/Stage2/extras/feature_graphics.png)
 
 #Features
 
@@ -23,7 +27,12 @@ With this app, you can:
 
 See More at:<br>
 [YouTube Demo 1](https://youtu.be/YoyXolO2hhU)<br>
-[YouTube Demo 2](https://youtu.be/uHlaXrYLm6s)
+[YouTube Demo 2](https://youtu.be/uHlaXrYLm6s)<br>
+[YouTube Promo Video](https://youtu.be/STsHnjp1jKk)
+
+#Libraries
+* Square's Picasso
+* Square's Okhttp
 
 #Development Setup
 This app uses The Movie Database API to retrieve movies. You must provide your own API key in order to build the app. When you get it, just paste it to:  _app/build.gradle_ 
@@ -45,3 +54,4 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+

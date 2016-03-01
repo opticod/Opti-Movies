@@ -3,52 +3,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity$MainActivityFragment">
+
     <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/main_swipe_refresh"
+        android:id="@+id/main_swipe_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/gridview_movie"
+            style="@style/MovieGridStyle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
-        style="@style/MovieGridStyle"
-        android:id="@+id/gridview_movie"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:background="@color/background_grey2" />
+            android:layout_height="wrap_content"
+            android:background="@color/background_grey2"
+            android:gravity="center" />
 
-    <TextView
-        android:id="@+id/loading"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/loadingMSG"
-        style="@style/TextAppearance.AppCompat.Button"
-        android:background="@android:color/background_light"
-        android:alpha="0.4"
-        android:enabled="true"
-        android:visibility="gone"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="false"
-        android:paddingTop="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/activity_horizontal_margin"
-        android:gravity="center"/>
+        <TextView
+            android:id="@+id/loading"
+            style="@style/TextAppearance.AppCompat.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="false"
+            android:alpha="0.4"
+            android:background="@android:color/background_light"
+            android:enabled="true"
+            android:gravity="center"
+            android:paddingBottom="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_horizontal_margin"
+            android:text="@string/loadingMSG"
+            android:visibility="gone" />
 
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
     <TextView
         android:id="@+id/empty"
+        style="@style/TextAppearance.AppCompat.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Loading"
-        style="@style/TextAppearance.AppCompat.Button"
-        android:background="@android:color/background_light"
-        android:alpha="0.4"
-        android:enabled="true"
-        android:visibility="gone"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="false"
-        android:paddingTop="@dimen/activity_horizontal_margin"
+        android:alpha="0.4"
+        android:background="@android:color/background_light"
+        android:enabled="true"
+        android:gravity="center"
         android:paddingBottom="@dimen/activity_horizontal_margin"
-        android:gravity="center"/>
+        android:paddingTop="@dimen/activity_horizontal_margin"
+        android:text="Loading"
+        android:visibility="gone" />
 
 </FrameLayout>

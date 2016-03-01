@@ -72,7 +72,7 @@ public class TrailerMovieAdapter extends CursorAdapter {
 
         final String trailerUrl = "https://www.youtube.com/watch?v=" + source;
         ImageView trailerImg = (ImageView) view.findViewById(R.id.youtubeImg);
-        trailerImg.setOnClickListener(new View.OnClickListener() {
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(trailerUrl));
