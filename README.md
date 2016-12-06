@@ -1,5 +1,7 @@
 <a href='https://play.google.com/store/apps/details?id=work.technie.popularmovies&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="200" /></a>
 
+&nbsp;&nbsp;&nbsp;&nbsp;[![Codacy Badge](https://api.codacy.com/project/badge/Grade/02344df4eea34ed98249040aea7eb10b)](https://www.codacy.com/app/anupam/PopularMovies?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=opticod/PopularMovies&amp;utm_campaign=Badge_Grade)
+
 # PopularMovies
 
 Here is a fully functional and user friendly android app which I made from scratch for [Android Developer Nanodegree](https://www.udacity.com/course/android-developer-nanodegree--nd801) program. 
