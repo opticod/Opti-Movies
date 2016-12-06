@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package work.technie.popularmovies;
+package work.technie.popularmovies.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -23,6 +23,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import work.technie.popularmovies.R;
+import work.technie.popularmovies.fragment.DetailActivityFragment;
 
 /**
  * Created by anupam on 27/12/15.

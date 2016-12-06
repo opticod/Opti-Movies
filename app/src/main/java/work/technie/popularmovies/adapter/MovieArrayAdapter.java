@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package work.technie.popularmovies;
+package work.technie.popularmovies.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -30,7 +30,9 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
+import work.technie.popularmovies.R;
 import work.technie.popularmovies.data.MovieContract;
+import work.technie.popularmovies.fragment.MainActivityFragment;
 
 
 public class MovieArrayAdapter extends CursorAdapter {

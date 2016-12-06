@@ -5,7 +5,7 @@
     android:baselineAligned="false"
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
-    tools:context="work.technie.popularmovies.MainActivity">
+    tools:context="work.technie.popularmovies.activity.MainActivity">
 
     <!--
     This layout is a two-pane layout for the Items master/detail flow.
@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/fragment_main_activity"
-        android:name="work.technie.popularmovies.MainActivityFragment"
+        android:name="work.technie.popularmovies.fragment.MainActivityFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="2"

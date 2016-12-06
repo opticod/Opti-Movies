@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package work.technie.popularmovies;
+package work.technie.popularmovies.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

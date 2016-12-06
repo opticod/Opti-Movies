@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package work.technie.popularmovies;
+package work.technie.popularmovies.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import work.technie.popularmovies.R;
+import work.technie.popularmovies.fragment.DetailActivityFragment;
 
 
 public class DetailActivity extends AppCompatActivity {

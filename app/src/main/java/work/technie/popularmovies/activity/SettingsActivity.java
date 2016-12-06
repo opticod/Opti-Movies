@@ -1,4 +1,4 @@
-package work.technie.popularmovies;
+package work.technie.popularmovies.activity;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -8,6 +8,8 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+
+import work.technie.popularmovies.R;
 
 
 public class SettingsActivity extends PreferenceActivity

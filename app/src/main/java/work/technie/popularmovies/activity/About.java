@@ -1,9 +1,11 @@
-package work.technie.popularmovies;
+package work.technie.popularmovies.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
+
+import work.technie.popularmovies.R;
 
 /**
  * Created by anupam on 13/2/16.

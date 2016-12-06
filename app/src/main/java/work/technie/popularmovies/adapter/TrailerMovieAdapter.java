@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package work.technie.popularmovies;
+package work.technie.popularmovies.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +30,8 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
+import work.technie.popularmovies.R;
+import work.technie.popularmovies.fragment.DetailActivityFragment;
 
 /**
  * Created by anupam on 27/12/15.

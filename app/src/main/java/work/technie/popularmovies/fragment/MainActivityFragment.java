@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package work.technie.popularmovies;
+package work.technie.popularmovies.fragment;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -37,7 +37,11 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import work.technie.popularmovies.FetchMovieTask;
+import work.technie.popularmovies.R;
+import work.technie.popularmovies.adapter.MovieArrayAdapter;
 import work.technie.popularmovies.data.MovieContract;
+import work.technie.popularmovies.model.MovieInfo;
 import work.technie.popularmovies.utils.Utility;
 
 /**
@@ -294,7 +298,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     }
 
     // since we read the new soring order when we create the loader, all we need to do is restart things
-    void onSortingChanged() {
+    public void onSortingChanged() {
         String sorting = Utility.getPreferredSorting(getActivity());
         updateMovieList();
         getLoaderManager().restartLoader(MOVIE_LOADER, null, this);

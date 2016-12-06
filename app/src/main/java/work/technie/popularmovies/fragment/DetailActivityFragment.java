@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package work.technie.popularmovies;
+package work.technie.popularmovies.fragment;
 
 
 import android.content.ContentValues;
@@ -41,6 +41,11 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
+import work.technie.popularmovies.FetchTrailReview;
+import work.technie.popularmovies.R;
+import work.technie.popularmovies.adapter.GenreMovieAdapter;
+import work.technie.popularmovies.adapter.ReviewMovieAdapter;
+import work.technie.popularmovies.adapter.TrailerMovieAdapter;
 import work.technie.popularmovies.data.MovieContract;
 import work.technie.popularmovies.utils.Utility;
 
@@ -265,7 +270,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         super.onActivityCreated(savedInstanceState);
     }
 
-    void onSortingChanged() {
+    public void onSortingChanged() {
         String mI = movie_Id;
         if (null != mI) {
             getLoaderManager().restartLoader(DETAIL_LOADER, null, this);
