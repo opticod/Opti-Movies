@@ -7,6 +7,12 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <!-- Main activity theme. -->
     <style name="MovieTheme" parent="AppTheme">
         <item name="actionBarStyle">@style/ActionBar.Solid.Movie.NoTitle</item>

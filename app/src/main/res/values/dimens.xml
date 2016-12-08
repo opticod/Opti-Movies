@@ -6,5 +6,9 @@
     <dimen name="poster_width">185dp</dimen>
     <dimen name="poster_height">278dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+
+    <dimen name="nav_header_height">160dp</dimen>
+    <dimen name="cardview_default_radius">4dp</dimen>
 
 </resources>

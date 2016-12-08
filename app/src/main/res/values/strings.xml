@@ -19,4 +19,5 @@
     <string name="share_links">Sharing Movie Details</string>
     <string name="about_text">\nLicensed under the Apache License v2.\n \t \t \t Source available on <a href="https://github.com/opticod/PopularMovies">GitHub</a>.\n</string>
     <string name="title_activity_about">About</string>
+    <string name="app_logo">App Logo</string>
 </resources>
