@@ -17,6 +17,7 @@
 package work.technie.popularmovies.fragment;
 
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -28,7 +29,10 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -209,6 +213,30 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        Activity mActivity = getActivity();
+        Toolbar toolbar = (Toolbar) mActivity.findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            ((AppCompatActivity) mActivity).setSupportActionBar(toolbar);
+            ((AppCompatActivity) mActivity).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Bundle arguments = getArguments();
@@ -216,6 +244,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             movie_Id = arguments.getString(Intent.EXTRA_TEXT);
         }
         rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+
         // The ArrayAdapter will take data from a source and
         // use it to populate the ListView it's attached to.
         trailerListAdapter = new TrailerMovieAdapter(getActivity(), null, 0);
@@ -386,6 +415,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                 orgTitle = data.getString(COL_ORIGINAL_TITLE);
                 ((TextView) rootView.findViewById(R.id.orgTitle))
                         .setText(orgTitle);
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(orgTitle);
 
                 overview = data.getString(COL_OVERVIEW);
                 ((TextView) rootView.findViewById(R.id.overview))

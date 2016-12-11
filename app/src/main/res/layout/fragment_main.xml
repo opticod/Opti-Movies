@@ -1,15 +1,13 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.MainActivity$MainActivityFragment">
+    android:layout_height="match_parent">
 
     <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/main_swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+        <GridView
             android:id="@+id/gridview_movie"
             style="@style/MovieGridStyle"
             android:layout_width="match_parent"

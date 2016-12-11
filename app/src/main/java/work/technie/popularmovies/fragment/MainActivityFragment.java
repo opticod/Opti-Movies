@@ -16,6 +16,7 @@
 
 package work.technie.popularmovies.fragment;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
@@ -115,10 +116,6 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     private int PAGE_LOADED = 0;
     private View rootView;
 
-    public MainActivityFragment() {
-
-    }
-
     private void updateMovieList() {
         FetchMovieTask weatherTask = new FetchMovieTask(getActivity());
         String sortingOrder = Utility.getPreferredSorting(getActivity());
@@ -196,21 +193,21 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         // Get a reference to the GridView, and attach this adapter to it.
         gridView = (GridView) rootView.findViewById(R.id.gridview_movie);
         gridView.setAdapter(movieListAdapter);
-        //loading=(TextView)rootView.findViewById(R.id.loading);
 
-        //startLoad();
-        gridView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
+        final Activity mActivity = getActivity();
 
-                final int size = gridView.getWidth();
-                int numCol = (int) Math.round((double) size / (double) getResources().getDimensionPixelSize(R.dimen.poster_width));
-                gridView.setNumColumns(numCol);
-                //Log.d("MainActivityFrag", "Value: " +size+" "+numCol+" "+getResources().getDimensionPixelSize(R.dimen.poster_width)+" "+test);
-            }
-        });
+        if (mActivity != null) {
+            gridView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
 
-        //gridView.setNumColumns(5);
+                    final int size = gridView.getWidth();
+                    int numCol = (int) Math.round((double) size / (double) mActivity.getResources().getDimensionPixelSize(R.dimen.poster_width));
+                    gridView.setNumColumns(numCol);
+                }
+            });
+        }
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -235,25 +232,6 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         }
 
 
-       /*gridView.setOnScrollListener(
-                new AbsListView.OnScrollListener() {
-                    @Override
-                    public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-                    }
-
-                    @Override
-                    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                        int lastInScreen = firstVisibleItem + visibleItemCount;
-                        if (lastInScreen == totalItemCount) {
-                            //Log.e("time to scroll","scroll");
-                            startLoad();
-                        }
-                    }
-                }
-
-        );
-*/
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.main_swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -270,27 +248,6 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         return rootView;
     }
 
-    /*
-        private void startLoad(){
-            if(isLoading||PAGE_LOADED>=MAX_PAGE){
-                return;
-            }
-            isLoading=true;
-            if (loading!=null){
-                loading.setVisibility(View.VISIBLE);
-            }
-
-            updateMovieList();
-        }
-        private void stopLoad(){
-            if(!isLoading){
-                return;
-            }
-            isLoading=false;
-            if (loading!=null){
-                loading.setVisibility(View.GONE);
-            }
-        }*/
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         getLoaderManager().initLoader(MOVIE_LOADER, null, this);
@@ -347,7 +304,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             } else {
                 info.setVisibility(View.GONE);
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
