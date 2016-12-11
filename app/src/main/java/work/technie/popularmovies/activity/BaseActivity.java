@@ -34,7 +34,6 @@ public class BaseActivity extends AppCompatActivity
 
     private String CURRENT_FRAGMENT_TAG;
     private boolean mTwoPane;
-    private String mSorting;
     private int currentMenuItemId;
     private Toolbar toolbar;
     private DrawerLayout drawer;
@@ -118,33 +117,6 @@ public class BaseActivity extends AppCompatActivity
             doMenuAction(currentMenuItemId);
         }
 
-    }
-
-    public void onResume() {
-        super.onResume();
-        final View.OnClickListener originalToolbarListener = toggle.getToolbarNavigationClickListener();
-        if (findViewById(R.id.detail_swipe_refresh) != null) {
-            toggle.setDrawerIndicatorEnabled(false);
-            toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    fragmentManager.popBackStack();
-                    SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-                    String fragment = sharedPref.getString(CURRENT_FRAGMENT_TAG, FRAGMENT_TAG_MOV_LATEST);
-                    toolbar.setTitle(fragment);
-                }
-            });
-        } else {
-            toggle.setDrawerIndicatorEnabled(true);
-            toggle.setToolbarNavigationClickListener(originalToolbarListener);
-        }
-
-        if (getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG) == null) {
-            SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-            String fragment = sharedPref.getString(CURRENT_FRAGMENT_TAG, FRAGMENT_TAG_MOV_LATEST);
-            toolbar.setTitle(fragment);
-        }
     }
 
     @Override
