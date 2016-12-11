@@ -17,7 +17,6 @@
 package work.technie.popularmovies.fragment;
 
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -30,9 +29,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -202,7 +199,6 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     private String genre = "Genre : ";
 
     public DetailActivityFragment() {
-        setHasOptionsMenu(true);
         playTrailer = "https://www.youtube.com/watch?v=";
         movieValues = new ContentValues();
     }
@@ -210,30 +206,6 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     private void updateMovieList() {
         FetchTrailReview weatherTask = new FetchTrailReview(getActivity());
         weatherTask.execute(movie_Id);
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-        Activity mActivity = getActivity();
-        Toolbar toolbar = (Toolbar) mActivity.findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            ((AppCompatActivity) mActivity).setSupportActionBar(toolbar);
-            ((AppCompatActivity) mActivity).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case android.R.id.home:
-                getActivity().onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override

@@ -1,6 +1,8 @@
 package work.technie.popularmovies.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import work.technie.popularmovies.R;
 import work.technie.popularmovies.fragment.DetailActivityFragment;
@@ -27,25 +30,62 @@ public class BaseActivity extends AppCompatActivity
     private final String FRAGMENT_TAG_MOV_LATEST = "Latest Movies";
     private final String DETAIL_FRAGMENT_TAG = "DFTAG";
     private final String FRAGMENT_TAG_REST = "FTAGR";
+    private final String LAST_FRAGMENT = "last_fragment";
+
     private String CURRENT_FRAGMENT_TAG;
     private boolean mTwoPane;
     private String mSorting;
     private int currentMenuItemId;
-    private ActionBarDrawerToggle toggle;
+    private Toolbar toolbar;
     private DrawerLayout drawer;
+    private ActionBarDrawerToggle toggle;
+    private SharedPreferences sharedpreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        final View.OnClickListener originalToolbarListener = toggle.getToolbarNavigationClickListener();
+
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                    toggle.setDrawerIndicatorEnabled(false);
+                    toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+                            fragmentManager.popBackStack();
+                            SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+                            String fragment = sharedPref.getString(CURRENT_FRAGMENT_TAG, FRAGMENT_TAG_MOV_LATEST);
+                            toolbar.setTitle(fragment);
+                        }
+                    });
+                } else {
+                    toggle.setDrawerIndicatorEnabled(true);
+                    toggle.setToolbarNavigationClickListener(originalToolbarListener);
+                }
+            }
+        });
+
+        if (findViewById(R.id.detail_swipe_refresh) != null) {
+            toggle.setDrawerIndicatorEnabled(false);
+        } else {
+            toggle.setDrawerIndicatorEnabled(true);
+            toggle.setToolbarNavigationClickListener(originalToolbarListener);
+        }
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -55,6 +95,12 @@ public class BaseActivity extends AppCompatActivity
             navigationView.getMenu().getItem(0).setChecked(true);
         } else {
             currentMenuItemId = savedInstanceState.getInt(STATE_FRAGMENT);
+        }
+
+        if (getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG) == null) {
+            SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+            String fragment = sharedPref.getString(CURRENT_FRAGMENT_TAG, FRAGMENT_TAG_MOV_LATEST);
+            toolbar.setTitle(fragment);
         }
 
         if (findViewById(R.id.movie_detail_container) != null) {
@@ -68,44 +114,46 @@ public class BaseActivity extends AppCompatActivity
             mTwoPane = false;
         }
 
-        if (getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_MOV_LATEST) == null && getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_REST) == null) {
+        if (getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_MOV_LATEST) == null && getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_REST) == null && getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG) == null) {
             doMenuAction(currentMenuItemId);
         }
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case android.R.id.home:
-                if (findViewById(R.id.detail_swipe_refresh) != null) {
-                    onBackPressed();
-                } else {
-                    drawer.openDrawer(GravityCompat.START);
+    public void onResume() {
+        super.onResume();
+        final View.OnClickListener originalToolbarListener = toggle.getToolbarNavigationClickListener();
+        if (findViewById(R.id.detail_swipe_refresh) != null) {
+            toggle.setDrawerIndicatorEnabled(false);
+            toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    fragmentManager.popBackStack();
+                    SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+                    String fragment = sharedPref.getString(CURRENT_FRAGMENT_TAG, FRAGMENT_TAG_MOV_LATEST);
+                    toolbar.setTitle(fragment);
                 }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+            });
+        } else {
+            toggle.setDrawerIndicatorEnabled(true);
+            toggle.setToolbarNavigationClickListener(originalToolbarListener);
+        }
+
+        if (getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG) == null) {
+            SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+            String fragment = sharedPref.getString(CURRENT_FRAGMENT_TAG, FRAGMENT_TAG_MOV_LATEST);
+            toolbar.setTitle(fragment);
         }
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        toggle.setDrawerIndicatorEnabled(true);
-
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            if (fragmentManager.getBackStackEntryCount() > 0) {
-                String fragmentTag = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
-                getSupportFragmentManager().popBackStack();
-                getSupportActionBar().setTitle(fragmentTag);
-            } else {
-                finish();
-            }
+        super.onBackPressed();
+        if (getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG) == null) {
+            SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+            String fragment = sharedPref.getString(CURRENT_FRAGMENT_TAG, FRAGMENT_TAG_MOV_LATEST);
+            toolbar.setTitle(fragment);
         }
     }
 
@@ -113,9 +161,12 @@ public class BaseActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         switch (menuItemId) {
             case R.id.mov_latest:
-                toggle.setDrawerIndicatorEnabled(true);
                 getSupportActionBar().setTitle(FRAGMENT_TAG_MOV_LATEST);
-                CURRENT_FRAGMENT_TAG = FRAGMENT_TAG_MOV_LATEST;
+
+                SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString(LAST_FRAGMENT, FRAGMENT_TAG_MOV_LATEST);
+                editor.apply();
 
                 fragmentManager.beginTransaction()
                         .replace(R.id.frag_container, new MainActivityFragment(), FRAGMENT_TAG_MOV_LATEST).commit();
@@ -130,22 +181,6 @@ public class BaseActivity extends AppCompatActivity
                 break;
             default:
                 //nothing;
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (findViewById(R.id.detail_swipe_refresh) != null) {
-            toggle.setDrawerIndicatorEnabled(false);
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            if (toolbar != null) {
-                setSupportActionBar(toolbar);
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            }
-        } else {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            toggle.setDrawerIndicatorEnabled(true);
         }
     }
 
@@ -192,11 +227,9 @@ public class BaseActivity extends AppCompatActivity
             DetailActivityFragment fragment = new DetailActivityFragment();
             fragment.setArguments(arguments);
 
-            toggle.setDrawerIndicatorEnabled(false);
-
             getSupportFragmentManager().beginTransaction()
                     .addToBackStack(CURRENT_FRAGMENT_TAG)
-                    .add(R.id.frag_container, fragment, FRAGMENT_TAG_REST)
+                    .add(R.id.frag_container, fragment, DETAIL_FRAGMENT_TAG)
                     .commit();
         }
     }
