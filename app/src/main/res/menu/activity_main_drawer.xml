@@ -7,11 +7,6 @@
                 android:id="@+id/menu_top"
                 android:checkableBehavior="single">
                 <item
-                    android:id="@+id/mov_latest"
-                    android:icon="@drawable/ic_trending_up_black_18dp"
-                    android:title="Get Latest" />
-
-                <item
                     android:id="@+id/mov_now_playing"
                     android:icon="@drawable/ic_local_play_black_18dp"
                     android:title="Get Now Playing" />
@@ -41,12 +36,6 @@
             <group
                 android:id="@+id/menu_middle"
                 android:checkableBehavior="single">
-
-                <item
-                    android:id="@+id/tv_latest"
-                    android:icon="@drawable/ic_trending_up_black_18dp"
-                    android:title="Get Latest" />
-
                 <item
                     android:id="@+id/tv_airing_today"
                     android:icon="@drawable/ic_live_tv_black_18dp"
