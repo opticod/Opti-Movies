@@ -1,56 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <group
-        android:id="@+id/menu_top"
-        android:checkableBehavior="single"
+    <item
         android:title="Movies">
-        <item
-            android:id="@+id/mov_latest"
-            android:title="Get Latest" />
+        <menu>
+            <group
+                android:id="@+id/menu_top"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/mov_latest"
+                    android:icon="@drawable/ic_trending_up_black_18dp"
+                    android:title="Get Latest" />
 
-        <item
-            android:id="@+id/mov_now_playing"
-            android:title="Get Now Playing" />
+                <item
+                    android:id="@+id/mov_now_playing"
+                    android:icon="@drawable/ic_local_play_black_18dp"
+                    android:title="Get Now Playing" />
 
-        <item
-            android:id="@+id/mov_popular"
-            android:title="Get Popular" />
+                <item
+                    android:id="@+id/mov_popular"
+                    android:icon="@drawable/ic_movie_filter_black_24dp"
+                    android:title="Get Popular" />
 
-        <item
-            android:id="@+id/mov_top_rated"
-            android:title="Get Top Rated" />
+                <item
+                    android:id="@+id/mov_top_rated"
+                    android:icon="@drawable/ic_poll_black_18dp"
+                    android:title="Get Top Rated" />
 
-        <item
-            android:id="@+id/mov_upcoming"
-            android:title="Get Upcoming" />
+                <item
+                    android:id="@+id/mov_upcoming"
+                    android:icon="@drawable/ic_local_movies_black_24dp"
+                    android:title="Get Upcoming" />
 
-    </group>
+            </group>
+        </menu>
+    </item>
+
+    <item
+        android:title="TV Shows">
+        <menu>
+            <group
+                android:id="@+id/menu_middle"
+                android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/tv_latest"
+                    android:icon="@drawable/ic_trending_up_black_18dp"
+                    android:title="Get Latest" />
+
+                <item
+                    android:id="@+id/tv_airing_today"
+                    android:icon="@drawable/ic_live_tv_black_18dp"
+                    android:title="Get TV Airing Today" />
+
+                <item
+                    android:id="@+id/tv_on_the_air"
+                    android:icon="@drawable/ic_ondemand_video_black_18dp"
+                    android:title="Get TV On The Air" />
+
+                <item
+                    android:id="@+id/tv_popular"
+                    android:icon="@drawable/ic_personal_video_black_18dp"
+                    android:title="Get Popular" />
+
+                <item
+                    android:id="@+id/tv_top_rated"
+                    android:icon="@drawable/ic_poll_black_18dp"
+                    android:title="Get Top Rated" />
+            </group>
+        </menu>
+    </item>
 
     <group
         android:id="@+id/menu_bottom"
-        android:checkableBehavior="single"
-        android:title="TV Shows">
+        android:checkableBehavior="single">
 
         <item
-            android:id="@+id/tv_latest"
-            android:title="Get Latest" />
+            android:id="@+id/about"
+            android:icon="@drawable/ic_info_outline_black_24dp"
+            android:title="About" />
 
         <item
-            android:id="@+id/tv_airing_today"
-            android:title="Get TV Airing Today" />
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="Settings" />
 
-        <item
-            android:id="@+id/tv_on_the_air"
-            android:title="Get TV On The Air" />
-
-        <item
-            android:id="@+id/tv_popular"
-            android:title="Get Popular" />
-
-        <item
-            android:id="@+id/tv_top_rated"
-            android:title="Get Top Rated" />
     </group>
-
 </menu>
