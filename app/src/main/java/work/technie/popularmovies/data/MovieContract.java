@@ -28,6 +28,7 @@ public class MovieContract {
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     public static final String PATH_MOVIES = "movies";
+    public static final String PATH_TV = "tv";
     public static final String PATH_TRAILERS = "trailers";
     public static final String PATH_REVIEWS = "reviews";
     public static final String PATH_GENRES = "genres";
@@ -54,7 +55,7 @@ public class MovieContract {
         public static final String FAVOURED = "favoured";
         public static final String SHOWED = "shown";
         public static final String DOWNLOADED = "downloaded";
-        public static final String SORT_BY = "sort_by";
+        public static final String MODE = "mode";
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIES).build();
@@ -81,6 +82,54 @@ public class MovieContract {
             return uri.getPathSegments().get(1);
         }
 
+
+    }
+
+    public static final class TV implements BaseColumns {
+
+        public static final String TABLE_NAME = "tv";
+
+        public static final String PAGE = "page";
+        public static final String POSTER_PATH = "poster_path";
+        public static final String OVERVIEW = "overview";
+        public static final String FIRST_AIR_DATE = "first_air_date";
+        public static final String TV_ID = "id";
+        public static final String ORIGINAL_NAME = "original_name";
+        public static final String ORIGINAL_LANGUAGE = "original_language";
+        public static final String NAME = "name";
+        public static final String BACKDROP_PATH = "backdrop_path";
+        public static final String POPULARITY = "popularity";
+        public static final String VOTE_COUNT = "vote_count";
+        public static final String VOTE_AVERAGE = "vote_average";
+        public static final String FAVOURED = "favoured";
+        public static final String SHOWED = "shown";
+        public static final String DOWNLOADED = "downloaded";
+        public static final String MODE = "mode";
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_TV).build();
+
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TV;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TV;
+
+        public static Uri buildTVUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        //content://work....../tv/TVid
+        public static Uri buildTVUriWithTVId(String tvId) {
+            return CONTENT_URI.buildUpon().appendPath(tvId).build();
+        }
+
+        public static Uri buildTVUri() {
+            return CONTENT_URI.buildUpon().build();
+        }
+
+        public static String getIDFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
 
     }
 

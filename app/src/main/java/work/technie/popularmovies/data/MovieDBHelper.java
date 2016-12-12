@@ -24,6 +24,7 @@ import work.technie.popularmovies.data.MovieContract.Favourites;
 import work.technie.popularmovies.data.MovieContract.Genres;
 import work.technie.popularmovies.data.MovieContract.Movies;
 import work.technie.popularmovies.data.MovieContract.Reviews;
+import work.technie.popularmovies.data.MovieContract.TV;
 import work.technie.popularmovies.data.MovieContract.Trailers;
 
 
@@ -56,8 +57,29 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 Movies.FAVOURED + " INTEGER NOT NULL DEFAULT 0," +
                 Movies.SHOWED + " INTEGER NOT NULL DEFAULT 0," +
                 Movies.DOWNLOADED + " INTEGER NOT NULL DEFAULT 0," +
-                Movies.SORT_BY + " TEXT,"
+                Movies.MODE + " TEXT,"
                 + "UNIQUE (" + Movies.MOVIE_ID + ") ON CONFLICT REPLACE)";
+
+        final String SQL_CREATE__TABLE_TV = "CREATE TABLE " + TV.TABLE_NAME + " (" +
+                TV._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                TV.PAGE + "  TEXT," +
+                TV.POSTER_PATH + "  TEXT," +
+                TV.OVERVIEW + "  TEXT," +
+                TV.FIRST_AIR_DATE + "  TEXT," +
+                TV.TV_ID + "  TEXT," +
+                TV.ORIGINAL_NAME + "  TEXT," +
+                TV.ORIGINAL_LANGUAGE + "  TEXT," +
+                TV.NAME + "  TEXT," +
+                TV.BACKDROP_PATH + "  TEXT," +
+                TV.POPULARITY + "  TEXT," +
+                TV.VOTE_COUNT + "  TEXT," +
+                TV.VOTE_AVERAGE + "  TEXT," +
+                TV.FAVOURED + " INTEGER NOT NULL DEFAULT 0," +
+                TV.SHOWED + " INTEGER NOT NULL DEFAULT 0," +
+                TV.DOWNLOADED + " INTEGER NOT NULL DEFAULT 0," +
+                TV.MODE + " TEXT,"
+                + "UNIQUE (" + TV.TV_ID + ") ON CONFLICT REPLACE)";
+
         final String SQL_CREATE__TABLE_FAVOURITES = "CREATE TABLE " + Favourites.TABLE_NAME + " (" +
                 Favourites._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 Favourites.PAGE + "  TEXT," +
@@ -104,6 +126,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 Genres.MOVIE_ID + "  TEXT )";
 
         sqLiteDatabase.execSQL(SQL_CREATE__TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE__TABLE_TV);
         sqLiteDatabase.execSQL(SQL_CREATE__TABLE_FAVOURITES);
         sqLiteDatabase.execSQL(SQL_CREATE__TABLE_TRAILERS);
         sqLiteDatabase.execSQL(SQL_CREATE__TABLE_REVIEWS);
@@ -115,6 +138,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Movies.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TV.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Favourites.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Trailers.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Reviews.TABLE_NAME);
