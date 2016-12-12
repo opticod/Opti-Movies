@@ -25,9 +25,16 @@ import work.technie.popularmovies.fragment.MainActivityFragment;
 public class BaseActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainActivityFragment.Callback {
 
+    public static final String FRAGMENT_TAG_MOV_NOW_PLAYING = "Now Playing Movies";
+    public static final String FRAGMENT_TAG_MOV_POPULAR = "Popular Movies";
+    public static final String FRAGMENT_TAG_MOV_TOP_RATED = "Top Rated Movies";
+    public static final String FRAGMENT_TAG_MOV_UPCOMING = "Upcoming Movies";
+    public static final String FRAGMENT_TAG_TV_AIRING_TODAY = "TV Airing Today";
+    public static final String FRAGMENT_TAG_TV_ON_THE_AIR = "TV On The Air";
+    public static final String FRAGMENT_TAG_TV_POPULAR = "Popular TV Shows";
+    public static final String FRAGMENT_TAG_TV_TOP_RATED = "Top Rated TV Shows";
     private final static String STATE_FRAGMENT = "stateFragment";
     private static final String TAG = "BaseActivity";
-    private final String FRAGMENT_TAG_MOV_LATEST = "Latest Movies";
     private final String DETAIL_FRAGMENT_TAG = "DFTAG";
     private final String FRAGMENT_TAG_REST = "FTAGR";
     private final String LAST_FRAGMENT = "last_fragment";
@@ -68,7 +75,7 @@ public class BaseActivity extends AppCompatActivity
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             fragmentManager.popBackStack();
                             SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-                            String fragment = sharedPref.getString(CURRENT_FRAGMENT_TAG, FRAGMENT_TAG_MOV_LATEST);
+                            String fragment = sharedPref.getString(CURRENT_FRAGMENT_TAG, FRAGMENT_TAG_MOV_NOW_PLAYING);
                             toolbar.setTitle(fragment);
                         }
                     });
@@ -90,15 +97,15 @@ public class BaseActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         if (savedInstanceState == null) {
-            currentMenuItemId = R.id.mov_latest;
-            navigationView.getMenu().getItem(0).setChecked(true);
+            currentMenuItemId = R.id.mov_now_playing;
+            navigationView.getMenu().getItem(0).getSubMenu().getItem(0).setChecked(true);
         } else {
             currentMenuItemId = savedInstanceState.getInt(STATE_FRAGMENT);
         }
 
         if (getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG) == null) {
             SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-            String fragment = sharedPref.getString(CURRENT_FRAGMENT_TAG, FRAGMENT_TAG_MOV_LATEST);
+            String fragment = sharedPref.getString(CURRENT_FRAGMENT_TAG, FRAGMENT_TAG_MOV_NOW_PLAYING);
             toolbar.setTitle(fragment);
         }
 
@@ -113,7 +120,7 @@ public class BaseActivity extends AppCompatActivity
             mTwoPane = false;
         }
 
-        if (getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_MOV_LATEST) == null && getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_REST) == null && getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG) == null) {
+        if (getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_MOV_NOW_PLAYING) == null && getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_REST) == null && getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG) == null) {
             doMenuAction(currentMenuItemId);
         }
 
@@ -124,36 +131,63 @@ public class BaseActivity extends AppCompatActivity
         super.onBackPressed();
         if (getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG) == null) {
             SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-            String fragment = sharedPref.getString(CURRENT_FRAGMENT_TAG, FRAGMENT_TAG_MOV_LATEST);
+            String fragment = sharedPref.getString(CURRENT_FRAGMENT_TAG, FRAGMENT_TAG_MOV_NOW_PLAYING);
             toolbar.setTitle(fragment);
         }
     }
 
     private void doMenuAction(int menuItemId) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        String currentFragment;
+
         switch (menuItemId) {
-            case R.id.mov_latest:
-                getSupportActionBar().setTitle(FRAGMENT_TAG_MOV_LATEST);
 
-                SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString(LAST_FRAGMENT, FRAGMENT_TAG_MOV_LATEST);
-                editor.apply();
-
-                fragmentManager.beginTransaction()
-                        .replace(R.id.frag_container, new MainActivityFragment(), FRAGMENT_TAG_MOV_LATEST).commit();
-
-                break;
             case R.id.mov_now_playing:
-                /*
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frag_container, new DriveCollectionFragment(), FRAGMENT_TAG_REST)
-                        .commit();
-                */
+                currentFragment = FRAGMENT_TAG_MOV_NOW_PLAYING;
                 break;
+            case R.id.mov_popular:
+                currentFragment = FRAGMENT_TAG_MOV_POPULAR;
+                break;
+            case R.id.mov_top_rated:
+                currentFragment = FRAGMENT_TAG_MOV_TOP_RATED;
+                break;
+            case R.id.mov_upcoming:
+                currentFragment = FRAGMENT_TAG_MOV_UPCOMING;
+                break;
+            case R.id.tv_airing_today:
+                currentFragment = FRAGMENT_TAG_TV_AIRING_TODAY;
+                break;
+            case R.id.tv_on_the_air:
+                currentFragment = FRAGMENT_TAG_TV_ON_THE_AIR;
+                break;
+            case R.id.tv_popular:
+                currentFragment = FRAGMENT_TAG_TV_POPULAR;
+                break;
+            case R.id.tv_top_rated:
+                currentFragment = FRAGMENT_TAG_TV_TOP_RATED;
+                break;
+
             default:
+                currentFragment = FRAGMENT_TAG_MOV_NOW_PLAYING;
+                break;
                 //nothing;
         }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(LAST_FRAGMENT, currentFragment);
+        editor.apply();
+
+        Bundle arguments = new Bundle();
+        MainActivityFragment fragment = new MainActivityFragment();
+        fragment.setArguments(arguments);
+        arguments.putString(Intent.EXTRA_TEXT, currentFragment);
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        fragmentManager.beginTransaction()
+                .replace(R.id.frag_container, fragment, currentFragment).commit();
+
+        getSupportActionBar().setTitle(currentFragment);
+
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

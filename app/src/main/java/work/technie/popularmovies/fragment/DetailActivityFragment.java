@@ -79,7 +79,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             MovieContract.Movies.TABLE_NAME + "." + MovieContract.Movies.FAVOURED,
             MovieContract.Movies.TABLE_NAME + "." + MovieContract.Movies.SHOWED,
             MovieContract.Movies.TABLE_NAME + "." + MovieContract.Movies.DOWNLOADED,
-            MovieContract.Movies.TABLE_NAME + "." + MovieContract.Movies.SORT_BY
+            MovieContract.Movies.TABLE_NAME + "." + MovieContract.Movies.MODE
 
     };
     private static final String[] TRAILER_COLUMNS = {
@@ -560,7 +560,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                     movieValues.put(MovieContract.Movies.FAVOURED, "1");
                     movieValues.put(MovieContract.Movies.SHOWED, data.getString(COL_SHOWED));
                     movieValues.put(MovieContract.Movies.DOWNLOADED, data.getString(COL_DOWNLOADED));
-                    movieValues.put(MovieContract.Movies.SORT_BY, data.getString(COL_SORT_BY));
+                    movieValues.put(MovieContract.Movies.MODE, data.getString(COL_SORT_BY));
                 }
                 break;
             case FAVOURITE_LOADER:
