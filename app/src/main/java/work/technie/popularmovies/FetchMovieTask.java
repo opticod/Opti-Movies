@@ -296,22 +296,22 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
 
                 case BaseActivity.FRAGMENT_TAG_TV_AIRING_TODAY:
                     isMovie = false;
-                    MOVIE_BASE_URL += "/tv/airing_today?";
+                    MOVIE_BASE_URL += "tv/airing_today?";
                     break;
 
                 case BaseActivity.FRAGMENT_TAG_TV_ON_THE_AIR:
                     isMovie = false;
-                    MOVIE_BASE_URL += "/tv/on_the_air?";
+                    MOVIE_BASE_URL += "tv/on_the_air?";
                     break;
 
                 case BaseActivity.FRAGMENT_TAG_TV_POPULAR:
                     isMovie = false;
-                    MOVIE_BASE_URL += "/tv/popular?";
+                    MOVIE_BASE_URL += "tv/popular?";
                     break;
 
                 case BaseActivity.FRAGMENT_TAG_TV_TOP_RATED:
                     isMovie = false;
-                    MOVIE_BASE_URL += "/tv/top_rated?";
+                    MOVIE_BASE_URL += "tv/top_rated?";
                     break;
 
                 default:

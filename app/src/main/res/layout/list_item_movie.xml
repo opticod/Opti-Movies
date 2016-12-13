@@ -47,7 +47,7 @@
         android:layout_gravity="bottom|right"
         android:layout_marginBottom="24dp"
         android:layout_marginRight="7dp"
-        android:src="@drawable/ic_star_bookmark" />
+        android:src="@drawable/ic_star_black_24dp" />
 
     <ImageView
         android:id="@+id/pop_icon"

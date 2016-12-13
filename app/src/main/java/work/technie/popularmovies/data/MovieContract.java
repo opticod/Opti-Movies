@@ -181,6 +181,9 @@ public class MovieContract {
         }
 
 
+        public static Uri buildTVUriWithTVId(String tvId) {
+            return CONTENT_URI.buildUpon().appendPath(tvId).build();
+        }
     }
 
     public static final class Trailers implements BaseColumns {

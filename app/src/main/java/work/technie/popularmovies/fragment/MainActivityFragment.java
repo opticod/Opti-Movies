@@ -42,10 +42,11 @@ import work.technie.popularmovies.Constants;
 import work.technie.popularmovies.FetchMovieTask;
 import work.technie.popularmovies.R;
 import work.technie.popularmovies.activity.BaseActivity;
-import work.technie.popularmovies.adapter.MovieArrayAdapter;
+import work.technie.popularmovies.adapter.TVMovieArrayAdapter;
 import work.technie.popularmovies.data.MovieContract;
 import work.technie.popularmovies.model.MovieInfo;
 import work.technie.popularmovies.utils.Utility;
+
 
 /**
  * Created by anupam on 4/12/15.
@@ -54,33 +55,11 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     private static final String SELECTED_KEY = "selected_position";
     private static final int MOVIE_LOADER = 0;
-
-    public static int COL_ID = 0;
-    public static int COL_PAGE = 1;
-    public static int COL_POSTER_PATH = 2;
-    public static int COL_ADULT = 3;
-    public static int COL_OVERVIEW = 4;
-    //private boolean isLoading=false;
-    //private TextView loading;
-    //private String lastSortingOrder="initial";
-    public static int COL_RELEASE_DATE = 5;
-    public static int COL_MOVIE_ID = 6;
-    public static int COL_ORIGINAL_TITLE = 7;
-    public static int COL_ORIGINAL_LANG = 8;
-    public static int COL_TITLE = 9;
-    public static int COL_BACKDROP_PATH = 10;
-    public static int COL_POPULARITY = 11;
-    public static int COL_VOTE_COUNT = 12;
-    public static int COL_VOTE_AVERAGE = 13;
-    public static int COL_FAVOURED = 14;
-    private static boolean firstTime = true;
-    private MovieArrayAdapter movieListAdapter;
+    private TVMovieArrayAdapter listAdapter;
     private int mPosition = ListView.INVALID_POSITION;
     private GridView gridView;
     private ArrayList<MovieInfo> movieList;
     private SwipeRefreshLayout swipeRefreshLayout;
-    //private static final int MAX_PAGE=100;
-    private int PAGE_LOADED = 0;
     private View rootView;
     private String MODE;
     private boolean isMovie;
@@ -140,23 +119,14 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         }
 
         int count;
-        if (isMovie) {
-            Uri movieUri = MovieContract.Movies.buildMovieUri();
-            count = mActivity.getContentResolver().query(movieUri,
-                    Constants.MOVIE_COLUMNS_MIN,
-                    MovieContract.Movies.MODE + " = ?",
-                    new String[]{MODE},
-                    null).getCount();
 
-        } else {
-            Uri tvUri = MovieContract.TV.buildTVUri();
-            count = mActivity.getContentResolver().query(tvUri,
-                    Constants.TV_COLUMNS_MIN,
-                    MovieContract.TV.MODE + " = ?",
-                    new String[]{MODE},
-                    null).getCount();
+        Uri Uri = isMovie ? MovieContract.Movies.buildMovieUri() : MovieContract.TV.buildTVUri();
+        count = mActivity.getContentResolver().query(Uri,
+                isMovie ? Constants.MOVIE_COLUMNS_MIN : Constants.TV_COLUMNS_MIN,
+                MovieContract.Movies.MODE + " = ?",
+                new String[]{MODE},
+                null).getCount();
 
-        }
         if (count == 0) {
             if (!Utility.hasNetworkConnection(getActivity())) {
                 Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_LONG).show();
@@ -167,15 +137,15 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
         // The ArrayAdapter will take data from a source and
         // use it to populate the ListView it's attached to.
-        movieListAdapter =
-                new MovieArrayAdapter(
+        listAdapter =
+                new TVMovieArrayAdapter(
                         getActivity(), null, 0);
 
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // Get a reference to the GridView, and attach this adapter to it.
         gridView = (GridView) rootView.findViewById(R.id.gridview_movie);
-        gridView.setAdapter(movieListAdapter);
+        gridView.setAdapter(listAdapter);
 
         if (mActivity != null) {
             gridView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -196,7 +166,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (cursor != null) {
                     ((Callback) getActivity())
-                            .onItemSelected(cursor.getString(COL_MOVIE_ID));
+                            .onItemSelected(cursor.getString(isMovie ? Constants.MOV_COL_MOVIE_ID : Constants.TV_COL_TV_ID));
                 }
                 mPosition = position;
             }
@@ -218,11 +188,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             @Override
             public void onRefresh() {
                 if (Utility.hasNetworkConnection(getActivity())) {
-                    if (isMovie) {
-                        getActivity().getContentResolver().delete(MovieContract.Movies.CONTENT_URI, MovieContract.Movies.MODE + " = ?", new String[]{MODE});
-                    } else {
-                        getActivity().getContentResolver().delete(MovieContract.TV.CONTENT_URI, MovieContract.TV.MODE + " = ?", new String[]{MODE});
-                    }
+                    getActivity().getContentResolver().delete(isMovie ? MovieContract.Movies.CONTENT_URI : MovieContract.TV.CONTENT_URI, MovieContract.Movies.MODE + " = ?", new String[]{MODE});
                     updateMovieList();
                 } else {
                     Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_SHORT).show();
@@ -241,28 +207,18 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        if (isMovie) {
-            Uri movieUri = MovieContract.Movies.buildMovieUri();
-            return new CursorLoader(getActivity(),
-                    movieUri,
-                    Constants.MOVIE_COLUMNS,
-                    MovieContract.Movies.MODE + " = ?",
-                    new String[]{MODE},
-                    null);
-        } else {
-            Uri tvUri = MovieContract.TV.buildTVUri();
-            return new CursorLoader(getActivity(),
-                    tvUri,
-                    Constants.TV_COLUMNS,
-                    MovieContract.TV.MODE + " = ?",
-                    new String[]{MODE},
-                    null);
-        }
+        Uri Uri = isMovie ? MovieContract.Movies.buildMovieUri() : MovieContract.TV.buildTVUri();
+        return new CursorLoader(getActivity(),
+                Uri,
+                isMovie ? Constants.MOVIE_COLUMNS : Constants.TV_COLUMNS,
+                MovieContract.Movies.MODE + " = ?",
+                new String[]{MODE},
+                null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        movieListAdapter.swapCursor(cursor);
+        listAdapter.swapCursor(cursor);
         swipeRefreshLayout.setRefreshing(false);
         if (mPosition != ListView.INVALID_POSITION) {
             // If we don't need to restart the loader, and there's a desired position to restore
@@ -271,7 +227,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         }
         try {
             TextView info = (TextView) rootView.findViewById(R.id.empty);
-            if (movieListAdapter.getCount() == 0) {
+            if (listAdapter.getCount() == 0) {
                 String sorting = Utility.getPreferredSorting(getActivity());
                 if (sorting.equalsIgnoreCase(getResources().getString(R.string.pref_sort_favourite))) {
                     info.setText("Favourite List is Empty!");
@@ -286,7 +242,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
-        movieListAdapter.swapCursor(null);
+        listAdapter.swapCursor(null);
     }
 
     /**

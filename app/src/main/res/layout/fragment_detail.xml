@@ -51,7 +51,7 @@
                     android:layout_marginLeft="180dp"
                     android:layout_marginTop="215dp"
                     android:clickable="true"
-                    android:src="@drawable/ic_star_border_bookmark"
+                    android:src="@drawable/ic_star_border_black_24dp"
                     android:visibility="gone"
                     app:backgroundTint="@color/colorPrimary" />
 
@@ -62,7 +62,7 @@
                     android:layout_marginLeft="180dp"
                     android:layout_marginTop="215dp"
                     android:clickable="true"
-                    android:src="@drawable/ic_star_bookmark"
+                    android:src="@drawable/ic_star_black_24dp"
                     android:visibility="gone"
                     app:backgroundTint="@color/colorPrimary" />
 
