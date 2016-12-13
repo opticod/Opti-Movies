@@ -96,7 +96,7 @@ public class BaseActivity extends AppCompatActivity
 
         if (savedInstanceState == null) {
             currentMenuItemId = R.id.mov_now_playing;
-            navigationView.getMenu().getItem(0).getSubMenu().getItem(0).setChecked(true);
+            navigationView.setCheckedItem(R.id.mov_now_playing);
         } else {
             currentMenuItemId = savedInstanceState.getInt(STATE_FRAGMENT);
         }
