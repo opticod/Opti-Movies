@@ -34,9 +34,7 @@ public class BaseActivity extends AppCompatActivity
     public static final String FRAGMENT_TAG_TV_POPULAR = "Popular TV Shows";
     public static final String FRAGMENT_TAG_TV_TOP_RATED = "Top Rated TV Shows";
     private final static String STATE_FRAGMENT = "stateFragment";
-    private static final String TAG = "BaseActivity";
     private final String DETAIL_FRAGMENT_TAG = "DFTAG";
-    private final String FRAGMENT_TAG_REST = "FTAGR";
     private final String LAST_FRAGMENT = "last_fragment";
 
     private String CURRENT_FRAGMENT_TAG;
@@ -45,7 +43,7 @@ public class BaseActivity extends AppCompatActivity
     private Toolbar toolbar;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
-    private SharedPreferences sharedpreferences;
+    private SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,8 +102,8 @@ public class BaseActivity extends AppCompatActivity
         }
 
         if (getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG) == null) {
-            SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-            String fragment = sharedPref.getString(CURRENT_FRAGMENT_TAG, FRAGMENT_TAG_MOV_NOW_PLAYING);
+            sharedPref = getPreferences(Context.MODE_PRIVATE);
+            String fragment = sharedPref.getString(LAST_FRAGMENT, FRAGMENT_TAG_MOV_NOW_PLAYING);
             toolbar.setTitle(fragment);
         }
 
@@ -120,7 +118,7 @@ public class BaseActivity extends AppCompatActivity
             mTwoPane = false;
         }
 
-        if (getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_MOV_NOW_PLAYING) == null && getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_REST) == null && getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG) == null) {
+        if (getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_MOV_NOW_PLAYING) == null && getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG) == null) {
             doMenuAction(currentMenuItemId);
         }
 
@@ -130,8 +128,8 @@ public class BaseActivity extends AppCompatActivity
     public void onBackPressed() {
         super.onBackPressed();
         if (getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG) == null) {
-            SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-            String fragment = sharedPref.getString(CURRENT_FRAGMENT_TAG, FRAGMENT_TAG_MOV_NOW_PLAYING);
+            sharedPref = getPreferences(Context.MODE_PRIVATE);
+            String fragment = sharedPref.getString(LAST_FRAGMENT, FRAGMENT_TAG_MOV_NOW_PLAYING);
             toolbar.setTitle(fragment);
         }
     }
@@ -173,7 +171,6 @@ public class BaseActivity extends AppCompatActivity
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(LAST_FRAGMENT, currentFragment);
         editor.apply();
