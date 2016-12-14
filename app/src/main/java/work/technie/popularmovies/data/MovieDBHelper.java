@@ -57,7 +57,10 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 Movies.FAVOURED + " INTEGER NOT NULL DEFAULT 0," +
                 Movies.SHOWED + " INTEGER NOT NULL DEFAULT 0," +
                 Movies.DOWNLOADED + " INTEGER NOT NULL DEFAULT 0," +
-                Movies.MODE + " TEXT,"
+                Movies.MODE + " TEXT," +
+                Movies.PREF_LANGUAGE + " TEXT," +
+                Movies.PREF_ADULT + " TEXT," +
+                Movies.PREF_REGION + " TEXT,"
                 + "UNIQUE (" + Movies.MOVIE_ID + ") ON CONFLICT REPLACE)";
 
         final String SQL_CREATE__TABLE_TV = "CREATE TABLE " + TV.TABLE_NAME + " (" +
@@ -77,7 +80,10 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 TV.FAVOURED + " INTEGER NOT NULL DEFAULT 0," +
                 TV.SHOWED + " INTEGER NOT NULL DEFAULT 0," +
                 TV.DOWNLOADED + " INTEGER NOT NULL DEFAULT 0," +
-                TV.MODE + " TEXT,"
+                TV.MODE + " TEXT," +
+                TV.PREF_LANGUAGE + " TEXT," +
+                TV.PREF_ADULT + " TEXT," +
+                TV.PREF_REGION + " TEXT,"
                 + "UNIQUE (" + TV.TV_ID + ") ON CONFLICT REPLACE)";
 
         final String SQL_CREATE__TABLE_FAVOURITES = "CREATE TABLE " + Favourites.TABLE_NAME + " (" +

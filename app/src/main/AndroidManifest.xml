@@ -21,23 +21,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".activity.BaseActivity"
-            android:theme="@style/SettingsTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="work.technie.popularmovies.activity.BaseActivity" />
-        </activity>
-        <activity
-            android:name=".activity.About"
-            android:label="@string/title_activity_about"
-            android:parentActivityName=".activity.BaseActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="work.technie.popularmovies.activity.BaseActivity" />
-        </activity>
         <provider
             android:name=".data.MovieProvider"
             android:authorities="work.technie.popularmovies" />

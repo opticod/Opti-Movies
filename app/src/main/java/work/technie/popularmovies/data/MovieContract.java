@@ -56,6 +56,9 @@ public class MovieContract {
         public static final String SHOWED = "shown";
         public static final String DOWNLOADED = "downloaded";
         public static final String MODE = "mode";
+        public static final String PREF_LANGUAGE = "pref_lang";
+        public static final String PREF_ADULT = "pref_adult";
+        public static final String PREF_REGION = "pref_region";
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIES).build();
@@ -105,6 +108,9 @@ public class MovieContract {
         public static final String SHOWED = "shown";
         public static final String DOWNLOADED = "downloaded";
         public static final String MODE = "mode";
+        public static final String PREF_LANGUAGE = "pref_lang";
+        public static final String PREF_ADULT = "pref_adult";
+        public static final String PREF_REGION = "pref_region";
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_TV).build();

@@ -17,8 +17,10 @@ package work.technie.popularmovies;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v7.preference.PreferenceManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,17 +36,19 @@ import java.util.Vector;
 
 import work.technie.popularmovies.activity.BaseActivity;
 import work.technie.popularmovies.data.MovieContract;
+import work.technie.popularmovies.utils.AsyncResponse;
 
 /**
  * Created by anupam on 17/12/15.
  */
-public class FetchMovieTask extends AsyncTask<String, Void, Void> {
+public class FetchTVMovieTask extends AsyncTask<String, Void, Integer> {
 
-    private final String LOG_TAG = FetchMovieTask.class.getSimpleName();
+    private final String LOG_TAG = FetchTVMovieTask.class.getSimpleName();
 
     private final Context mContext;
+    public AsyncResponse response = null;
 
-    public FetchMovieTask(Context context) {
+    public FetchTVMovieTask(Context context) {
         mContext = context;
     }
 
@@ -55,8 +59,9 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
      * Fortunately parsing is easy:  constructor takes the JSON string and converts it
      * into an Object hierarchy for us.
      */
-    private void getMovieDataFromJson(String movieJsonStr, String mode)
+    private int getMovieDataFromJson(String movieJsonStr, String mode)
             throws JSONException {
+        int inserted = 0;
 
         // These are the names of the JSON objects that need to be extracted.
         final String MOVIE_ID = "id";
@@ -72,6 +77,19 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
         final String BACKDROP_PATH = "backdrop_path";
         final String VOTE_COUNT = "vote_count";
         final String PAGE = "page";
+
+        boolean PREF_CHILD;
+        String PREF_LANGUAGE;
+        String PREF_REGION;
+
+        String KEY_ADULT = "child_mode";
+        String KEY_LANGUAGE = "language";
+        String KEY_REGION = "region";
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        PREF_CHILD = sharedPreferences.getBoolean(KEY_ADULT, true);
+        PREF_LANGUAGE = sharedPreferences.getString(KEY_LANGUAGE, "");
+        PREF_REGION = sharedPreferences.getString(KEY_REGION, "");
 
 
         final String RESULT = "results";
@@ -141,9 +159,12 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
                 movieValues.put(MovieContract.Movies.VOTE_COUNT, vote_count);
                 movieValues.put(MovieContract.Movies.VOTE_AVERAGE, votAvg);
                 movieValues.put(MovieContract.Movies.MODE, mode);
+                movieValues.put(MovieContract.Movies.PREF_LANGUAGE, PREF_LANGUAGE);
+                movieValues.put(MovieContract.Movies.PREF_ADULT, String.valueOf(!PREF_CHILD));
+                movieValues.put(MovieContract.Movies.PREF_REGION, PREF_REGION);
                 cVVector.add(movieValues);
             }
-            int inserted = 0;
+
             // add to database
             if (cVVector.size() > 0) {
                 ContentValues[] cvArray = new ContentValues[cVVector.size()];
@@ -154,10 +175,13 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        return inserted;
     }
 
-    private void getTVDataFromJson(String tvJsonStr, String mode)
+    private int getTVDataFromJson(String tvJsonStr, String mode)
             throws JSONException {
+
+        int inserted = 0;
 
         // These are the names of the JSON objects that need to be extracted.
         final String TV_ID = "id";
@@ -171,9 +195,20 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
         final String VOTAVG = "vote_average";
         final String BACKDROP_PATH = "backdrop_path";
         final String VOTE_COUNT = "vote_count";
-        final String MODE = "mode";
         final String PAGE = "page";
 
+        boolean PREF_CHILD;
+        String PREF_LANGUAGE;
+        String PREF_REGION;
+
+        String KEY_ADULT = "child_mode";
+        String KEY_LANGUAGE = "language";
+        String KEY_REGION = "region";
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        PREF_CHILD = sharedPreferences.getBoolean(KEY_ADULT, true);
+        PREF_LANGUAGE = sharedPreferences.getString(KEY_LANGUAGE, "");
+        PREF_REGION = sharedPreferences.getString(KEY_REGION, "");
 
         final String RESULT = "results";
         final String POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185";
@@ -241,9 +276,11 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
                 tvValues.put(MovieContract.TV.VOTE_COUNT, vote_count);
                 tvValues.put(MovieContract.TV.VOTE_AVERAGE, votAvg);
                 tvValues.put(MovieContract.TV.MODE, mode);
+                tvValues.put(MovieContract.TV.PREF_LANGUAGE, PREF_LANGUAGE);
+                tvValues.put(MovieContract.TV.PREF_ADULT, String.valueOf(!PREF_CHILD));
+                tvValues.put(MovieContract.TV.PREF_REGION, PREF_REGION);
                 cVVector.add(tvValues);
             }
-            int inserted = 0;
             // add to database
             if (cVVector.size() > 0) {
                 ContentValues[] cvArray = new ContentValues[cVVector.size()];
@@ -254,14 +291,16 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        return inserted;
     }
 
     @Override
-    protected Void doInBackground(String... params) {
+    protected Integer doInBackground(String... params) {
 
         if (params.length == 0) {
             return null;
         }
+        int inserted = 0;
 
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
@@ -278,7 +317,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
 
             String MOVIE_BASE_URL = "https://api.themoviedb.org/3/";
 
-            switch (params[1]) {
+            switch (params[0]) {
                 case BaseActivity.FRAGMENT_TAG_MOV_NOW_PLAYING:
                     MOVIE_BASE_URL += "movie/now_playing?";
                     break;
@@ -322,12 +361,27 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
             final String PAGE_PARAM = "page";
             final String LANG_PARAM = "language";
             final String REGION_PARAM = "region";
+            final String ADULT_PARAM = "adult";
+
+            boolean PREF_CHILD;
+            String PREF_LANGUAGE;
+            String PREF_REGION;
+
+            String KEY_ADULT = "child_mode";
+            String KEY_LANGUAGE = "language";
+            String KEY_REGION = "region";
+
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+            PREF_CHILD = sharedPreferences.getBoolean(KEY_ADULT, true);
+            PREF_LANGUAGE = sharedPreferences.getString(KEY_LANGUAGE, "");
+            PREF_REGION = sharedPreferences.getString(KEY_REGION, "");
 
             Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                     .appendQueryParameter(APPID_PARAM, BuildConfig.MOVIE_DB_API_KEY)
-                    .appendQueryParameter(LANG_PARAM, "hi")
+                    .appendQueryParameter(LANG_PARAM, PREF_LANGUAGE)
                     .appendQueryParameter(PAGE_PARAM, "1")
-                    .appendQueryParameter(REGION_PARAM, "IN")
+                    .appendQueryParameter(REGION_PARAM, PREF_REGION)
+                    .appendQueryParameter(ADULT_PARAM, String.valueOf(!PREF_CHILD))
                     .build();
 
             URL url = new URL(builtUri.toString());
@@ -359,9 +413,9 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
             }
             movieJsonStr = buffer.toString();
             if (isMovie) {
-                getMovieDataFromJson(movieJsonStr, params[1]);
+                inserted = getMovieDataFromJson(movieJsonStr, params[0]);
             } else {
-                getTVDataFromJson(movieJsonStr, params[1]);
+                inserted = getTVDataFromJson(movieJsonStr, params[0]);
             }
         } catch (IOException e) {
             //Log.e(LOG_TAG, "Error ", e);
@@ -384,6 +438,12 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
             }
         }
         // This will only happen if there was an error getting or parsing the forecast.
-        return null;
+        return inserted;
+    }
+
+    @Override
+    protected void onPostExecute(Integer result) {
+        super.onPostExecute(result);
+        response.onFinish(result > 0);
     }
 }

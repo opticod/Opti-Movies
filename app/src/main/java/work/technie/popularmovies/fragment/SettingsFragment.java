@@ -100,11 +100,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         addPreferencesFromResource(R.xml.pref_settings);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        String REGION = "region";
-        String LANGUAGE = "language";
+        String KEY_REGION = "region";
+        String KEY_LANGUAGE = "language";
 
-        final ListPreference listPreferenceRegion = (ListPreference) findPreference(REGION);
-        final ListPreference listPreferenceLanguage = (ListPreference) findPreference(LANGUAGE);
+        final ListPreference listPreferenceRegion = (ListPreference) findPreference(KEY_REGION);
+        final ListPreference listPreferenceLanguage = (ListPreference) findPreference(KEY_LANGUAGE);
 
         setListPreferenceRegion(listPreferenceRegion);
         setListPreferenceLanguage(listPreferenceLanguage);
@@ -116,7 +116,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 return false;
             }
         });
-        int prefIndex = listPreferenceRegion.findIndexOfValue(sharedPreferences.getString(REGION, ""));
+        int prefIndex = listPreferenceRegion.findIndexOfValue(sharedPreferences.getString(KEY_REGION, ""));
         if (prefIndex >= 0) {
             listPreferenceRegion.setSummary(listPreferenceRegion.getEntries()[prefIndex]);
         }
@@ -128,7 +128,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 return false;
             }
         });
-        prefIndex = listPreferenceLanguage.findIndexOfValue(sharedPreferences.getString(LANGUAGE, ""));
+        prefIndex = listPreferenceLanguage.findIndexOfValue(sharedPreferences.getString(KEY_LANGUAGE, ""));
         if (prefIndex >= 0) {
             listPreferenceLanguage.setSummary(listPreferenceLanguage.getEntries()[prefIndex]);
         }

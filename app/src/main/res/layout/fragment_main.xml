@@ -49,7 +49,7 @@
         android:gravity="center"
         android:paddingBottom="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_horizontal_margin"
-        android:text="Loading"
+        android:text="@string/loading"
         android:visibility="gone" />
 
 </FrameLayout>

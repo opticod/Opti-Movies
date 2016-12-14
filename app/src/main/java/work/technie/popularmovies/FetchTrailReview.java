@@ -41,7 +41,7 @@ import work.technie.popularmovies.data.MovieContract;
  */
 public class FetchTrailReview extends AsyncTask<String, Void, Void> {
 
-    private final String LOG_TAG = FetchMovieTask.class.getSimpleName();
+    private final String LOG_TAG = FetchTVMovieTask.class.getSimpleName();
 
     private final Context mContext;
     private boolean DEBUG = true;
