@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -20,10 +21,6 @@
     <!-- Main activity theme. -->
     <style name="MovieTheme" parent="AppTheme">
         <item name="actionBarStyle">@style/ActionBar.Solid.Movie.NoTitle</item>
-    </style>
-
-    <!-- Settings activity theme. -->
-    <style name="SettingsTheme" parent="AppTheme">
     </style>
 
     <!-- main activity action bar styles -->

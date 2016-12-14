@@ -228,10 +228,6 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         try {
             TextView info = (TextView) rootView.findViewById(R.id.empty);
             if (listAdapter.getCount() == 0) {
-                String sorting = Utility.getPreferredSorting(getActivity());
-                if (sorting.equalsIgnoreCase(getResources().getString(R.string.pref_sort_favourite))) {
-                    info.setText("Favourite List is Empty!");
-                }
                 info.setVisibility(View.VISIBLE);
             } else {
                 info.setVisibility(View.GONE);

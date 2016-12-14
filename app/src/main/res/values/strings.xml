@@ -24,5 +24,10 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="back">back</string>
+    <string name="pref_description_enable_child_mode">Hiding adult rated movies or TV shows from lists.</string>
+    <string name="pref_title_enable_child_mode">Enable child mode</string>
+    <string name="pref_region">Select Region</string>
+    <string name="pref_language">Select Language</string>
+    <string name="pref_sort_favourite">s</string>
 
 </resources>

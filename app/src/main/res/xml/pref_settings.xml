@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:key="child_mode"
+        android:summary="@string/pref_description_enable_child_mode"
+        android:title="@string/pref_title_enable_child_mode" />
+
+    <ListPreference
+        android:key="region"
+        android:title="@string/pref_region" />
+
+    <ListPreference
+        android:key="language"
+        android:title="@string/pref_language" />
+
+</PreferenceScreen>

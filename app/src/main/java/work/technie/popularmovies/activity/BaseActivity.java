@@ -15,8 +15,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import work.technie.popularmovies.R;
+import work.technie.popularmovies.fragment.AboutFragment;
 import work.technie.popularmovies.fragment.DetailActivityFragment;
 import work.technie.popularmovies.fragment.MainActivityFragment;
+import work.technie.popularmovies.fragment.SettingsFragment;
 
 /**
  * Created by anupam on 9/12/16.
@@ -33,6 +35,9 @@ public class BaseActivity extends AppCompatActivity
     public static final String FRAGMENT_TAG_TV_ON_THE_AIR = "TV On The Air";
     public static final String FRAGMENT_TAG_TV_POPULAR = "Popular TV Shows";
     public static final String FRAGMENT_TAG_TV_TOP_RATED = "Top Rated TV Shows";
+    public static final String FRAGMENT_ABOUT = "About";
+    public static final String FRAGMENT_SETTINGS = "Settings";
+
     private final static String STATE_FRAGMENT = "stateFragment";
     private final String DETAIL_FRAGMENT_TAG = "DFTAG";
     private final String LAST_FRAGMENT = "last_fragment";
@@ -163,6 +168,12 @@ public class BaseActivity extends AppCompatActivity
             case R.id.tv_top_rated:
                 currentFragment = FRAGMENT_TAG_TV_TOP_RATED;
                 break;
+            case R.id.about:
+                currentFragment = FRAGMENT_ABOUT;
+                break;
+            case R.id.settings:
+                currentFragment = FRAGMENT_SETTINGS;
+                break;
 
             default:
                 currentFragment = FRAGMENT_TAG_MOV_NOW_PLAYING;
@@ -175,14 +186,25 @@ public class BaseActivity extends AppCompatActivity
         editor.putString(LAST_FRAGMENT, currentFragment);
         editor.apply();
 
-        Bundle arguments = new Bundle();
-        MainActivityFragment fragment = new MainActivityFragment();
-        fragment.setArguments(arguments);
-        arguments.putString(Intent.EXTRA_TEXT, currentFragment);
-        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        fragmentManager.beginTransaction()
-                .replace(R.id.frag_container, fragment, currentFragment).commit();
+        if (currentFragment.equals(FRAGMENT_ABOUT)) {
+            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.frag_container, new AboutFragment(), currentFragment).commit();
 
+        } else if (currentFragment.equals(FRAGMENT_SETTINGS)) {
+            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.frag_container, new SettingsFragment(), currentFragment).commit();
+
+        } else {
+            Bundle arguments = new Bundle();
+            MainActivityFragment fragment = new MainActivityFragment();
+            fragment.setArguments(arguments);
+            arguments.putString(Intent.EXTRA_TEXT, currentFragment);
+            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.frag_container, fragment, currentFragment).commit();
+        }
         getSupportActionBar().setTitle(currentFragment);
 
     }
