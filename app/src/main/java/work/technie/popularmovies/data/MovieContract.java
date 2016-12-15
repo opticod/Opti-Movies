@@ -29,9 +29,14 @@ public class MovieContract {
 
     public static final String PATH_MOVIES = "movies";
     public static final String PATH_TV = "tv";
-    public static final String PATH_TRAILERS = "trailers";
+    public static final String PATH_VIDEOS = "videos";
+    public static final String PATH_SIMILAR_MOVIES = "similar_movies";
+    public static final String PATH_CASTS = "casts";
+    public static final String PATH_PEOPLE = "people";
+    public static final String PATH_CREWS = "crews";
     public static final String PATH_REVIEWS = "reviews";
     public static final String PATH_GENRES = "genres";
+    public static final String PATH_MOVIE_DETAILS = "movie_details";
     public static final String PATH_FAVOURITES = "favourites";
 
 
@@ -63,12 +68,12 @@ public class MovieContract {
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIES).build();
 
-        public static final String CONTENT_TYPE =
+        static final String CONTENT_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_MOVIES;
-        public static final String CONTENT_ITEM_TYPE =
+        static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_MOVIES;
 
-        public static Uri buildMoviesUri(long id) {
+        static Uri buildMoviesUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
@@ -85,6 +90,230 @@ public class MovieContract {
             return uri.getPathSegments().get(1);
         }
 
+
+    }
+
+    public static final class SimilarMovies implements BaseColumns {
+
+        public static final String TABLE_NAME = "similar_movies";
+
+        public static final String PAGE = "page";
+        public static final String POSTER_PATH = "poster_path";
+        public static final String ADULT = "adult";
+        public static final String OVERVIEW = "overview";
+        public static final String RELEASE_DATE = "release_date";
+        public static final String MOVIE_ID = "id";
+        public static final String ORIGINAL_TITLE = "original_title";
+        public static final String ORIGINAL_LANGUAGE = "original_language";
+        public static final String TITLE = "title";
+        public static final String BACKDROP_PATH = "backdrop_path";
+        public static final String POPULARITY = "popularity";
+        public static final String VOTE_COUNT = "vote_count";
+        public static final String VOTE_AVERAGE = "vote_average";
+        public static final String FAVOURED = "favoured";
+        public static final String SHOWED = "shown";
+        public static final String DOWNLOADED = "downloaded";
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_SIMILAR_MOVIES).build();
+
+        static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SIMILAR_MOVIES;
+        static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SIMILAR_MOVIES;
+
+        static Uri buildSimilarMoviesUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        //content://work....../similar_movies/MovieId
+        public static Uri buildSimilarMoviesUriWithMovieId(String MovieId) {
+            return CONTENT_URI.buildUpon().appendPath(MovieId).build();
+        }
+
+        public static Uri buildMovieUri() {
+            return CONTENT_URI.buildUpon().build();
+        }
+
+        public static String getIDFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+
+
+    }
+
+    public static final class MovieDetails implements BaseColumns {
+
+        public static final String TABLE_NAME = "movie_details";
+
+        public static final String MOVIE_ID = "id";
+        public static final String ADULT = "adult";
+        public static final String BACKDROP_PATH = "backdrop_path";
+        public static final String BUDGET = "budget";
+        public static final String HOMEPAGE = "homepage";
+        public static final String ORIGINAL_LANGUAGE = "original_language";
+        public static final String ORIGINAL_TITLE = "original_title";
+        public static final String OVERVIEW = "overview";
+        public static final String POPULARITY = "popularity";
+        public static final String POSTER_PATH = "poster_path";
+        public static final String RELEASE_DATE = "release_date";
+        public static final String REVENUE = "revenue";
+        public static final String RUNTIME = "runtime";
+        public static final String STATUS = "status";
+        public static final String TAGLINE = "tagline";
+        public static final String TITLE = "title";
+        public static final String VOTE_AVERAGE = "vote_average";
+        public static final String VOTE_COUNT = "vote_count";
+        public static final String FAVOURED = "favoured";
+        public static final String SHOWED = "shown";
+        public static final String DOWNLOADED = "downloaded";
+
+        static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE_DETAILS).build();
+
+        static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_MOVIE_DETAILS;
+        static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_MOVIE_DETAILS;
+
+        static Uri buildMovieDetailsUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        //content://work....../movie_details/MovieId
+        public static Uri buildMovieDetailsUriWithMovieId(String MovieId) {
+            return CONTENT_URI.buildUpon().appendPath(MovieId).build();
+        }
+
+        public static Uri buildMovieDetailsUri() {
+            return CONTENT_URI.buildUpon().build();
+        }
+
+        public static String getIDFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+
+    }
+
+    public static final class Cast implements BaseColumns {
+
+        public static final String TABLE_NAME = "cast";
+
+        public static final String CAST_ID = "cast_id";
+        public static final String CHARACTER = "character";
+        public static final String CREDIT_ID = "credit_id";
+        public static final String ID = "id";
+        public static final String NAME = "name";
+        public static final String ORDER = "order";
+        public static final String PROFILE_PATH = "profile_path";
+        public static final String MOVIE_ID = "id";
+
+        static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_CASTS).build();
+
+        static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CASTS;
+        static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CASTS;
+
+        static Uri buildCastUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        //content://work....../casts/MovieId
+        public static Uri buildCastsUriWithMovieId(String MovieId) {
+            return CONTENT_URI.buildUpon().appendPath(MovieId).build();
+        }
+
+        public static Uri buildMovieUri() {
+            return CONTENT_URI.buildUpon().build();
+        }
+
+        public static String getIDFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+
+    }
+
+    public static final class People implements BaseColumns {
+
+        public static final String TABLE_NAME = "people";
+
+        public static final String ADULT = "adult";
+        public static final String BIOGRAPHY = "biography";
+        public static final String BIRTHDAY = "birthday";
+        public static final String DEATHDAY = "deathday";
+        public static final String GENDER = "gender";
+        public static final String HOMEPAGE = "homepage";
+        public static final String ID = "id";
+        public static final String NAME = "name";
+        public static final String PLACE_OF_BIRTH = "place_of_birth";
+        public static final String POPULARITY = "popularity";
+        public static final String PROFILE_PATH = "profile_path";
+
+        static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_PEOPLE).build();
+
+        static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PEOPLE;
+        static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PEOPLE;
+
+        static Uri buildPeopleUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        //content://work....../people/MovieId
+        public static Uri buildPeopleUriWithMovieId(String MovieId) {
+            return CONTENT_URI.buildUpon().appendPath(MovieId).build();
+        }
+
+        public static Uri buildMovieUri() {
+            return CONTENT_URI.buildUpon().build();
+        }
+
+        public static String getIDFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+
+    }
+
+    public static final class Crew implements BaseColumns {
+
+        public static final String TABLE_NAME = "crew";
+
+        public static final String CREDIT_ID = "credit_id";
+        public static final String DEPARTMENT = "department";
+        public static final String ID = "id";
+        public static final String JOB = "job";
+        public static final String NAME = "name";
+        public static final String PROFILE_PATH = "profile_path";
+        public static final String MOVIE_ID = "id";
+
+        static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_CREWS).build();
+
+        static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CREWS;
+        static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CREWS;
+
+        static Uri buildCrewUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        //content://work....../crews/MovieId
+        public static Uri buildCrewsUriWithMovieId(String MovieId) {
+            return CONTENT_URI.buildUpon().appendPath(MovieId).build();
+        }
+
+        public static Uri buildCrewUri() {
+            return CONTENT_URI.buildUpon().build();
+        }
+
+        public static String getIDFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
 
     }
 
@@ -115,12 +344,12 @@ public class MovieContract {
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_TV).build();
 
-        public static final String CONTENT_TYPE =
+        static final String CONTENT_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TV;
-        public static final String CONTENT_ITEM_TYPE =
+        static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TV;
 
-        public static Uri buildTVUri(long id) {
+        static Uri buildTVUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
@@ -192,30 +421,31 @@ public class MovieContract {
         }
     }
 
-    public static final class Trailers implements BaseColumns {
+    public static final class Videos implements BaseColumns {
 
-        public static final String TABLE_NAME = "trailers";
+        public static final String TABLE_NAME = "videos";
 
+        public static final String VIDEO_ID = "video_id";
+        public static final String KEY = "key";
         public static final String NAME = "name";
+        public static final String SITE = "site";
         public static final String SIZE = "size";
-        public static final String SOURCE = "source";
         public static final String TYPE = "type";
         public static final String MOVIE_ID = "id";
 
-
         public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(PATH_TRAILERS).build();
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_VIDEOS).build();
 
-        public static final String CONTENT_TYPE =
-                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TRAILERS;
-        public static final String CONTENT_ITEM_TYPE =
-                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TRAILERS;
+        static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_VIDEOS;
+        static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_VIDEOS;
 
-        public static Uri buildMoviesUri(long id) {
+        static Uri buildMoviesUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        //content://work....../trailers/MovieId
+        //content://work....../videos/MovieId
         public static Uri buildMoviesUriWithMovieId(String MovieId) {
             return CONTENT_URI.buildUpon().appendPath(MovieId).build();
         }
@@ -247,12 +477,12 @@ public class MovieContract {
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_REVIEWS).build();
 
-        public static final String CONTENT_TYPE =
+        static final String CONTENT_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_REVIEWS;
-        public static final String CONTENT_ITEM_TYPE =
+        static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_REVIEWS;
 
-        public static Uri buildMoviesUri(long id) {
+        static Uri buildMoviesUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
@@ -284,17 +514,17 @@ public class MovieContract {
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_GENRES).build();
 
-        public static final String CONTENT_TYPE =
+        static final String CONTENT_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_GENRES;
-        public static final String CONTENT_ITEM_TYPE =
+        static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_GENRES;
 
-        public static Uri buildMoviesUri(long id) {
+        static Uri buildMoviesUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        //content://work....../movies/MovieId
-        public static Uri buildMoviesUriWithMovieId(String MovieId) {
+        //content://work....../genres/MovieId
+        public static Uri buildGenresUriWithMovieId(String MovieId) {
             return CONTENT_URI.buildUpon().appendPath(MovieId).build();
         }
 
@@ -305,7 +535,6 @@ public class MovieContract {
         public static String getIDFromUri(Uri uri) {
             return uri.getPathSegments().get(1);
         }
-
 
     }
 

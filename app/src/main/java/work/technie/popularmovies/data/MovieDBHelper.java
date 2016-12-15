@@ -20,12 +20,17 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import work.technie.popularmovies.data.MovieContract.Cast;
+import work.technie.popularmovies.data.MovieContract.Crew;
 import work.technie.popularmovies.data.MovieContract.Favourites;
 import work.technie.popularmovies.data.MovieContract.Genres;
+import work.technie.popularmovies.data.MovieContract.MovieDetails;
 import work.technie.popularmovies.data.MovieContract.Movies;
+import work.technie.popularmovies.data.MovieContract.People;
 import work.technie.popularmovies.data.MovieContract.Reviews;
+import work.technie.popularmovies.data.MovieContract.SimilarMovies;
 import work.technie.popularmovies.data.MovieContract.TV;
-import work.technie.popularmovies.data.MovieContract.Trailers;
+import work.technie.popularmovies.data.MovieContract.Videos;
 
 
 public class MovieDBHelper extends SQLiteOpenHelper {
@@ -62,6 +67,90 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 Movies.PREF_ADULT + " TEXT," +
                 Movies.PREF_REGION + " TEXT,"
                 + "UNIQUE (" + Movies.MOVIE_ID + ") ON CONFLICT REPLACE)";
+
+        final String SQL_CREATE__TABLE_SIMILAR_MOVIES = "CREATE TABLE " + SimilarMovies.TABLE_NAME + " (" +
+                SimilarMovies._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                SimilarMovies.PAGE + "  TEXT," +
+                SimilarMovies.POSTER_PATH + "  TEXT," +
+                SimilarMovies.ADULT + "  TEXT," +
+                SimilarMovies.OVERVIEW + "  TEXT," +
+                SimilarMovies.RELEASE_DATE + "  TEXT," +
+                SimilarMovies.MOVIE_ID + "  TEXT," +
+                SimilarMovies.ORIGINAL_TITLE + "  TEXT," +
+                SimilarMovies.ORIGINAL_LANGUAGE + "  TEXT," +
+                SimilarMovies.TITLE + "  TEXT," +
+                SimilarMovies.BACKDROP_PATH + "  TEXT," +
+                SimilarMovies.POPULARITY + "  TEXT," +
+                SimilarMovies.VOTE_COUNT + "  TEXT," +
+                SimilarMovies.VOTE_AVERAGE + "  TEXT," +
+                SimilarMovies.FAVOURED + " INTEGER NOT NULL DEFAULT 0," +
+                SimilarMovies.SHOWED + " INTEGER NOT NULL DEFAULT 0," +
+                SimilarMovies.DOWNLOADED + " INTEGER NOT NULL DEFAULT 0,"
+                + "UNIQUE (" + SimilarMovies.MOVIE_ID + ") ON CONFLICT REPLACE)";
+
+        final String SQL_CREATE__TABLE_MOVIE_DETAILS = "CREATE TABLE " + MovieDetails.TABLE_NAME + " (" +
+                MovieDetails._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                MovieDetails.MOVIE_ID + "  TEXT," +
+                MovieDetails.ADULT + "  TEXT," +
+                MovieDetails.BACKDROP_PATH + "  TEXT," +
+                MovieDetails.BUDGET + "  TEXT," +
+                MovieDetails.HOMEPAGE + "  TEXT," +
+                MovieDetails.ORIGINAL_LANGUAGE + "  TEXT," +
+                MovieDetails.ORIGINAL_TITLE + "  TEXT," +
+                MovieDetails.OVERVIEW + "  TEXT," +
+                MovieDetails.POPULARITY + "  TEXT," +
+                MovieDetails.POSTER_PATH + "  TEXT," +
+                MovieDetails.RELEASE_DATE + "  TEXT," +
+                MovieDetails.REVENUE + "  TEXT," +
+                MovieDetails.RUNTIME + "  TEXT," +
+                MovieDetails.STATUS + "  TEXT," +
+                MovieDetails.TAGLINE + "  TEXT," +
+                MovieDetails.TITLE + "  TEXT," +
+                MovieDetails.VOTE_AVERAGE + "  TEXT," +
+                MovieDetails.VOTE_COUNT + "  TEXT," +
+                MovieDetails.FAVOURED + " INTEGER NOT NULL DEFAULT 0," +
+                MovieDetails.SHOWED + " INTEGER NOT NULL DEFAULT 0," +
+                MovieDetails.DOWNLOADED + " INTEGER NOT NULL DEFAULT 0,"
+                + "UNIQUE (" + MovieDetails.MOVIE_ID + ") ON CONFLICT REPLACE)";
+
+        final String SQL_CREATE__TABLE_CAST = "CREATE TABLE " + Cast.TABLE_NAME + " (" +
+                Cast._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                Cast.CAST_ID + "  TEXT," +
+                Cast.CHARACTER + "  TEXT," +
+                Cast.CREDIT_ID + "  TEXT," +
+                Cast.ID + "  TEXT," +
+                Cast.NAME + "  TEXT," +
+                Cast.ORDER + "  TEXT," +
+                Cast.PROFILE_PATH + "  TEXT," +
+                Cast.MOVIE_ID + "  TEXT,"
+                + "UNIQUE (" + Cast.MOVIE_ID + " , " + Cast.CAST_ID + ") ON CONFLICT REPLACE)";
+
+        final String SQL_CREATE__TABLE_PEOPLE = "CREATE TABLE " + People.TABLE_NAME + " (" +
+                People._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                People.ADULT + "  TEXT," +
+                People.BIOGRAPHY + "  TEXT," +
+                People.BIRTHDAY + "  TEXT," +
+                People.DEATHDAY + "  TEXT," +
+                People.GENDER + "  TEXT," +
+                People.HOMEPAGE + "  TEXT," +
+                People.ID + "  TEXT," +
+                People.NAME + "  TEXT," +
+                People.PLACE_OF_BIRTH + "  TEXT," +
+                People.POPULARITY + "  TEXT," +
+                People.PROFILE_PATH + "  TEXT,"
+                + "UNIQUE (" + People.ID + ") ON CONFLICT REPLACE)";
+
+        final String SQL_CREATE__TABLE_CREW = "CREATE TABLE " + Crew.TABLE_NAME + " (" +
+                Crew._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                Crew.CREDIT_ID + "  TEXT," +
+                Crew.DEPARTMENT + "  TEXT," +
+                Crew.ID + "  TEXT," +
+                Crew.JOB + "  TEXT," +
+                Crew.NAME + "  TEXT," +
+                Crew.PROFILE_PATH + "  TEXT," +
+                Crew.MOVIE_ID + "  TEXT,"
+                + "UNIQUE (" + Crew.CREDIT_ID + " , " + Crew.MOVIE_ID + ") ON CONFLICT REPLACE)";
+
 
         final String SQL_CREATE__TABLE_TV = "CREATE TABLE " + TV.TABLE_NAME + " (" +
                 TV._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -107,14 +196,17 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 Favourites.SORT_BY + " TEXT,"
                 + "UNIQUE (" + Favourites.MOVIE_ID + ") ON CONFLICT REPLACE)";
 
-        final String SQL_CREATE__TABLE_TRAILERS = "CREATE TABLE " + Trailers.TABLE_NAME + " (" +
-                Trailers._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                Trailers.NAME + "  TEXT," +
-                Trailers.SIZE + "  TEXT," +
-                Trailers.SOURCE + "  TEXT," +
-                Trailers.TYPE + "  TEXT," +
-                Trailers.MOVIE_ID + "  TEXT ," +
-                "UNIQUE (" + Trailers.SOURCE + ") ON CONFLICT REPLACE)";
+        final String SQL_CREATE__TABLE_VIDEOS = "CREATE TABLE " + Videos.TABLE_NAME + " (" +
+                Videos._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                Videos.VIDEO_ID + "  TEXT," +
+                Videos.KEY + "  TEXT," +
+                Videos.NAME + "  TEXT," +
+                Videos.SITE + "  TEXT," +
+                Videos.SIZE + "  TEXT," +
+                Videos.TYPE + "  TEXT," +
+                Videos.MOVIE_ID + "  TEXT ," +
+                "UNIQUE (" + Videos.MOVIE_ID + " , " + Videos.VIDEO_ID + ") ON CONFLICT REPLACE)";
+
         final String SQL_CREATE__TABLE_REVIEWS = "CREATE TABLE " + Reviews.TABLE_NAME + " (" +
                 Reviews._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 Reviews.PAGE + "  TEXT," +
@@ -125,18 +217,25 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 Reviews.CONTENT + "  TEXT," +
                 Reviews.URL + "  TEXT," +
                 Reviews.MOVIE_ID + "  TEXT )";
+
         final String SQL_CREATE__TABLE_GENRES = "CREATE TABLE " + Genres.TABLE_NAME + " (" +
                 Genres._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 Genres.NAME + "  TEXT," +
                 Genres.ID_GENRES + "  TEXT," +
-                Genres.MOVIE_ID + "  TEXT )";
+                Genres.MOVIE_ID + "  TEXT ," +
+                "UNIQUE (" + Genres.MOVIE_ID + " , " + Genres.ID_GENRES + ") ON CONFLICT REPLACE)";
 
         sqLiteDatabase.execSQL(SQL_CREATE__TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE__TABLE_TV);
         sqLiteDatabase.execSQL(SQL_CREATE__TABLE_FAVOURITES);
-        sqLiteDatabase.execSQL(SQL_CREATE__TABLE_TRAILERS);
+        sqLiteDatabase.execSQL(SQL_CREATE__TABLE_VIDEOS);
         sqLiteDatabase.execSQL(SQL_CREATE__TABLE_REVIEWS);
         sqLiteDatabase.execSQL(SQL_CREATE__TABLE_GENRES);
+        sqLiteDatabase.execSQL(SQL_CREATE__TABLE_MOVIE_DETAILS);
+        sqLiteDatabase.execSQL(SQL_CREATE__TABLE_CAST);
+        sqLiteDatabase.execSQL(SQL_CREATE__TABLE_CREW);
+        sqLiteDatabase.execSQL(SQL_CREATE__TABLE_PEOPLE);
+        sqLiteDatabase.execSQL(SQL_CREATE__TABLE_SIMILAR_MOVIES);
 
 
     }
@@ -146,9 +245,14 @@ public class MovieDBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Movies.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TV.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Favourites.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Trailers.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Videos.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Reviews.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Genres.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + MovieDetails.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Cast.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Crew.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + SimilarMovies.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + People.TABLE_NAME);
 
         onCreate(sqLiteDatabase);
     }
