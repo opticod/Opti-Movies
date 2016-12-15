@@ -54,6 +54,37 @@ public class Constants {
             MovieContract.TV.DOWNLOADED,
             MovieContract.TV.MODE
     };
+    public static final String[] VIDEO_COLUMNS = {
+
+            MovieContract.Videos.TABLE_NAME + "." + MovieContract.Videos._ID,
+            MovieContract.Videos.TABLE_NAME + "." + MovieContract.Videos.VIDEO_ID,
+            MovieContract.Videos.TABLE_NAME + "." + MovieContract.Videos.KEY,
+            MovieContract.Videos.TABLE_NAME + "." + MovieContract.Videos.NAME,
+            MovieContract.Videos.TABLE_NAME + "." + MovieContract.Videos.SITE,
+            MovieContract.Videos.TABLE_NAME + "." + MovieContract.Videos.SIZE,
+            MovieContract.Videos.TABLE_NAME + "." + MovieContract.Videos.TYPE,
+            MovieContract.Videos.TABLE_NAME + "." + MovieContract.Videos.MOVIE_ID,
+    };
+    public static final String[] REVIEW_COLUMNS = {
+
+            MovieContract.Reviews.TABLE_NAME + "." + MovieContract.Reviews._ID,
+            MovieContract.Reviews.TABLE_NAME + "." + MovieContract.Reviews.PAGE,
+            MovieContract.Reviews.TABLE_NAME + "." + MovieContract.Reviews.TOTAL_PAGE,
+            MovieContract.Reviews.TABLE_NAME + "." + MovieContract.Reviews.TOTAL_RESULTS,
+            MovieContract.Reviews.TABLE_NAME + "." + MovieContract.Reviews.ID_REVIEWS,
+            MovieContract.Reviews.TABLE_NAME + "." + MovieContract.Reviews.AUTHOR,
+            MovieContract.Reviews.TABLE_NAME + "." + MovieContract.Reviews.CONTENT,
+            MovieContract.Reviews.TABLE_NAME + "." + MovieContract.Reviews.URL,
+            MovieContract.Reviews.TABLE_NAME + "." + MovieContract.Reviews.MOVIE_ID
+
+    };
+    public static final String[] GENRE_COLUMNS = {
+
+            MovieContract.Genres.TABLE_NAME + "." + MovieContract.Genres._ID,
+            MovieContract.Genres.TABLE_NAME + "." + MovieContract.Genres.NAME,
+            MovieContract.Genres.TABLE_NAME + "." + MovieContract.Genres.ID_GENRES,
+            MovieContract.Genres.TABLE_NAME + "." + MovieContract.Genres.MOVIE_ID
+    };
     private static final String[] FAVOURITE_MOVIE_COLUMNS = {
 
             MovieContract.Favourites.TABLE_NAME + "." + MovieContract.Favourites._ID,
@@ -70,7 +101,10 @@ public class Constants {
             MovieContract.Favourites.POPULARITY,
             MovieContract.Favourites.VOTE_COUNT,
             MovieContract.Favourites.VOTE_AVERAGE,
-            MovieContract.Favourites.FAVOURED
+            MovieContract.Favourites.FAVOURED,
+            MovieContract.Favourites.SHOWED,
+            MovieContract.Favourites.DOWNLOADED,
+            MovieContract.Favourites.SORT_BY
     };
     public static int MOV_COL_ID = 0;
     public static int MOV_COL_PAGE = 1;
@@ -107,8 +141,25 @@ public class Constants {
     public static int TV_COL_SHOWED = 14;
     public static int TV_COL_DOWNLOADED = 15;
     public static int TV_COL_MODE = 16;
-
-
+    public static int COL_TRAILER_ID = 0;
+    public static int COL_TRAILER_NAME = 1;
+    public static int COL_TRAILER_SIZE = 2;
+    public static int COL_TRAILER_SOURCE = 3;
+    public static int COL_TRAILER_TYPE = 4;
+    public static int COL_TRAILER_MOVIE_ID = 5;
+    public static int COL_REVIEW_ID = 0;
+    public static int COL_REVIEW_PAGE = 1;
+    public static int COL_REVIEW_TOTAL_PAGE = 2;
+    public static int COL_REVIEW_TOTAL_RESULTS = 3;
+    public static int COL_REVIEW_ID_REVIEWS = 4;
+    public static int COL_REVIEW_AUTHOR = 5;
+    public static int COL_REVIEW_CONTENT = 6;
+    public static int COL_REVIEW_URL = 7;
+    public static int COL_REVIEW_MOVIE_ID = 8;
+    public static int COL_GENRE_ID = 0;
+    public static int COL_GENRE_NAME = 1;
+    public static int COL_GENRE_ID_GENRE = 3;
+    public static int COL_GENRE_MOVIE_ID = 4;
 
 
 }

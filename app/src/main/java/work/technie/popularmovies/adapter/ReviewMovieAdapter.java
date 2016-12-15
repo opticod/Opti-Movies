@@ -25,7 +25,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import work.technie.popularmovies.R;
-import work.technie.popularmovies.fragment.DetailActivityFragment;
+
+import static work.technie.popularmovies.Constants.COL_REVIEW_AUTHOR;
+import static work.technie.popularmovies.Constants.COL_REVIEW_CONTENT;
+import static work.technie.popularmovies.Constants.COL_REVIEW_URL;
 
 /**
  * Created by anupam on 27/12/15.
@@ -50,9 +53,9 @@ public class ReviewMovieAdapter extends CursorAdapter {
     */
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
-        final String author_name = cursor.getString(DetailActivityFragment.COL_REVIEW_AUTHOR);
-        final String content = cursor.getString(DetailActivityFragment.COL_REVIEW_CONTENT);
-        final String url = cursor.getString(DetailActivityFragment.COL_REVIEW_URL);
+        final String author_name = cursor.getString(COL_REVIEW_AUTHOR);
+        final String content = cursor.getString(COL_REVIEW_CONTENT);
+        final String url = cursor.getString(COL_REVIEW_URL);
 
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 

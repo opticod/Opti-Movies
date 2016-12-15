@@ -25,7 +25,8 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import work.technie.popularmovies.R;
-import work.technie.popularmovies.fragment.DetailActivityFragment;
+
+import static work.technie.popularmovies.Constants.COL_GENRE_NAME;
 
 /**
  * Created by anupam on 28/12/15.
@@ -51,7 +52,7 @@ public class GenreMovieAdapter extends CursorAdapter {
     */
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        final String genre = cursor.getString(DetailActivityFragment.COL_GENRE_NAME);
+        final String genre = cursor.getString(COL_GENRE_NAME);
 
         ViewHolder viewHolder = (ViewHolder) view.getTag();
         viewHolder.genre.setText("Genre: " + genre);

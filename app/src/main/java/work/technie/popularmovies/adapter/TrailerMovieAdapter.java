@@ -31,7 +31,9 @@ import com.squareup.picasso.Picasso;
 
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 import work.technie.popularmovies.R;
-import work.technie.popularmovies.fragment.DetailActivityFragment;
+
+import static work.technie.popularmovies.Constants.COL_TRAILER_NAME;
+import static work.technie.popularmovies.Constants.COL_TRAILER_SOURCE;
 
 /**
  * Created by anupam on 27/12/15.
@@ -57,8 +59,8 @@ public class TrailerMovieAdapter extends CursorAdapter {
     */
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
-        final String trailer_name = cursor.getString(DetailActivityFragment.COL_TRAILER_NAME);
-        final String source = cursor.getString(DetailActivityFragment.COL_TRAILER_SOURCE);
+        final String trailer_name = cursor.getString(COL_TRAILER_NAME);
+        final String source = cursor.getString(COL_TRAILER_SOURCE);
         final ViewHolder viewHolder = (ViewHolder) view.getTag();
         viewHolder.trailer.setText(trailer_name);
         final String BASE_URL = "http://img.youtube.com/vi/";

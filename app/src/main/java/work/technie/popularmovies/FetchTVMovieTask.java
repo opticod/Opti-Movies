@@ -444,6 +444,8 @@ public class FetchTVMovieTask extends AsyncTask<String, Void, Integer> {
     @Override
     protected void onPostExecute(Integer result) {
         super.onPostExecute(result);
-        response.onFinish(result > 0);
+        if (result != null) {
+            response.onFinish(result > 0);
+        }
     }
 }

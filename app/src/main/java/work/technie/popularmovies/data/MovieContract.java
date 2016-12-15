@@ -168,7 +168,7 @@ public class MovieContract {
         public static final String SHOWED = "shown";
         public static final String DOWNLOADED = "downloaded";
 
-        static final Uri CONTENT_URI =
+        public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE_DETAILS).build();
 
         static final String CONTENT_TYPE =
@@ -204,11 +204,11 @@ public class MovieContract {
         public static final String CREDIT_ID = "credit_id";
         public static final String ID = "id";
         public static final String NAME = "name";
-        public static final String ORDER = "order";
+        public static final String ORDER = "order_cast";
         public static final String PROFILE_PATH = "profile_path";
-        public static final String MOVIE_ID = "id";
+        public static final String MOVIE_ID = "movie_id";
 
-        static final Uri CONTENT_URI =
+        public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_CASTS).build();
 
         static final String CONTENT_TYPE =
@@ -251,7 +251,7 @@ public class MovieContract {
         public static final String POPULARITY = "popularity";
         public static final String PROFILE_PATH = "profile_path";
 
-        static final Uri CONTENT_URI =
+        public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_PEOPLE).build();
 
         static final String CONTENT_TYPE =
@@ -288,9 +288,9 @@ public class MovieContract {
         public static final String JOB = "job";
         public static final String NAME = "name";
         public static final String PROFILE_PATH = "profile_path";
-        public static final String MOVIE_ID = "id";
+        public static final String MOVIE_ID = "movie_id";
 
-        static final Uri CONTENT_URI =
+        public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_CREWS).build();
 
         static final String CONTENT_TYPE =
@@ -425,13 +425,13 @@ public class MovieContract {
 
         public static final String TABLE_NAME = "videos";
 
-        public static final String VIDEO_ID = "video_id";
+        public static final String VIDEO_ID = "id";
         public static final String KEY = "key";
         public static final String NAME = "name";
         public static final String SITE = "site";
         public static final String SIZE = "size";
         public static final String TYPE = "type";
-        public static final String MOVIE_ID = "id";
+        public static final String MOVIE_ID = "movie_id";
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_VIDEOS).build();
@@ -472,7 +472,7 @@ public class MovieContract {
         public static final String AUTHOR = "author";
         public static final String CONTENT = "content";
         public static final String URL = "url";
-        public static final String MOVIE_ID = "id";
+        public static final String MOVIE_ID = "movie_id";
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_REVIEWS).build();
@@ -482,16 +482,16 @@ public class MovieContract {
         static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_REVIEWS;
 
-        static Uri buildMoviesUri(long id) {
+        static Uri buildReviewsUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
         //content://work....../reviews/MovieId
-        public static Uri buildMoviesUriWithMovieId(String MovieId) {
+        public static Uri buildReviewsUriWithMovieId(String MovieId) {
             return CONTENT_URI.buildUpon().appendPath(MovieId).build();
         }
 
-        public static Uri buildMovieUri() {
+        public static Uri buildReviewUri() {
             return CONTENT_URI.buildUpon().build();
         }
 
