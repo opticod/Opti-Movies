@@ -28,7 +28,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="false"
         android:alpha="0.4"
-        android:background="@android:color/background_light"
+        android:background="@color/light_primary_color"
         android:enabled="true"
         android:gravity="center"
         android:paddingBottom="@dimen/activity_horizontal_margin"
@@ -46,7 +46,7 @@
             style="@style/MovieGridStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/background_grey2"
+            android:background="@color/divider_color"
             android:gravity="center" />
 
         <TextView

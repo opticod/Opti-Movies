@@ -6,7 +6,7 @@
     android:layout_height="330dp"
     android:layout_gravity="center"
     android:foreground="?android:attr/selectableItemBackground"
-    card_view:cardBackgroundColor="#FFFFFF"
+    card_view:cardBackgroundColor="@color/light_primary_color"
     card_view:cardCornerRadius="4dp"
     card_view:cardElevation="4dp"
     card_view:cardUseCompatPadding="true">
