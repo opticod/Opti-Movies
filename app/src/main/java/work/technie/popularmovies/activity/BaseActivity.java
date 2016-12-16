@@ -1,26 +1,19 @@
 package work.technie.popularmovies.activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.facebook.stetho.Stetho;
 
 import work.technie.popularmovies.R;
-import work.technie.popularmovies.fragment.AboutFragment;
 import work.technie.popularmovies.fragment.DetailActivityFragment;
 import work.technie.popularmovies.fragment.MainActivityFragment;
-import work.technie.popularmovies.fragment.SettingsFragment;
 
 /**
  * Created by anupam on 9/12/16.
@@ -43,14 +36,9 @@ public class BaseActivity extends AppCompatActivity
     private final static String STATE_FRAGMENT = "stateFragment";
     private final String DETAIL_FRAGMENT_TAG = "DFTAG";
     private final String LAST_FRAGMENT = "last_fragment";
-
-    private String CURRENT_FRAGMENT_TAG;
+    NavigationView navigationView;
     private boolean mTwoPane;
     private int currentMenuItemId;
-    private Toolbar toolbar;
-    private DrawerLayout drawer;
-    private ActionBarDrawerToggle toggle;
-    private SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,48 +46,7 @@ public class BaseActivity extends AppCompatActivity
         setContentView(R.layout.activity_base);
         Stetho.initializeWithDefaults(this);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        final View.OnClickListener originalToolbarListener = toggle.getToolbarNavigationClickListener();
-
-        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                    toggle.setDrawerIndicatorEnabled(false);
-                    toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            FragmentManager fragmentManager = getSupportFragmentManager();
-                            fragmentManager.popBackStack();
-                            SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-                            String fragment = sharedPref.getString(CURRENT_FRAGMENT_TAG, FRAGMENT_TAG_MOV_NOW_PLAYING);
-                            toolbar.setTitle(fragment);
-                        }
-                    });
-                } else {
-                    toggle.setDrawerIndicatorEnabled(true);
-                    toggle.setToolbarNavigationClickListener(originalToolbarListener);
-                }
-            }
-        });
-
-        if (findViewById(R.id.detail_swipe_refresh) != null) {
-            toggle.setDrawerIndicatorEnabled(false);
-        } else {
-            toggle.setDrawerIndicatorEnabled(true);
-            toggle.setToolbarNavigationClickListener(originalToolbarListener);
-        }
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         if (savedInstanceState == null) {
@@ -107,12 +54,6 @@ public class BaseActivity extends AppCompatActivity
             navigationView.setCheckedItem(R.id.mov_now_playing);
         } else {
             currentMenuItemId = savedInstanceState.getInt(STATE_FRAGMENT);
-        }
-
-        if (getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG) == null) {
-            sharedPref = getPreferences(Context.MODE_PRIVATE);
-            String fragment = sharedPref.getString(LAST_FRAGMENT, FRAGMENT_TAG_MOV_NOW_PLAYING);
-            toolbar.setTitle(fragment);
         }
 
         if (findViewById(R.id.movie_detail_container) != null) {
@@ -134,11 +75,33 @@ public class BaseActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        if (getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG) == null) {
-            sharedPref = getPreferences(Context.MODE_PRIVATE);
-            String fragment = sharedPref.getString(LAST_FRAGMENT, FRAGMENT_TAG_MOV_NOW_PLAYING);
-            toolbar.setTitle(fragment);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStack();
+            } else {
+                finish();
+            }
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                FragmentManager fm = getSupportFragmentManager();
+                if (fm.getBackStackEntryCount() > 0) {
+                    fm.popBackStack();
+                    return true;
+                } else {
+                    onBackPressed();
+                }
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -181,35 +144,30 @@ public class BaseActivity extends AppCompatActivity
             default:
                 currentFragment = FRAGMENT_TAG_MOV_NOW_PLAYING;
                 break;
-                //nothing;
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(LAST_FRAGMENT, currentFragment);
-        editor.apply();
+        switch (currentFragment) {
+            case FRAGMENT_ABOUT:
+                Intent intent = new Intent(BaseActivity.this, AboutActivity.class);
+                startActivity(intent);
+                break;
+            case FRAGMENT_SETTINGS:
 
-        if (currentFragment.equals(FRAGMENT_ABOUT)) {
-            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            fragmentManager.beginTransaction()
-                    .replace(R.id.frag_container, new AboutFragment(), currentFragment).commit();
+                intent = new Intent(BaseActivity.this, SettingsActivity.class);
+                startActivity(intent);
+                break;
 
-        } else if (currentFragment.equals(FRAGMENT_SETTINGS)) {
-            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            fragmentManager.beginTransaction()
-                    .replace(R.id.frag_container, new SettingsFragment(), currentFragment).commit();
+            default:
 
-        } else {
-            Bundle arguments = new Bundle();
-            MainActivityFragment fragment = new MainActivityFragment();
-            fragment.setArguments(arguments);
-            arguments.putString(Intent.EXTRA_TEXT, currentFragment);
-            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            fragmentManager.beginTransaction()
-                    .replace(R.id.frag_container, fragment, currentFragment).commit();
+                Bundle arguments = new Bundle();
+                MainActivityFragment fragment = new MainActivityFragment();
+                fragment.setArguments(arguments);
+                arguments.putString(Intent.EXTRA_TEXT, currentFragment);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.frag_container, fragment, currentFragment).commit();
+                break;
         }
-        getSupportActionBar().setTitle(currentFragment);
-
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -219,7 +177,6 @@ public class BaseActivity extends AppCompatActivity
         int id = item.getItemId();
 
         doMenuAction(id);
-        currentMenuItemId = id;
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -256,8 +213,8 @@ public class BaseActivity extends AppCompatActivity
             fragment.setArguments(arguments);
 
             getSupportFragmentManager().beginTransaction()
-                    .addToBackStack(CURRENT_FRAGMENT_TAG)
-                    .add(R.id.frag_container, fragment, DETAIL_FRAGMENT_TAG)
+                    .addToBackStack(LAST_FRAGMENT)
+                    .replace(R.id.frag_container, fragment, DETAIL_FRAGMENT_TAG)
                     .commit();
         }
     }

@@ -62,7 +62,7 @@
 
     <group
         android:id="@+id/menu_bottom"
-        android:checkableBehavior="single">
+        android:checkableBehavior="none">
 
         <item
             android:id="@+id/about"

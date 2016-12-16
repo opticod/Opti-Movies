@@ -28,7 +28,6 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -264,7 +263,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                 orgTitle = data.getString(MOV_COL_ORIGINAL_TITLE);
                 ((TextView) rootView.findViewById(R.id.orgTitle))
                         .setText(orgTitle);
-                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(orgTitle);
+//                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(orgTitle);
 
                 overview = data.getString(MOV_COL_OVERVIEW);
                 ((TextView) rootView.findViewById(R.id.overview))

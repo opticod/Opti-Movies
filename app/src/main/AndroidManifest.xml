@@ -21,6 +21,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:label="Settings"
+            android:theme="@style/SettingsTheme" />
+        <activity
+            android:name=".activity.AboutActivity"
+            android:label="About"
+            android:theme="@style/AppTheme" />
         <provider
             android:name=".data.MovieProvider"
             android:authorities="work.technie.popularmovies" />

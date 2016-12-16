@@ -26,8 +26,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.preference.PreferenceManager;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,9 +101,17 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        final Activity mActivity = getActivity();
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.main_swipe_refresh);
+
+        Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) mActivity.findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                mActivity, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
 
         // The ArrayAdapter will take data from a source and
         // use it to populate the ListView it's attached to.
@@ -108,10 +119,10 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                 new TVMovieArrayAdapter(
                         getActivity(), null, 0);
 
-        final Activity mActivity = getActivity();
         Bundle arguments = getArguments();
         if (arguments != null) {
             MODE = arguments.getString(Intent.EXTRA_TEXT);
+            toolbar.setTitle(MODE);
         }
 
         if (MODE != null) {

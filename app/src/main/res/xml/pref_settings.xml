@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <SwitchPreferenceCompat
+    <SwitchPreference
         android:defaultValue="true"
         android:key="child_mode"
         android:summary="@string/pref_description_enable_child_mode"

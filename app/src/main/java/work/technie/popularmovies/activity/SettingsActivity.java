@@ -1,12 +1,13 @@
-package work.technie.popularmovies.fragment;
+package work.technie.popularmovies.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.v7.preference.ListPreference;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceFragmentCompat;
-import android.support.v7.preference.PreferenceManager;
+import android.view.MenuItem;
 
 import java.util.Arrays;
 import java.util.Locale;
@@ -14,11 +15,10 @@ import java.util.Locale;
 import work.technie.popularmovies.R;
 
 /**
- * Created by anupam on 14/12/16.
+ * Created by anupam on 16/12/16.
  */
 
-public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
-
+public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     protected static void setListPreferenceRegion(ListPreference lp) {
 
@@ -95,10 +95,23 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                onBackPressed();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+
         addPreferencesFromResource(R.xml.pref_settings);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         String KEY_REGION = "region";
         String KEY_LANGUAGE = "language";
@@ -133,7 +146,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             listPreferenceLanguage.setSummary(listPreferenceLanguage.getEntries()[prefIndex]);
         }
 
-
     }
 
     @Override
@@ -160,11 +172,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         super.onPause();
         getPreferenceScreen().getSharedPreferences()
                 .unregisterOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    public void onCreatePreferences(Bundle bundle, String s) {
-
     }
 
     static class Country implements Comparable<Country> {
