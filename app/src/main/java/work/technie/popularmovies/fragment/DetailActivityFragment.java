@@ -20,7 +20,10 @@ package work.technie.popularmovies.fragment;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -28,17 +31,20 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.graphics.Palette;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 import work.technie.popularmovies.FetchDetailMovie;
@@ -47,6 +53,7 @@ import work.technie.popularmovies.adapter.GenreMovieAdapter;
 import work.technie.popularmovies.adapter.ReviewMovieAdapter;
 import work.technie.popularmovies.adapter.TrailerMovieAdapter;
 import work.technie.popularmovies.data.MovieContract;
+import work.technie.popularmovies.utils.PaletteTransformation;
 import work.technie.popularmovies.utils.Utility;
 
 import static work.technie.popularmovies.Constants.COL_GENRE_NAME;
@@ -298,37 +305,20 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                         .setText(votAvg);
                 backdropURL = data.getString(MOV_COL_BACKDROP_PATH);
                 final ImageView backdrop = (ImageView) rootView.findViewById(R.id.backdropImg);
-                Picasso
-                        .with(getActivity())
+
+                Picasso.with(getActivity())
                         .load(backdropURL)
-                        .fit()
-                        .centerCrop()
-                        .networkPolicy(NetworkPolicy.OFFLINE)
-                        .into(backdrop, new Callback() {
+                        .fit().centerCrop()
+                        .transform(PaletteTransformation.instance())
+                        .into(backdrop, new Callback.EmptyCallback() {
                             @Override
                             public void onSuccess() {
-                            }
-
-                            @Override
-                            public void onError() {
-                                Picasso
-                                        .with(getActivity())
-                                        .load(backdropURL)
-                                        .fit()
-                                        .centerCrop()
-                                        .error(R.mipmap.ic_launcher)
-                                        .into(backdrop, new Callback() {
-                                            @Override
-                                            public void onSuccess() {
-                                            }
-
-                                            @Override
-                                            public void onError() {
-                                                //Log.v("Error Loading Images", "'");
-                                            }
-                                        });
+                                Bitmap bitmap = ((BitmapDrawable) backdrop.getDrawable()).getBitmap();
+                                Palette palette = PaletteTransformation.getPalette(bitmap);
+                                changeSystemToolbarColor(palette);
                             }
                         });
+
                 backdrop.setAdjustViewBounds(true);
 
                 final String downloaded = data.getString(MOV_COL_DOWNLOADED);
@@ -464,5 +454,18 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         trailerListAdapter.swapCursor(null);
         reviewListAdapter.swapCursor(null);
         genreListAdapter.swapCursor(null);
+    }
+
+    public void changeSystemToolbarColor(Palette palette) {
+        List<Palette.Swatch> vibrant = palette.getSwatches();
+        for (Palette.Swatch s : vibrant) {
+            if (s != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                    getActivity().getWindow().setStatusBarColor(s.getRgb());
+                }
+            }
+        }
+
     }
 }

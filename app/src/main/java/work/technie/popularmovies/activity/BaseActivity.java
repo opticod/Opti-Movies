@@ -80,11 +80,7 @@ public class BaseActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                getSupportFragmentManager().popBackStack();
-            } else {
-                finish();
-            }
+            super.onBackPressed();
         }
     }
 
@@ -164,6 +160,7 @@ public class BaseActivity extends AppCompatActivity
                 MainActivityFragment fragment = new MainActivityFragment();
                 fragment.setArguments(arguments);
                 arguments.putString(Intent.EXTRA_TEXT, currentFragment);
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 fragmentManager.beginTransaction()
                         .replace(R.id.frag_container, fragment, currentFragment).commit();
                 break;
