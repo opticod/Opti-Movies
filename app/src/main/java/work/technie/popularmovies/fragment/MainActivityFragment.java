@@ -40,6 +40,7 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,6 +73,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     private View rootView;
     private String MODE;
     private boolean isMovie;
+
 
     private void updateMovieList() {
         FetchTVMovieTask weatherTask = new FetchTVMovieTask(getActivity());
@@ -199,14 +201,23 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             });
         }
 
+        final Fragment current = this;
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (cursor != null) {
+                    ImageView imageView = (ImageView) view.findViewById(R.id.grid_item_poster);
+                    ImageView staticImage = (ImageView) getView().findViewById(R.id.grid_item_poster);
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        imageView.setTransitionName("TRANS_NAME" + position);
+                    }
+
                     ((Callback) getActivity())
-                            .onItemSelected(cursor.getString(isMovie ? Constants.MOV_COL_MOVIE_ID : Constants.TV_COL_TV_ID));
+                            .onItemSelected(cursor.getString(isMovie ? Constants.MOV_COL_MOVIE_ID : Constants.TV_COL_TV_ID), imageView, staticImage, current);
                 }
                 mPosition = position;
             }
@@ -276,7 +287,16 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         if (mPosition != ListView.INVALID_POSITION) {
             // If we don't need to restart the loader, and there's a desired position to restore
             // to, do so now.
-            gridView.smoothScrollToPosition(mPosition);
+            gridView.post(new Runnable() {
+                @Override
+                public void run() {
+                    gridView.setSelection(mPosition);
+                    View v = gridView.getChildAt(mPosition);
+                    if (v != null) {
+                        v.requestFocus();
+                    }
+                }
+            });
         }
         try {
             TextView info = (TextView) rootView.findViewById(R.id.empty);
@@ -317,9 +337,11 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     public interface Callback {
         /**
          * DetailFragmentCallback for when an item has been selected.
-         *
-         * @param movieUri
+         *  @param movieUri
+         * @param view
+         * @param staticImage
+         * @param current
          */
-        void onItemSelected(String movieUri);
+        void onItemSelected(String movieUri, ImageView view, ImageView staticImage, Fragment current);
     }
 }

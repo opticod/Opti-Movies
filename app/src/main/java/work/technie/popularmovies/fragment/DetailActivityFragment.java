@@ -17,6 +17,7 @@
 package work.technie.popularmovies.fragment;
 
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -111,6 +112,8 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     private ListView listViewGenres;
     private SwipeRefreshLayout swipeRefreshLayout;
     private String genre = "Genre : ";
+    private boolean reLoadPoster;
+
 
     public DetailActivityFragment() {
         playTrailer = "https://www.youtube.com/watch?v=";
@@ -125,10 +128,27 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Bundle arguments = getArguments();
+
+        Bitmap imageBitmap = null;
+        String transitionName = "";
+        reLoadPoster = false;
+
         if (arguments != null) {
             movie_Id = arguments.getString(Intent.EXTRA_TEXT);
+            transitionName = arguments.getString("TRANS_NAME");
+            imageBitmap = arguments.getParcelable("POSTER_IMAGE");
         }
         rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            rootView.findViewById(R.id.poster).setTransitionName(transitionName);
+        }
+
+        if (imageBitmap != null) {
+            ((ImageView) rootView.findViewById(R.id.poster)).setImageBitmap(imageBitmap);
+        } else {
+            reLoadPoster = true;
+        }
 
         // The ArrayAdapter will take data from a source and
         // use it to populate the ListView it's attached to.
@@ -282,14 +302,15 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                         .setText("Release Date: " + relDate);
 
                 postURL = data.getString(MOV_COL_POSTER_PATH);
-                ImageView poster = (ImageView) rootView.findViewById(R.id.poster);
-                Picasso
-                        .with(getActivity())
-                        .load(postURL)
-                        .transform(new RoundedCornersTransformation(10, 10))
-                        .fit()
-                        .into(poster);
-
+                if (reLoadPoster) {
+                    ImageView poster = (ImageView) rootView.findViewById(R.id.poster);
+                    Picasso
+                            .with(getActivity())
+                            .load(postURL)
+                            .transform(new RoundedCornersTransformation(10, 10))
+                            .fit()
+                            .into(poster);
+                }
                 movieId = data.getString(MOV_COL_MOVIE_ID);
                 popularity = data.getString(MOV_COL_POPULARITY);
                 double pop = Double.parseDouble(popularity);
@@ -461,8 +482,11 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         for (Palette.Swatch s : vibrant) {
             if (s != null) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                    getActivity().getWindow().setStatusBarColor(s.getRgb());
+                    Activity mActivity = getActivity();
+                    if (mActivity != null) {
+                        mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                        mActivity.getWindow().setStatusBarColor(s.getRgb());
+                    }
                 }
             }
         }

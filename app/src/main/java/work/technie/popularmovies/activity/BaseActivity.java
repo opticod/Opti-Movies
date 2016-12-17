@@ -1,13 +1,18 @@
 package work.technie.popularmovies.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.TransitionInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import com.facebook.stetho.Stetho;
 
@@ -187,7 +192,7 @@ public class BaseActivity extends AppCompatActivity
     }
 
     @Override
-    public void onItemSelected(String id) {
+    public void onItemSelected(String id, ImageView sharedView, ImageView staticView, Fragment current) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
@@ -203,15 +208,39 @@ public class BaseActivity extends AppCompatActivity
                     .commit();
         } else {
 
+            String imageTransitionName = "";
+            DetailActivityFragment fragment = new DetailActivityFragment();
+
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                current.setSharedElementReturnTransition(TransitionInflater.from(
+                        this).inflateTransition(R.transition.change_image_trans));
+                current.setExitTransition(TransitionInflater.from(
+                        this).inflateTransition(android.R.transition.fade));
+
+                fragment.setSharedElementEnterTransition(TransitionInflater.from(
+                        this).inflateTransition(R.transition.change_image_trans));
+                fragment.setEnterTransition(TransitionInflater.from(
+                        this).inflateTransition(android.R.transition.fade));
+
+                imageTransitionName = sharedView.getTransitionName();
+            }
+
             Bundle arguments = new Bundle();
             arguments.putString(Intent.EXTRA_TEXT, id);
-
-            DetailActivityFragment fragment = new DetailActivityFragment();
+            arguments.putString("TRANS_NAME", imageTransitionName);
+            BitmapDrawable sharedDrawable = (BitmapDrawable) sharedView.getDrawable();
+            if (sharedDrawable != null) {
+                arguments.putParcelable("POSTER_IMAGE", sharedDrawable.getBitmap());
+            } else {
+                arguments.putParcelable("POSTER_IMAGE", null);
+            }
             fragment.setArguments(arguments);
-
-            getSupportFragmentManager().beginTransaction()
-                    .addToBackStack(LAST_FRAGMENT)
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
                     .replace(R.id.frag_container, fragment, DETAIL_FRAGMENT_TAG)
+                    .addToBackStack(LAST_FRAGMENT)
+                    .addSharedElement(sharedView, imageTransitionName)
                     .commit();
         }
     }
