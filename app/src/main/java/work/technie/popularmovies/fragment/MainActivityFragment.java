@@ -160,7 +160,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                     isTVBookmark = false;
                     break;
                 default:
-                    isMovie = true;
+                    isMovie = false;
                     isMovieBookmark = false;
                     isTVBookmark = false;
                     break;
