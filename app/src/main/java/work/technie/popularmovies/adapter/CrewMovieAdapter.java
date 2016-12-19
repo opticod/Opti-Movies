@@ -24,29 +24,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import work.technie.popularmovies.Constants;
 import work.technie.popularmovies.R;
 
-import static work.technie.popularmovies.Constants.COL_GENRE_NAME;
-
 /**
- * Created by anupam on 28/12/15.
+ * Created by anupam on 27/12/15.
  */
-public class GenreMovieAdapter extends
-        RecyclerView.Adapter<GenreMovieAdapter.ViewHolder> {
-    private static final String LOG_TAG = GenreMovieAdapter.class.getSimpleName();
-    private Cursor cursor;
-    private Context context;
+public class CrewMovieAdapter extends
+        RecyclerView.Adapter<CrewMovieAdapter.ViewHolder> {
+    private static final String LOG_TAG = CrewMovieAdapter.class.getSimpleName();
 
-    public GenreMovieAdapter(Cursor cursor) {
+    private Cursor cursor;
+
+    public CrewMovieAdapter(Cursor cursor) {
         this.cursor = cursor;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        context = parent.getContext();
+        Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View view = inflater.inflate(R.layout.list_genre_movie, parent, false);
+        View view = inflater.inflate(R.layout.list_crew_movie, parent, false);
 
         return new ViewHolder(view);
     }
@@ -54,8 +53,10 @@ public class GenreMovieAdapter extends
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         cursor.moveToPosition(position);
-        final String genre = cursor.getString(COL_GENRE_NAME);
-        holder.genre.setText(genre);
+        final String crew_name = cursor.getString(Constants.CREW_COL_NAME);
+        final String crew_department = cursor.getString(Constants.CREW_COL_JOB);
+        holder.name.setText(crew_name);
+        holder.department.setText(crew_department);
     }
 
     @Override
@@ -68,11 +69,13 @@ public class GenreMovieAdapter extends
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        final TextView genre;
+        final TextView name;
+        final TextView department;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
-            genre = (TextView) view.findViewById(R.id.genre);
+            name = (TextView) view.findViewById(R.id.crew_name);
+            department = (TextView) view.findViewById(R.id.crew_department);
         }
     }
 }

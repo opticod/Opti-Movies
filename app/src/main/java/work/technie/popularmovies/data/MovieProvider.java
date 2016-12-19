@@ -310,7 +310,7 @@ public class MovieProvider extends ContentProvider {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         MovieContract.SimilarMovies.TABLE_NAME,
                         projection,
-                        MovieContract.SimilarMovies.MOVIE_ID + " = ?",
+                        MovieContract.SimilarMovies.MOVIE_ID_OLD + " = ?",
                         new String[]{String.valueOf(ContentUris.parseId(uri))},
                         null,
                         null,
@@ -334,7 +334,7 @@ public class MovieProvider extends ContentProvider {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         MovieContract.Cast.TABLE_NAME,
                         projection,
-                        MovieContract.Cast.CAST_ID + " = ?",
+                        MovieContract.Cast.MOVIE_ID + " = ?",
                         new String[]{String.valueOf(ContentUris.parseId(uri))},
                         null,
                         null,
@@ -382,7 +382,7 @@ public class MovieProvider extends ContentProvider {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         MovieContract.Crew.TABLE_NAME,
                         projection,
-                        MovieContract.Crew.CREDIT_ID + " = ?",
+                        MovieContract.Crew.MOVIE_ID + " = ?",
                         new String[]{String.valueOf(ContentUris.parseId(uri))},
                         null,
                         null,
@@ -601,7 +601,7 @@ public class MovieProvider extends ContentProvider {
                 break;
             case SIMILAR_MOVIES_WITH_ID:
                 rowsDeleted = db.delete(MovieContract.SimilarMovies.TABLE_NAME,
-                        MovieContract.SimilarMovies.MOVIE_ID + " = ?",
+                        MovieContract.SimilarMovies.MOVIE_ID_OLD + " = ?",
                         new String[]{String.valueOf(ContentUris.parseId(uri))});
                 break;
             case CASTS:
@@ -610,7 +610,7 @@ public class MovieProvider extends ContentProvider {
                 break;
             case CASTS_WITH_ID:
                 rowsDeleted = db.delete(MovieContract.Cast.TABLE_NAME,
-                        MovieContract.Cast.CAST_ID + " = ?",
+                        MovieContract.Cast.MOVIE_ID + " = ?",
                         new String[]{String.valueOf(ContentUris.parseId(uri))});
                 break;
             case CREW:
@@ -619,7 +619,7 @@ public class MovieProvider extends ContentProvider {
                 break;
             case CREW_WITH_ID:
                 rowsDeleted = db.delete(MovieContract.Crew.TABLE_NAME,
-                        MovieContract.Crew.CREDIT_ID + " = ?",
+                        MovieContract.Crew.MOVIE_ID + " = ?",
                         new String[]{String.valueOf(ContentUris.parseId(uri))});
                 break;
             case PEOPLE:
@@ -734,7 +734,7 @@ public class MovieProvider extends ContentProvider {
             case CREW_WITH_ID: {
                 rowsUpdated = db.update(MovieContract.Crew.TABLE_NAME,
                         values,
-                        MovieContract.Crew.CREDIT_ID + " = ?",
+                        MovieContract.Crew.MOVIE_ID + " = ?",
                         new String[]{String.valueOf(ContentUris.parseId(uri))});
                 break;
             }
@@ -745,7 +745,7 @@ public class MovieProvider extends ContentProvider {
             case CASTS_WITH_ID: {
                 rowsUpdated = db.update(MovieContract.Cast.TABLE_NAME,
                         values,
-                        MovieContract.Cast.CAST_ID + " = ?",
+                        MovieContract.Cast.MOVIE_ID + " = ?",
                         new String[]{String.valueOf(ContentUris.parseId(uri))});
                 break;
             }
@@ -767,7 +767,7 @@ public class MovieProvider extends ContentProvider {
             case SIMILAR_MOVIES_WITH_ID: {
                 rowsUpdated = db.update(MovieContract.SimilarMovies.TABLE_NAME,
                         values,
-                        MovieContract.SimilarMovies.MOVIE_ID + " = ?",
+                        MovieContract.SimilarMovies.MOVIE_ID_OLD + " = ?",
                         new String[]{String.valueOf(ContentUris.parseId(uri))});
                 break;
             }

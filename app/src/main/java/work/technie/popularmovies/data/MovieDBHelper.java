@@ -36,7 +36,7 @@ import work.technie.popularmovies.data.MovieContract.Videos;
 public class MovieDBHelper extends SQLiteOpenHelper {
 
     static final String DATABASE_NAME = "movie.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public MovieDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -70,6 +70,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
 
         final String SQL_CREATE__TABLE_SIMILAR_MOVIES = "CREATE TABLE " + SimilarMovies.TABLE_NAME + " (" +
                 SimilarMovies._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                SimilarMovies.MOVIE_ID_OLD + "  TEXT," +
                 SimilarMovies.PAGE + "  TEXT," +
                 SimilarMovies.POSTER_PATH + "  TEXT," +
                 SimilarMovies.ADULT + "  TEXT," +

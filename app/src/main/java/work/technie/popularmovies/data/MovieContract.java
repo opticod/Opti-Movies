@@ -96,7 +96,7 @@ public class MovieContract {
     public static final class SimilarMovies implements BaseColumns {
 
         public static final String TABLE_NAME = "similar_movies";
-
+        public static final String MOVIE_ID_OLD = "id_old";
         public static final String PAGE = "page";
         public static final String POSTER_PATH = "poster_path";
         public static final String ADULT = "adult";

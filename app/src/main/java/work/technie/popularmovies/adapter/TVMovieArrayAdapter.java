@@ -29,10 +29,10 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
-import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 import work.technie.popularmovies.Constants;
 import work.technie.popularmovies.R;
 import work.technie.popularmovies.data.MovieContract;
+import work.technie.popularmovies.utils.RoundedTransformation;
 
 
 public class TVMovieArrayAdapter extends CursorAdapter {
@@ -64,7 +64,7 @@ public class TVMovieArrayAdapter extends CursorAdapter {
                 .with(context)
                 .load(url)
                 .networkPolicy(NetworkPolicy.OFFLINE)
-                .transform(new RoundedCornersTransformation(10, 10))
+                .transform(new RoundedTransformation(10, 10))
                 .fit()
                 .centerCrop()
                 .into(viewHolder.imageView, new Callback() {

@@ -192,7 +192,7 @@ public class BaseActivity extends AppCompatActivity
     }
 
     @Override
-    public void onItemSelected(String id, ImageView sharedView, ImageView staticView, Fragment current) {
+    public void onItemSelected(String id, ImageView sharedView, Fragment current) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a

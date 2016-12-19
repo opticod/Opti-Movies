@@ -18,7 +18,6 @@ package work.technie.popularmovies.fragment;
 
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -26,102 +25,99 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
+import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
-import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
-import work.technie.popularmovies.FetchDetailMovie;
+import work.technie.popularmovies.Constants;
+import work.technie.popularmovies.FetchDetail;
 import work.technie.popularmovies.R;
+import work.technie.popularmovies.adapter.CastMovieAdapter;
+import work.technie.popularmovies.adapter.CrewMovieAdapter;
 import work.technie.popularmovies.adapter.GenreMovieAdapter;
 import work.technie.popularmovies.adapter.ReviewMovieAdapter;
-import work.technie.popularmovies.adapter.TrailerMovieAdapter;
+import work.technie.popularmovies.adapter.SimilarMovieArrayAdapter;
+import work.technie.popularmovies.adapter.VideoMovieAdapter;
 import work.technie.popularmovies.data.MovieContract;
+import work.technie.popularmovies.utils.AsyncResponse;
 import work.technie.popularmovies.utils.PaletteTransformation;
+import work.technie.popularmovies.utils.RoundedTransformation;
 import work.technie.popularmovies.utils.Utility;
 
-import static work.technie.popularmovies.Constants.COL_GENRE_NAME;
-import static work.technie.popularmovies.Constants.COL_TRAILER_SOURCE;
+import static work.technie.popularmovies.Constants.CAST_COLUMNS;
+import static work.technie.popularmovies.Constants.CREW_COLUMNS;
 import static work.technie.popularmovies.Constants.GENRE_COLUMNS;
-import static work.technie.popularmovies.Constants.MOVIE_COLUMNS;
+import static work.technie.popularmovies.Constants.MOVIE_DETAILS_COLUMNS;
 import static work.technie.popularmovies.Constants.MOV_COL_BACKDROP_PATH;
-import static work.technie.popularmovies.Constants.MOV_COL_DOWNLOADED;
-import static work.technie.popularmovies.Constants.MOV_COL_MOVIE_ID;
-import static work.technie.popularmovies.Constants.MOV_COL_ORIGINAL_LANG;
-import static work.technie.popularmovies.Constants.MOV_COL_ORIGINAL_TITLE;
-import static work.technie.popularmovies.Constants.MOV_COL_OVERVIEW;
-import static work.technie.popularmovies.Constants.MOV_COL_POPULARITY;
-import static work.technie.popularmovies.Constants.MOV_COL_POSTER_PATH;
-import static work.technie.popularmovies.Constants.MOV_COL_RELEASE_DATE;
-import static work.technie.popularmovies.Constants.MOV_COL_SHOWED;
-import static work.technie.popularmovies.Constants.MOV_COL_VOTE_AVERAGE;
+import static work.technie.popularmovies.Constants.MOV_DETAILS_COL_BUDGET;
+import static work.technie.popularmovies.Constants.MOV_DETAILS_COL_HOMEPAGE;
+import static work.technie.popularmovies.Constants.MOV_DETAILS_COL_ORIGINAL_LANGUAGE;
+import static work.technie.popularmovies.Constants.MOV_DETAILS_COL_ORIGINAL_TITLE;
+import static work.technie.popularmovies.Constants.MOV_DETAILS_COL_OVERVIEW;
+import static work.technie.popularmovies.Constants.MOV_DETAILS_COL_POSTER_PATH;
+import static work.technie.popularmovies.Constants.MOV_DETAILS_COL_RELEASE_DATE;
+import static work.technie.popularmovies.Constants.MOV_DETAILS_COL_REVENUE;
+import static work.technie.popularmovies.Constants.MOV_DETAILS_COL_RUNTIME;
+import static work.technie.popularmovies.Constants.MOV_DETAILS_COL_STATUS;
+import static work.technie.popularmovies.Constants.MOV_DETAILS_COL_VOTE_AVERAGE;
 import static work.technie.popularmovies.Constants.REVIEW_COLUMNS;
+import static work.technie.popularmovies.Constants.SIMILAR_MOVIE_COLUMNS;
 import static work.technie.popularmovies.Constants.VIDEO_COLUMNS;
 
 
-public class DetailActivityFragment extends Fragment implements LoaderCallbacks<Cursor> {
+public class DetailActivityFragment extends Fragment implements LoaderCallbacks<Cursor>, AsyncResponse {
 
     private static final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
     private static final String MOVIE_SHARE_HASHTAG = " #PopularMovieApp #ByAnupam ";
-    private static final int DETAIL_LOADER = 0;
-    private static final int TRAILER_LOADER = 1;
-    private static final int REVIEW_LOADER = 2;
-    private static final int GENRE_LOADER = 3;
+    private static final int MOVIE_DETAILS_LOADER = 0;
+    private final String DETAIL_FRAGMENT_TAG = "DFTAG";
 
-    public static String playTrailer = "https://www.youtube.com/watch?v=";
-    private static String showed = "0";
-    String orgLang;
-    String orgTitle;
-    String overview;
-    String relDate;
-    String postURL;
-    String popularity;
-    String votAvg;
-    String favourite;
-    String movieId;
-    String backdropURL;
-    String trailerName;
-    String trailerSize;
-    String trailerSource;
-    String trailerType;
-    String trailerID;
     private View rootView;
     private String movie_Id;
-    private TrailerMovieAdapter trailerListAdapter;
+    private Fragment current;
+    private CrewMovieAdapter crewListAdapter;
+    private CastMovieAdapter castListAdapter;
+    private SimilarMovieArrayAdapter similarMovieListAdapter;
+    private VideoMovieAdapter videoListAdapter;
     private ReviewMovieAdapter reviewListAdapter;
     private GenreMovieAdapter genreListAdapter;
-    private ListView listViewTrailers;
-    private ListView listViewReviews;
-    private ListView listViewGenres;
+
     private SwipeRefreshLayout swipeRefreshLayout;
-    private String genre = "Genre : ";
     private boolean reLoadPoster;
 
-
-    public DetailActivityFragment() {
-        playTrailer = "https://www.youtube.com/watch?v=";
-    }
-
-    private void updateMovieList() {
-        FetchDetailMovie weatherTask = new FetchDetailMovie(getActivity());
-        weatherTask.execute(movie_Id);
+    private void updateDetailList() {
+        FetchDetail fetchTask = new FetchDetail(getActivity());
+        fetchTask.response = this;
+        fetchTask.execute(movie_Id);
     }
 
     @Override
@@ -150,19 +146,183 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             reLoadPoster = true;
         }
 
-        // The ArrayAdapter will take data from a source and
-        // use it to populate the ListView it's attached to.
-        trailerListAdapter = new TrailerMovieAdapter(getActivity(), null, 0);
-        listViewTrailers = (ListView) rootView.findViewById(R.id.listview_trailer);
-        listViewTrailers.setAdapter(trailerListAdapter);
+        current = this;
 
-        reviewListAdapter = new ReviewMovieAdapter(getActivity(), null, 0);
-        listViewReviews = (ListView) rootView.findViewById(R.id.listview_review);
-        listViewReviews.setAdapter(reviewListAdapter);
+        loadData(rootView);
 
-        genreListAdapter = new GenreMovieAdapter(getActivity(), null, 0);
-        listViewGenres = (ListView) rootView.findViewById(R.id.listview_genre);
-        listViewGenres.setAdapter(genreListAdapter);
+
+        return rootView;
+    }
+
+    public void populateAdapters() {
+
+        Activity mActivity = getActivity();
+        if (mActivity != null) {
+            LinearLayoutManager crewLayoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.HORIZONTAL, false);
+            crewListAdapter = new CrewMovieAdapter(mActivity.getContentResolver().query(
+                    MovieContract.Crew.buildCrewsUriWithMovieId(movie_Id),
+                    CREW_COLUMNS,
+                    null,
+                    null,
+                    null
+            ));
+
+            RecyclerView recyclerViewCrew = (RecyclerView) rootView.findViewById(R.id.recyclerview_crew);
+            recyclerViewCrew.setAdapter(crewListAdapter);
+            recyclerViewCrew.setLayoutManager(crewLayoutManager);
+
+            if (crewListAdapter.getItemCount() == 0) {
+                recyclerViewCrew.setVisibility(View.GONE);
+                rootView.findViewById(R.id.empty_crew).setVisibility(View.VISIBLE);
+            } else {
+                recyclerViewCrew.setVisibility(View.VISIBLE);
+                rootView.findViewById(R.id.empty_crew).setVisibility(View.GONE);
+            }
+
+            LinearLayoutManager castLayoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.HORIZONTAL, false);
+            SnapHelper castSnapHelper = new LinearSnapHelper();
+            castListAdapter = new CastMovieAdapter(mActivity.getContentResolver().query(
+                    MovieContract.Cast.buildCastsUriWithMovieId(movie_Id),
+                    CAST_COLUMNS,
+                    null,
+                    null,
+                    " CAST ( " + MovieContract.Cast.ORDER + " AS REAL ) ASC"
+            ));
+            RecyclerView recyclerViewCast = (RecyclerView) rootView.findViewById(R.id.recyclerview_cast);
+            recyclerViewCast.setAdapter(castListAdapter);
+            recyclerViewCast.setLayoutManager(castLayoutManager);
+            castSnapHelper.attachToRecyclerView(recyclerViewCast);
+
+            if (castListAdapter.getItemCount() == 0) {
+                recyclerViewCast.setVisibility(View.GONE);
+                rootView.findViewById(R.id.empty_cast).setVisibility(View.VISIBLE);
+            } else {
+                recyclerViewCast.setVisibility(View.VISIBLE);
+                rootView.findViewById(R.id.empty_cast).setVisibility(View.GONE);
+            }
+
+            LinearLayoutManager similarLayoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.HORIZONTAL, false);
+            similarMovieListAdapter = new SimilarMovieArrayAdapter(mActivity.getContentResolver().query(
+                    MovieContract.SimilarMovies.buildSimilarMoviesUriWithMovieId(movie_Id),
+                    SIMILAR_MOVIE_COLUMNS,
+                    null,
+                    null,
+                    null
+            ));
+            RecyclerView recyclerViewSimilarMovies = (RecyclerView) rootView.findViewById(R.id.recyclerview_similar_movies);
+            recyclerViewSimilarMovies.setAdapter(similarMovieListAdapter);
+            recyclerViewSimilarMovies.setLayoutManager(similarLayoutManager);
+
+            if (similarMovieListAdapter.getItemCount() == 0) {
+                recyclerViewSimilarMovies.setVisibility(View.GONE);
+                rootView.findViewById(R.id.empty_similar_movies).setVisibility(View.VISIBLE);
+            } else {
+                recyclerViewSimilarMovies.setVisibility(View.VISIBLE);
+                rootView.findViewById(R.id.empty_similar_movies).setVisibility(View.GONE);
+            }
+
+            LinearLayoutManager videoLayoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.HORIZONTAL, false);
+            videoListAdapter = new VideoMovieAdapter(mActivity.getContentResolver().query(
+                    MovieContract.Videos.buildMoviesUriWithMovieId(movie_Id),
+                    VIDEO_COLUMNS,
+                    null,
+                    null,
+                    null
+            ));
+
+            RecyclerView recyclerViewVideos = (RecyclerView) rootView.findViewById(R.id.recyclerview_videos);
+            recyclerViewVideos.setAdapter(videoListAdapter);
+            recyclerViewVideos.setLayoutManager(videoLayoutManager);
+
+            if (videoListAdapter.getItemCount() == 0) {
+                recyclerViewVideos.setVisibility(View.GONE);
+                rootView.findViewById(R.id.empty_video).setVisibility(View.VISIBLE);
+            } else {
+                recyclerViewVideos.setVisibility(View.VISIBLE);
+                rootView.findViewById(R.id.empty_video).setVisibility(View.GONE);
+            }
+
+            LinearLayoutManager reviewLayoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
+            reviewListAdapter = new ReviewMovieAdapter(mActivity.getContentResolver().query(
+                    MovieContract.Reviews.buildReviewsUriWithMovieId(movie_Id),
+                    REVIEW_COLUMNS,
+                    null,
+                    null,
+                    null
+            ));
+
+            RecyclerView recyclerViewReviews = (RecyclerView) rootView.findViewById(R.id.recyclerview_review);
+            recyclerViewReviews.setAdapter(reviewListAdapter);
+            recyclerViewReviews.setLayoutManager(reviewLayoutManager);
+
+            if (reviewListAdapter.getItemCount() == 0) {
+                recyclerViewReviews.setVisibility(View.GONE);
+                rootView.findViewById(R.id.empty_review).setVisibility(View.VISIBLE);
+            } else {
+                recyclerViewReviews.setVisibility(View.VISIBLE);
+                rootView.findViewById(R.id.empty_review).setVisibility(View.GONE);
+            }
+
+
+            GridLayoutManager genreLayoutManager = new GridLayoutManager(mActivity, 2);
+            SnapHelper genreSnapHelper = new LinearSnapHelper();
+            genreListAdapter = new GenreMovieAdapter(mActivity.getContentResolver().query(
+                    MovieContract.Genres.buildGenresUriWithMovieId(movie_Id),
+                    GENRE_COLUMNS,
+                    null,
+                    null,
+                    null
+            ));
+
+            RecyclerView recyclerViewGenres = (RecyclerView) rootView.findViewById(R.id.recyclerview_genre);
+            recyclerViewGenres.setAdapter(genreListAdapter);
+            recyclerViewGenres.setLayoutManager(genreLayoutManager);
+            genreSnapHelper.attachToRecyclerView(recyclerViewGenres);
+
+
+            if (genreListAdapter.getItemCount() == 0) {
+                recyclerViewGenres.setVisibility(View.GONE);
+                rootView.findViewById(R.id.empty_genre).setVisibility(View.VISIBLE);
+            } else {
+                recyclerViewGenres.setVisibility(View.VISIBLE);
+                rootView.findViewById(R.id.empty_genre).setVisibility(View.GONE);
+            }
+
+            similarMovieListAdapter.setOnClickListener(new SimilarMovieArrayAdapter.SetOnClickListener() {
+                @Override
+                public void onItemClick(int position, View view) {
+                    Cursor cursor = similarMovieListAdapter.getCursor();
+                    cursor.moveToPosition(position);
+                    Activity mActivity = getActivity();
+
+                    DetailActivityFragment fragment = new DetailActivityFragment();
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        current.setSharedElementReturnTransition(TransitionInflater.from(
+                                mActivity).inflateTransition(R.transition.change_image_trans));
+                        current.setExitTransition(TransitionInflater.from(
+                                mActivity).inflateTransition(android.R.transition.fade));
+
+                        fragment.setSharedElementEnterTransition(TransitionInflater.from(
+                                mActivity).inflateTransition(R.transition.change_image_trans));
+                        fragment.setEnterTransition(TransitionInflater.from(
+                                mActivity).inflateTransition(android.R.transition.fade));
+                    }
+
+                    Bundle arguments = new Bundle();
+                    arguments.putString(Intent.EXTRA_TEXT, cursor.getString(Constants.SIMILAR_MOV_COL_MOVIE_ID));
+                    fragment.setArguments(arguments);
+                    FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .add(R.id.frag_container, fragment, DETAIL_FRAGMENT_TAG)
+                            .addToBackStack(null)
+                            .commit();
+                }
+            });
+        }
+    }
+
+    public void loadData(final View rootView) {
 
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.detail_swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -172,33 +332,47 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                     getActivity().getContentResolver().delete(MovieContract.Videos.buildMoviesUriWithMovieId(movie_Id), null, null);
                     getActivity().getContentResolver().delete(MovieContract.Reviews.buildReviewsUriWithMovieId(movie_Id), null, null);
                     getActivity().getContentResolver().delete(MovieContract.Genres.buildGenresUriWithMovieId(movie_Id), null, null);
-                    genre = "Genre : ";
-                    updateMovieList();
+                    getActivity().getContentResolver().delete(MovieContract.SimilarMovies.buildSimilarMoviesUriWithMovieId(movie_Id), null, null);
+                    getActivity().getContentResolver().delete(MovieContract.Crew.buildCrewsUriWithMovieId(movie_Id), null, null);
+                    getActivity().getContentResolver().delete(MovieContract.Cast.buildCastsUriWithMovieId(movie_Id), null, null);
+                    getActivity().getContentResolver().delete(MovieContract.MovieDetails.buildMovieDetailsUriWithMovieId(movie_Id), null, null);
+                    updateDetailList();
                 } else {
                     Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_SHORT).show();
                     swipeRefreshLayout.setRefreshing(false);
                 }
             }
         });
-        FloatingActionButton play = (FloatingActionButton) rootView.findViewById(R.id.play);
 
-        play.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(playTrailer));
-                startActivity(intent);
+        int count;
+
+        Uri Uri = MovieContract.MovieDetails.buildMovieDetailsUri();
+        count = getActivity().getContentResolver().query(Uri, Constants.MOVIE_DETAILS_COLUMNS_MIN,
+                MovieContract.MovieDetails.MOVIE_ID + " = ? ",
+                new String[]{movie_Id},
+                null).getCount();
+
+        if (count == 0) {
+            if (!Utility.hasNetworkConnection(getActivity())) {
+                Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_LONG).show();
+            } else {
+                swipeRefreshLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(true);
+                    }
+                });
+                updateDetailList();
             }
-        });
-        return rootView;
+        } else {
+            populateAdapters();
+        }
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        getLoaderManager().initLoader(DETAIL_LOADER, null, this);
-        getLoaderManager().initLoader(TRAILER_LOADER, null, this);
-        getLoaderManager().initLoader(REVIEW_LOADER, null, this);
-        getLoaderManager().initLoader(GENRE_LOADER, null, this);
 
+        getLoaderManager().initLoader(MOVIE_DETAILS_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -208,39 +382,11 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             // Now create and return a CursorLoader that will take care of
             // creating a Cursor for the data being displayed.
             switch (id) {
-                case DETAIL_LOADER:
-                    String sorting = Utility.getPreferredSorting(getActivity());
+                case MOVIE_DETAILS_LOADER:
                     return new CursorLoader(
                             getActivity(),
-                            MovieContract.Movies.buildMoviesUriWithMovieId(movie_Id),
-                            MOVIE_COLUMNS,
-                            null,
-                            null,
-                            null
-                    );
-                case TRAILER_LOADER:
-                    return new CursorLoader(
-                            getActivity(),
-                            MovieContract.Videos.buildMoviesUriWithMovieId(movie_Id),
-                            VIDEO_COLUMNS,
-                            null,
-                            null,
-                            null
-                    );
-                case REVIEW_LOADER:
-                    return new CursorLoader(
-                            getActivity(),
-                            MovieContract.Reviews.buildReviewsUriWithMovieId(movie_Id),
-                            REVIEW_COLUMNS,
-                            null,
-                            null,
-                            null
-                    );
-                case GENRE_LOADER:
-                    return new CursorLoader(
-                            getActivity(),
-                            MovieContract.Genres.buildGenresUriWithMovieId(movie_Id),
-                            GENRE_COLUMNS,
+                            MovieContract.MovieDetails.buildMovieDetailsUriWithMovieId(movie_Id),
+                            MOVIE_DETAILS_COLUMNS,
                             null,
                             null,
                             null
@@ -248,24 +394,6 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             }
         }
         return null;
-    }
-
-    private void hide() {
-        rootView.findViewById(R.id.TrailerText).setVisibility(View.GONE);
-        rootView.findViewById(R.id.ReviewsText).setVisibility(View.GONE);
-        rootView.findViewById(R.id.listview_trailer).setVisibility(View.GONE);
-        rootView.findViewById(R.id.listview_review).setVisibility(View.GONE);
-        rootView.findViewById(R.id.hide).setVisibility(View.GONE);
-        rootView.findViewById(R.id.show).setVisibility(View.VISIBLE);
-    }
-
-    private void show() {
-        rootView.findViewById(R.id.TrailerText).setVisibility(View.VISIBLE);
-        rootView.findViewById(R.id.ReviewsText).setVisibility(View.VISIBLE);
-        rootView.findViewById(R.id.listview_trailer).setVisibility(View.VISIBLE);
-        rootView.findViewById(R.id.listview_review).setVisibility(View.VISIBLE);
-        rootView.findViewById(R.id.hide).setVisibility(View.VISIBLE);
-        rootView.findViewById(R.id.show).setVisibility(View.GONE);
     }
 
     private void defaultShow() {
@@ -278,53 +406,19 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     @Override
     public void onLoadFinished(Loader<Cursor> loader, final Cursor data) {
         swipeRefreshLayout.setRefreshing(false);
-        //Log.v(LOG_TAG, "In onLoadFinished");
         if (!data.moveToFirst()) {
             return;
         }
         switch (loader.getId()) {
-            case DETAIL_LOADER:
+            case MOVIE_DETAILS_LOADER:
                 defaultShow();
-                orgLang = data.getString(MOV_COL_ORIGINAL_LANG);
 
-                orgTitle = data.getString(MOV_COL_ORIGINAL_TITLE);
-                ((TextView) rootView.findViewById(R.id.orgTitle))
-                        .setText(orgTitle);
-//                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(orgTitle);
-
-                overview = data.getString(MOV_COL_OVERVIEW);
-                ((TextView) rootView.findViewById(R.id.overview))
-                        .setText(overview);
-
-                relDate = data.getString(MOV_COL_RELEASE_DATE);
-
-                ((TextView) rootView.findViewById(R.id.relDate))
-                        .setText("Release Date: " + relDate);
-
-                postURL = data.getString(MOV_COL_POSTER_PATH);
-                if (reLoadPoster) {
-                    ImageView poster = (ImageView) rootView.findViewById(R.id.poster);
-                    Picasso
-                            .with(getActivity())
-                            .load(postURL)
-                            .transform(new RoundedCornersTransformation(10, 10))
-                            .fit()
-                            .into(poster);
-                }
-                movieId = data.getString(MOV_COL_MOVIE_ID);
-                popularity = data.getString(MOV_COL_POPULARITY);
-                double pop = Double.parseDouble(popularity);
-                popularity = String.valueOf((double) Math.round(pop * 10d) / 10d);
-
-                ((TextView) rootView.findViewById(R.id.popularity))
-                        .setText("Popularity : " + popularity);
-
-                votAvg = data.getString(MOV_COL_VOTE_AVERAGE);
+                String votAvg = data.getString(MOV_DETAILS_COL_VOTE_AVERAGE);
                 double vote = Double.parseDouble(votAvg);
                 votAvg = String.valueOf((double) Math.round(vote * 10d) / 10d);
                 ((TextView) rootView.findViewById(R.id.vote))
                         .setText(votAvg);
-                backdropURL = data.getString(MOV_COL_BACKDROP_PATH);
+                String backdropURL = data.getString(MOV_COL_BACKDROP_PATH);
                 final ImageView backdrop = (ImageView) rootView.findViewById(R.id.backdropImg);
 
                 Picasso.with(getActivity())
@@ -342,129 +436,106 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
 
                 backdrop.setAdjustViewBounds(true);
 
-                final String downloaded = data.getString(MOV_COL_DOWNLOADED);
-                showed = data.getString(MOV_COL_SHOWED);
-                FloatingActionButton show;
-                if (showed.equalsIgnoreCase("1")) {
-                    rootView.findViewById(R.id.hide).setVisibility(View.VISIBLE);
-                    show = (FloatingActionButton) rootView.findViewById(R.id.hide);
-                    show();
+                String orgTitle = data.getString(MOV_DETAILS_COL_ORIGINAL_TITLE).trim();
+                ((TextView) rootView.findViewById(R.id.orgTitle))
+                        .setText(orgTitle.isEmpty() ? "-" : orgTitle);
+
+
+                String overview = data.getString(MOV_DETAILS_COL_OVERVIEW).trim();
+                ((TextView) rootView.findViewById(R.id.overview))
+                        .setText(overview.isEmpty() ? "-" : overview);
+
+                String status = data.getString(MOV_DETAILS_COL_STATUS).trim();
+                ((TextView) rootView.findViewById(R.id.status))
+                        .setText(status.isEmpty() ? "-" : status);
+
+                String original_lang = data.getString(MOV_DETAILS_COL_ORIGINAL_LANGUAGE).toUpperCase().trim();
+                ((TextView) rootView.findViewById(R.id.original_lang))
+                        .setText(original_lang.isEmpty() ? "-" : original_lang);
+
+                TextView runtimeText = (TextView) rootView.findViewById(R.id.runtime);
+
+                int runtime = data.getInt(MOV_DETAILS_COL_RUNTIME);
+                if (runtime >= 60) {
+                    int min = (int) Math.floor(runtime / 60);
+                    int sec = (int) (runtime - min * 60);
+                    runtimeText.setText(String.format(Locale.US, "%d" + "hr" + " %d" + "s", min, sec));
                 } else {
-                    rootView.findViewById(R.id.show).setVisibility(View.VISIBLE);
-                    show = (FloatingActionButton) rootView.findViewById(R.id.show);
-                    hide();
+                    runtimeText.setText(String.format(Locale.US, "%s" + "s", runtime == 0 ? "-" : String.valueOf(runtime)));
                 }
-                show.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ContentValues sh = new ContentValues();
-                        if (showed.equalsIgnoreCase("1")) {
-                            sh.put(MovieContract.Movies.SHOWED, "0");
-                            Toast.makeText(getContext(), "TRAILERS and REVIEWS hidden!", Toast.LENGTH_SHORT).show();
-                            hide();
-                        } else {
-                            sh.put(MovieContract.Movies.SHOWED, "1");
-                            if (downloaded.equalsIgnoreCase("0")) {
-                                if (Utility.hasNetworkConnection(getActivity())) {
-                                    updateMovieList();
-                                    sh.put(MovieContract.Movies.DOWNLOADED, "1");
-                                    Toast.makeText(getContext(), "TRAILERS and REVIEWS shown!", Toast.LENGTH_SHORT).show();
-                                    show();
-                                } else {
-                                    Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_LONG).show();
+
+                long budget = data.getLong(MOV_DETAILS_COL_BUDGET);
+
+                ((TextView) rootView.findViewById(R.id.budget))
+                        .setText(budget == 0 ? "-" : String.format(Locale.getDefault(), "$%,d", budget));
+
+
+                long revenue = data.getLong(MOV_DETAILS_COL_REVENUE);
+                ((TextView) rootView.findViewById(R.id.revenue))
+                        .setText(String.valueOf(revenue == 0 ? "-" : String.format(Locale.getDefault(), "$%,d", revenue)));
+
+                String homepage = data.getString(MOV_DETAILS_COL_HOMEPAGE).trim();
+                ((TextView) rootView.findViewById(R.id.homepage))
+                        .setText(homepage.isEmpty() ? "-" : homepage);
+
+                String releaseDate = data.getString(MOV_DETAILS_COL_RELEASE_DATE).trim();
+
+                if (!releaseDate.isEmpty()) {
+                    DateFormat inputFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                    Date date = null;
+                    try {
+                        date = inputFormatter.parse(releaseDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    SimpleDateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy", Locale.getDefault());
+
+                    ((TextView) rootView.findViewById(R.id.release_date))
+                            .setText(formatter.format(date));
+                } else {
+                    ((TextView) rootView.findViewById(R.id.release_date))
+                            .setText("-");
+                }
+
+                final String postURL = data.getString(MOV_DETAILS_COL_POSTER_PATH);
+                if (reLoadPoster) {
+                    final ImageView poster = (ImageView) rootView.findViewById(R.id.poster);
+
+                    Picasso
+                            .with(getActivity())
+                            .load(postURL)
+                            .networkPolicy(NetworkPolicy.OFFLINE)
+                            .transform(new RoundedTransformation(10, 10))
+                            .fit()
+                            .centerCrop()
+                            .into(poster, new Callback() {
+                                @Override
+                                public void onSuccess() {
                                 }
-                            }
-                        }
-                        getContext().getContentResolver().update(
-                                MovieContract.Movies.CONTENT_URI.buildUpon().appendPath(movieId).build(),
-                                sh, null, new String[]{movieId});
-                    }
-                });
 
-                FloatingActionButton play = (FloatingActionButton) rootView.findViewById(R.id.play);
+                                @Override
+                                public void onError() {
+                                    Picasso
+                                            .with(getActivity())
+                                            .load(postURL)
+                                            .error(R.mipmap.ic_launcher)
+                                            .fit()
+                                            .centerCrop()
+                                            .into(poster, new Callback() {
+                                                @Override
+                                                public void onSuccess() {
+                                                }
 
-                play.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (downloaded.equalsIgnoreCase("0")) {
-                            ContentValues sh = new ContentValues();
-                            if (Utility.hasNetworkConnection(getActivity())) {
-                                updateMovieList();
-                                sh.put(MovieContract.Movies.DOWNLOADED, "1");
-                                getContext().getContentResolver().update(
-                                        MovieContract.Movies.CONTENT_URI.buildUpon().appendPath(movieId).build(),
-                                        sh, null, new String[]{movieId});
-                                Toast.makeText(getContext(), "Click One More Time to Play!", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_LONG).show();
-                            }
-                        } else {
-                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(playTrailer));
-                            startActivity(intent);
-                        }
-                    }
-                });
-                FloatingActionButton share = (FloatingActionButton) rootView.findViewById(R.id.share);
-                share.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (downloaded.equalsIgnoreCase("0")) {
-                            ContentValues sh = new ContentValues();
-                            if (Utility.hasNetworkConnection(getActivity())) {
-                                updateMovieList();
-                                sh.put(MovieContract.Movies.DOWNLOADED, "1");
-                                getContext().getContentResolver().update(
-                                        MovieContract.Movies.CONTENT_URI.buildUpon().appendPath(movieId).build(),
-                                        sh, null, new String[]{movieId});
-                                Toast.makeText(getContext(), "Click One More Time to Share!", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_LONG).show();
-                            }
-                        } else {
-                            Intent intent = new Intent();
-                            intent.setAction(Intent.ACTION_SEND);
-                            intent.putExtra(Intent.EXTRA_TEXT,
-                                    orgTitle + "Watch : " + playTrailer + MOVIE_SHARE_HASHTAG);
-                            intent.setType("text/plain");
-                            startActivity(Intent.createChooser(intent, getString(R.string.share_links)));
-                        }
-                    }
-                });
-                break;
-            case TRAILER_LOADER:
-                int iter = 0;
-                if (data.moveToFirst()) {
-                    do {
-                        trailerListAdapter.swapCursor(data);
-                        iter++;
-                        if (iter == 1) {
-                            playTrailer += data.getString(COL_TRAILER_SOURCE);
-                        }
-                    }
-                    while (data.moveToNext());
+                                                @Override
+                                                public void onError() {
+                                                }
+                                            });
+                                }
+                            });
+                    poster.setAdjustViewBounds(true);
                 }
                 break;
-            case REVIEW_LOADER:
-                //Log.e(LOG_TAG, "Review");
-                if (data.moveToFirst()) {
-                    do {
-                        reviewListAdapter.swapCursor(data);
-                    }
-                    while (data.moveToNext());
-                }
-                break;
-            case GENRE_LOADER:
-                if (data.moveToFirst()) {
-                    do {
-                        if (genre.length() < 9)
-                            genre += data.getString(COL_GENRE_NAME) + " ";
-                        genreListAdapter.swapCursor(data);
-                    }
-                    while (data.moveToNext());
-                    TextView genreNames = ((TextView) rootView.findViewById(R.id.genreNames));
-                    genreNames.setText(genre);
-                }
-                break;
+
             default:
                 throw new UnsupportedOperationException("Unknown Loader");
         }
@@ -472,9 +543,12 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        trailerListAdapter.swapCursor(null);
-        reviewListAdapter.swapCursor(null);
-        genreListAdapter.swapCursor(null);
+    }
+
+    @Override
+    public void onFinish(boolean isData) {
+        swipeRefreshLayout.setRefreshing(false);
+        populateAdapters();
     }
 
     public void changeSystemToolbarColor(Palette palette) {

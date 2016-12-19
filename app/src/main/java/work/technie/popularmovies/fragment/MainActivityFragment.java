@@ -180,6 +180,12 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             if (!Utility.hasNetworkConnection(getActivity())) {
                 Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_LONG).show();
             } else {
+                swipeRefreshLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(true);
+                    }
+                });
                 updateMovieList();
             }
         }
@@ -210,14 +216,13 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (cursor != null) {
                     ImageView imageView = (ImageView) view.findViewById(R.id.grid_item_poster);
-                    ImageView staticImage = (ImageView) getView().findViewById(R.id.grid_item_poster);
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         imageView.setTransitionName("TRANS_NAME" + position);
                     }
 
                     ((Callback) getActivity())
-                            .onItemSelected(cursor.getString(isMovie ? Constants.MOV_COL_MOVIE_ID : Constants.TV_COL_TV_ID), imageView, staticImage, current);
+                            .onItemSelected(cursor.getString(isMovie ? Constants.MOV_COL_MOVIE_ID : Constants.TV_COL_TV_ID), imageView, current);
                 }
                 mPosition = position;
             }
@@ -317,8 +322,8 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onFinish(boolean isData) {
+        swipeRefreshLayout.setRefreshing(false);
         if (!isData) {
-            swipeRefreshLayout.setRefreshing(false);
             TextView info = (TextView) rootView.findViewById(R.id.empty);
             if (listAdapter.getCount() == 0) {
                 info.setText(R.string.no_data);
@@ -339,9 +344,8 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
          * DetailFragmentCallback for when an item has been selected.
          *  @param movieUri
          * @param view
-         * @param staticImage
          * @param current
          */
-        void onItemSelected(String movieUri, ImageView view, ImageView staticImage, Fragment current);
+        void onItemSelected(String movieUri, ImageView view, Fragment current);
     }
 }

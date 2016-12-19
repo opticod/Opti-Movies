@@ -18,7 +18,8 @@ package work.technie.popularmovies.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.support.v4.widget.CursorAdapter;
+import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,48 +34,57 @@ import static work.technie.popularmovies.Constants.COL_REVIEW_URL;
 /**
  * Created by anupam on 27/12/15.
  */
-public class ReviewMovieAdapter extends CursorAdapter {
+public class ReviewMovieAdapter extends
+        RecyclerView.Adapter<ReviewMovieAdapter.ViewHolder> {
     private static final String LOG_TAG = ReviewMovieAdapter.class.getSimpleName();
 
-    public ReviewMovieAdapter(Context context, Cursor c, int flags) {
-        super(context, c, flags);
+    private Cursor cursor;
+
+    public ReviewMovieAdapter(Cursor cursor) {
+        this.cursor = cursor;
     }
 
     @Override
-    public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        View view = LayoutInflater.from(context).inflate(R.layout.list_review_movie, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
-        view.setTag(viewHolder);
-        return view;
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+
+        View view = inflater.inflate(R.layout.list_review_movie, parent, false);
+
+        return new ViewHolder(view);
     }
 
-    /*
-       This is where we fill-in the views with the contents of the cursor.
-    */
     @Override
-    public void bindView(View view, final Context context, Cursor cursor) {
+    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+        cursor.moveToPosition(position);
         final String author_name = cursor.getString(COL_REVIEW_AUTHOR);
         final String content = cursor.getString(COL_REVIEW_CONTENT);
         final String url = cursor.getString(COL_REVIEW_URL);
 
-        ViewHolder viewHolder = (ViewHolder) view.getTag();
-
-        viewHolder.author.setText("Author:  " + author_name);
-        viewHolder.contentView.setText("Content:  " + content);
+        viewHolder.author.setText(Html.fromHtml("<font color=\"#212121\">By " + author_name + ":</font>"));
+        viewHolder.contentView.setText(content);
         viewHolder.urlView.setText("Look more at:  " + url);
     }
 
-    public static class ViewHolder {
+    @Override
+    public int getItemCount() {
+        if (cursor != null) {
+            return cursor.getCount();
+        }
+        return 0;
+    }
 
-        public final TextView author;
-        public final TextView contentView;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+
         public final TextView urlView;
+        final TextView author;
+        final TextView contentView;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
+            super(view);
             author = (TextView) view.findViewById(R.id.review_author);
             contentView = (TextView) view.findViewById(R.id.review_content);
             urlView = (TextView) view.findViewById(R.id.review_url);
-
         }
     }
 }
