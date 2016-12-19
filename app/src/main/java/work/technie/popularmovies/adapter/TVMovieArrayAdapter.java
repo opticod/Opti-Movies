@@ -29,6 +29,8 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.util.Locale;
+
 import work.technie.popularmovies.Constants;
 import work.technie.popularmovies.R;
 import work.technie.popularmovies.data.MovieContract;
@@ -96,11 +98,25 @@ public class TVMovieArrayAdapter extends CursorAdapter {
         String date = cursor.getString(isMovie ? Constants.MOV_COL_RELEASE_DATE : Constants.TV_COL_FIRST_AIR_DATE);
         int pos = date.indexOf('-');
         viewHolder.year.setText(date.substring(0, pos >= 0 ? pos : 0));
-        int fav = isMovie ? context.getContentResolver().query(
-                MovieContract.Favourites.buildMoviesUriWithMovieId(cursor.getString(Constants.MOV_COL_MOVIE_ID)),
-                null, null, null, null).getCount() : context.getContentResolver().query(
-                MovieContract.Favourites.buildTVUriWithTVId(cursor.getString(Constants.TV_COL_TV_ID)),
-                null, null, null, null).getCount();
+
+        int fav = 0;
+        if (isMovie) {
+            Cursor cursor1 = context.getContentResolver().query(
+                    MovieContract.Favourites.buildMoviesUriWithMovieId(cursor.getString(Constants.MOV_COL_MOVIE_ID)),
+                    null, null, null, null);
+            if (!(cursor1 == null || !(cursor1.moveToFirst()) || cursor1.getCount() == 0)) {
+                fav = 1;
+                cursor1.close();
+            }
+        } else {
+            Cursor cursor1 = context.getContentResolver().query(
+                    MovieContract.Favourites.buildTVUriWithTVId(cursor.getString(Constants.TV_COL_ID)),
+                    null, null, null, null);
+            if (!(cursor1 == null || !(cursor1.moveToFirst()) || cursor1.getCount() == 0)) {
+                fav = 1;
+                cursor1.close();
+            }
+        }
 
         if (fav == 1) {
             viewHolder.favIcon.setImageResource(R.drawable.ic_star_black_24dp);
@@ -112,14 +128,14 @@ public class TVMovieArrayAdapter extends CursorAdapter {
         double vote = Double.parseDouble(rating);
         rating = String.valueOf((double) Math.round(vote * 10d) / 10d);
 
-        viewHolder.userRating.setText(rating + "/10");
+        viewHolder.userRating.setText(String.format(Locale.ENGLISH, "%s/10", rating));
 
         String popularity = cursor.getString(isMovie ? Constants.MOV_COL_POPULARITY : Constants.TV_COL_POPULARITY);
         pos = popularity.indexOf(".");
         viewHolder.pop_text.setText(popularity.substring(0, pos >= 0 ? pos : 0));
     }
 
-    public static class ViewHolder {
+    private static class ViewHolder {
 
         final ImageView imageView;
         final TextView year;
@@ -127,7 +143,7 @@ public class TVMovieArrayAdapter extends CursorAdapter {
         final TextView userRating;
         final TextView pop_text;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             imageView = (ImageView) view.findViewById(R.id.grid_item_poster);
             year = (TextView) view.findViewById(R.id.year);
             favIcon = (ImageView) view.findViewById(R.id.vote_icon);

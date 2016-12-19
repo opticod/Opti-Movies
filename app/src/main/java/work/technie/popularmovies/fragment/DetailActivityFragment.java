@@ -18,6 +18,7 @@ package work.technie.popularmovies.fragment;
 
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -77,6 +78,7 @@ import work.technie.popularmovies.utils.Utility;
 import static work.technie.popularmovies.Constants.CAST_COLUMNS;
 import static work.technie.popularmovies.Constants.COL_VIDEOS_KEY;
 import static work.technie.popularmovies.Constants.CREW_COLUMNS;
+import static work.technie.popularmovies.Constants.FAVOURITE_MOVIE_COLUMNS;
 import static work.technie.popularmovies.Constants.GENRE_COLUMNS;
 import static work.technie.popularmovies.Constants.MOVIE_DETAILS_COLUMNS;
 import static work.technie.popularmovies.Constants.MOV_COL_BACKDROP_PATH;
@@ -101,6 +103,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     private static final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
     private static final String MOVIE_SHARE_HASHTAG = " #PopularMovieApp";
     private static final int MOVIE_DETAILS_LOADER = 0;
+    private static final int FAVOURITE_DETAILS_LOADER = 1;
     private final String DETAIL_FRAGMENT_TAG = "DFTAG";
     private final String PROFILE_DETAIL_FRAGMENT_TAG = "PDFTAG";
 
@@ -497,6 +500,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     public void onActivityCreated(Bundle savedInstanceState) {
 
         getLoaderManager().initLoader(MOVIE_DETAILS_LOADER, null, this);
+        getLoaderManager().initLoader(FAVOURITE_DETAILS_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -511,6 +515,15 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                             getActivity(),
                             MovieContract.MovieDetails.buildMovieDetailsUriWithMovieId(movie_Id),
                             MOVIE_DETAILS_COLUMNS,
+                            null,
+                            null,
+                            null
+                    );
+                case FAVOURITE_DETAILS_LOADER:
+                    return new CursorLoader(
+                            getActivity(),
+                            MovieContract.Favourites.buildMoviesUriWithMovieId(movie_Id),
+                            FAVOURITE_MOVIE_COLUMNS,
                             null,
                             null,
                             null
@@ -530,11 +543,11 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     @Override
     public void onLoadFinished(Loader<Cursor> loader, final Cursor data) {
         swipeRefreshLayout.setRefreshing(false);
-        if (!data.moveToFirst()) {
-            return;
-        }
         switch (loader.getId()) {
             case MOVIE_DETAILS_LOADER:
+                if (!data.moveToFirst()) {
+                    break;
+                }
                 defaultShow();
 
                 String votAvg = data.getString(MOV_DETAILS_COL_VOTE_AVERAGE);
@@ -658,6 +671,41 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                             });
                     poster.setAdjustViewBounds(true);
                 }
+                break;
+
+            case FAVOURITE_DETAILS_LOADER:
+                final FloatingActionButton bookmark = (FloatingActionButton) rootView.findViewById(R.id.bookmark);
+                if (data == null || !(data.moveToFirst()) || data.getCount() == 0) {
+                    bookmark.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_star_border_black_24dp));
+                } else {
+                    bookmark.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_star_black_24dp));
+                }
+                bookmark.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Activity mActivity = getActivity();
+                        if (mActivity != null) {
+                            Cursor cursor = mActivity.getContentResolver().query(MovieContract.Favourites.buildMoviesUriWithMovieId(movie_Id),
+                                    FAVOURITE_MOVIE_COLUMNS,
+                                    null,
+                                    null,
+                                    null);
+                            if (cursor == null || !(cursor.moveToFirst()) || cursor.getCount() == 0) {
+                                ContentValues sh = new ContentValues();
+                                sh.put(MovieContract.Favourites.MOVIE_ID, movie_Id);
+                                mActivity.getContentResolver().insert(MovieContract.Favourites.buildMovieUri(), sh);
+                                Toast.makeText(getContext(), "Added to bookmarks", Toast.LENGTH_SHORT).show();
+                                bookmark.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_star_black_24dp));
+                            } else {
+                                ContentValues sh = new ContentValues();
+                                getActivity().getContentResolver().delete(MovieContract.Favourites.buildMoviesUriWithMovieId(movie_Id), null, null);
+                                Toast.makeText(getContext(), "Removed from bookmarks", Toast.LENGTH_SHORT).show();
+                                bookmark.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_star_border_black_24dp));
+                                cursor.close();
+                            }
+                        }
+                    }
+                });
                 break;
 
             default:

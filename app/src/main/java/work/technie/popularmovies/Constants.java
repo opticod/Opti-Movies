@@ -182,7 +182,7 @@ public class Constants {
             MovieContract.People.POPULARITY,
             MovieContract.People.PROFILE_PATH
     };
-    private static final String[] FAVOURITE_MOVIE_COLUMNS = {
+    public static final String[] FAVOURITE_MOVIE_COLUMNS = {
 
             MovieContract.Favourites.TABLE_NAME + "." + MovieContract.Favourites._ID,
             MovieContract.Favourites.PAGE,

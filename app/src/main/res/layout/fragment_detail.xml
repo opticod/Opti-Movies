@@ -45,25 +45,13 @@
                     android:layout_marginTop="150dp" />
 
                 <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/border_bookmark"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="180dp"
-                    android:layout_marginTop="215dp"
-                    android:clickable="true"
-                    android:src="@drawable/ic_star_border_black_24dp"
-                    android:visibility="gone"
-                    app:backgroundTint="@color/colorPrimary" />
-
-                <android.support.design.widget.FloatingActionButton
                     android:id="@+id/bookmark"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginLeft="180dp"
                     android:layout_marginTop="215dp"
                     android:clickable="true"
-                    android:src="@drawable/ic_star_black_24dp"
-                    android:visibility="gone"
+                    android:src="@drawable/ic_star_border_black_24dp"
                     app:backgroundTint="@color/colorPrimary" />
 
                 <android.support.design.widget.FloatingActionButton
