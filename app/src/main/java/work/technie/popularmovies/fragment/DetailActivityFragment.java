@@ -25,6 +25,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
@@ -74,6 +75,7 @@ import work.technie.popularmovies.utils.RoundedTransformation;
 import work.technie.popularmovies.utils.Utility;
 
 import static work.technie.popularmovies.Constants.CAST_COLUMNS;
+import static work.technie.popularmovies.Constants.COL_VIDEOS_KEY;
 import static work.technie.popularmovies.Constants.CREW_COLUMNS;
 import static work.technie.popularmovies.Constants.GENRE_COLUMNS;
 import static work.technie.popularmovies.Constants.MOVIE_DETAILS_COLUMNS;
@@ -97,13 +99,14 @@ import static work.technie.popularmovies.Constants.VIDEO_COLUMNS;
 public class DetailActivityFragment extends Fragment implements LoaderCallbacks<Cursor>, AsyncResponse {
 
     private static final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
-    private static final String MOVIE_SHARE_HASHTAG = " #PopularMovieApp #ByAnupam ";
+    private static final String MOVIE_SHARE_HASHTAG = " #PopularMovieApp";
     private static final int MOVIE_DETAILS_LOADER = 0;
     private final String DETAIL_FRAGMENT_TAG = "DFTAG";
 
     private View rootView;
     private String movie_Id;
     private Fragment current;
+    private String orgTitle;
     private CrewMovieAdapter crewListAdapter;
     private CastMovieAdapter castListAdapter;
     private SimilarMovieArrayAdapter similarMovieListAdapter;
@@ -319,6 +322,60 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                             .commit();
                 }
             });
+
+            videoListAdapter.setOnClickListener(new VideoMovieAdapter.SetOnClickListener() {
+                @Override
+                public void onItemClick(int position, View view) {
+                    Cursor cursor = videoListAdapter.getCursor();
+                    cursor.moveToPosition(position);
+                    Activity mActivity = getActivity();
+                    final String source = cursor.getString(COL_VIDEOS_KEY);
+                    final String trailerUrl = "https://www.youtube.com/watch?v=" + source;
+
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(trailerUrl));
+                    mActivity.startActivity(intent);
+                }
+            });
+
+            String firstVideoLink = "https://www.youtube.com/watch?v=";
+            Cursor mCursor = mActivity.getContentResolver().query(
+                    MovieContract.Videos.buildMoviesUriWithMovieId(movie_Id),
+                    VIDEO_COLUMNS,
+                    null,
+                    null,
+                    null
+            );
+            if (mCursor != null) {
+                mCursor.moveToFirst();
+                firstVideoLink += mCursor.getString(Constants.COL_VIDEOS_KEY);
+                mCursor.close();
+            }
+
+            FloatingActionButton play = (FloatingActionButton) rootView.findViewById(R.id.play);
+
+            final String finalFirstVideoLink = firstVideoLink;
+            play.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(finalFirstVideoLink));
+                    startActivity(intent);
+                }
+            });
+
+
+            FloatingActionButton share = (FloatingActionButton) rootView.findViewById(R.id.share);
+            share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_SEND);
+                    intent.putExtra(Intent.EXTRA_TEXT,
+                            orgTitle + " Watch : " + finalFirstVideoLink + MOVIE_SHARE_HASHTAG);
+                    intent.setType("text/plain");
+                    startActivity(Intent.createChooser(intent, getString(R.string.share_links)));
+                }
+            });
+
         }
     }
 
@@ -436,7 +493,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
 
                 backdrop.setAdjustViewBounds(true);
 
-                String orgTitle = data.getString(MOV_DETAILS_COL_ORIGINAL_TITLE).trim();
+                orgTitle = data.getString(MOV_DETAILS_COL_ORIGINAL_TITLE).trim();
                 ((TextView) rootView.findViewById(R.id.orgTitle))
                         .setText(orgTitle.isEmpty() ? "-" : orgTitle);
 

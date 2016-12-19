@@ -31,6 +31,7 @@ import com.squareup.picasso.Picasso;
 
 import work.technie.popularmovies.R;
 import work.technie.popularmovies.utils.RoundedTransformation;
+import work.technie.popularmovies.utils.ViewHolderUtil;
 
 import static work.technie.popularmovies.Constants.COL_VIDEOS_KEY;
 import static work.technie.popularmovies.Constants.COL_VIDEOS_NAME;
@@ -43,6 +44,7 @@ public class VideoMovieAdapter extends RecyclerView.Adapter<VideoMovieAdapter.Vi
 
     private Cursor cursor;
     private Context context;
+    private ViewHolderUtil.SetOnClickListener listener;
 
     public VideoMovieAdapter(Cursor cursor) {
         this.cursor = cursor;
@@ -99,6 +101,8 @@ public class VideoMovieAdapter extends RecyclerView.Adapter<VideoMovieAdapter.Vi
                     }
                 });
         viewHolder.trailerImg.setAdjustViewBounds(true);
+        viewHolder.setItemClickListener(listener);
+
 /*
                 final String trailerUrl = "https://www.youtube.com/watch?v=" + source;
                 ImageView trailerImg = (ImageView) view.findViewById(R.id.youtubeImg);
@@ -111,6 +115,15 @@ public class VideoMovieAdapter extends RecyclerView.Adapter<VideoMovieAdapter.Vi
                 });*/
     }
 
+
+    public Cursor getCursor() {
+        return cursor;
+    }
+
+    public void setOnClickListener(ViewHolderUtil.SetOnClickListener clickListener) {
+        this.listener = clickListener;
+    }
+
     @Override
     public int getItemCount() {
         if (cursor != null) {
@@ -119,15 +132,33 @@ public class VideoMovieAdapter extends RecyclerView.Adapter<VideoMovieAdapter.Vi
         return 0;
     }
 
+    public interface SetOnClickListener extends ViewHolderUtil.SetOnClickListener {
+        void onItemClick(int position, View itemView);
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         final TextView trailer;
         final ImageView trailerImg;
+        private ViewHolderUtil.SetOnClickListener listener;
 
-        ViewHolder(View view) {
+        ViewHolder(final View view) {
             super(view);
             trailer = (TextView) view.findViewById(R.id.trailer_name);
             trailerImg = (ImageView) view.findViewById(R.id.youtubeImg);
+            view.setClickable(true);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        listener.onItemClick(getAdapterPosition(), view);
+                    }
+                }
+            });
+        }
+
+        void setItemClickListener(ViewHolderUtil.SetOnClickListener itemClickListener) {
+            this.listener = itemClickListener;
         }
     }
 }
