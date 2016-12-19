@@ -27,6 +27,8 @@ import work.technie.popularmovies.fragment.MainActivityFragment;
 public class BaseActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainActivityFragment.Callback {
 
+    public static final String FRAGMENT_TAG_MOVIE_BOOKMARKS = "Bookmarked Movies";
+    public static final String FRAGMENT_TAG_TV_BOOKMARKS = "Bookmarked TV Shows";
     public static final String FRAGMENT_TAG_MOV_NOW_PLAYING = "Now Playing Movies";
     public static final String FRAGMENT_TAG_MOV_POPULAR = "Popular Movies";
     public static final String FRAGMENT_TAG_MOV_TOP_RATED = "Top Rated Movies";
@@ -111,6 +113,9 @@ public class BaseActivity extends AppCompatActivity
 
         switch (menuItemId) {
 
+            case R.id.mov_bookmarks:
+                currentFragment = FRAGMENT_TAG_MOVIE_BOOKMARKS;
+                break;
             case R.id.mov_now_playing:
                 currentFragment = FRAGMENT_TAG_MOV_NOW_PLAYING;
                 break;
@@ -134,6 +139,9 @@ public class BaseActivity extends AppCompatActivity
                 break;
             case R.id.tv_top_rated:
                 currentFragment = FRAGMENT_TAG_TV_TOP_RATED;
+                break;
+            case R.id.tv_bookmarks:
+                currentFragment = FRAGMENT_TAG_TV_BOOKMARKS;
                 break;
             case R.id.about:
                 currentFragment = FRAGMENT_ABOUT;

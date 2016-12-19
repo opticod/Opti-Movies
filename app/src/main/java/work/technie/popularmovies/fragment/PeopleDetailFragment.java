@@ -155,6 +155,15 @@ public class PeopleDetailFragment extends Fragment implements LoaderManager.Load
         return null;
     }
 
+    public void defaultShow() {
+        rootView.findViewById(R.id.profile_img).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.birthday_title).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.place_of_birth_title).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.biography_title).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.homepage_title).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.tmdb_profile).setVisibility(View.VISIBLE);
+    }
+
     @Override
     public void onLoadFinished(Loader<Cursor> loader, final Cursor data) {
         swipeRefreshLayout.setRefreshing(false);
@@ -164,6 +173,7 @@ public class PeopleDetailFragment extends Fragment implements LoaderManager.Load
         switch (loader.getId()) {
             case PEOPLE_DETAILS_LOADER:
 
+                defaultShow();
                 String name = data.getString(PEOPLE_COL_NAME).trim();
                 ((TextView) rootView.findViewById(R.id.name))
                         .setText(name.isEmpty() || name.equalsIgnoreCase("null") ? "-" : name);

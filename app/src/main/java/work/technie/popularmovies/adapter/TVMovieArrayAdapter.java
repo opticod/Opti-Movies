@@ -40,9 +40,15 @@ import work.technie.popularmovies.utils.RoundedTransformation;
 public class TVMovieArrayAdapter extends CursorAdapter {
     private static final String LOG_TAG = TVMovieArrayAdapter.class.getSimpleName();
 
+    private boolean isMovie;
+    private boolean isMovieBookmark;
+    private boolean isTVBookmark;
 
-    public TVMovieArrayAdapter(Context context, Cursor c, int flags) {
+    public TVMovieArrayAdapter(Context context, boolean isMovie, boolean isMovieBookmark, boolean isTVBookmark, Cursor c, int flags) {
         super(context, c, flags);
+        this.isMovie = isMovie;
+        this.isMovieBookmark = isMovieBookmark;
+        this.isTVBookmark = isTVBookmark;
     }
 
     @Override
@@ -59,9 +65,8 @@ public class TVMovieArrayAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
         final ViewHolder viewHolder = (ViewHolder) view.getTag();
-        boolean isMovie = cursor.getColumnCount() == 18;
 
-        final String url = cursor.getString(isMovie ? Constants.MOV_COL_POSTER_PATH : Constants.TV_COL_POSTER_PATH);
+        final String url = cursor.getString(isMovieBookmark ? Constants.MOV_DETAILS_COL_POSTER_PATH : (isMovie ? Constants.MOV_COL_POSTER_PATH : Constants.TV_COL_POSTER_PATH));
         Picasso
                 .with(context)
                 .load(url)
@@ -95,27 +100,27 @@ public class TVMovieArrayAdapter extends CursorAdapter {
                 });
         viewHolder.imageView.setAdjustViewBounds(true);
 
-        String date = cursor.getString(isMovie ? Constants.MOV_COL_RELEASE_DATE : Constants.TV_COL_FIRST_AIR_DATE);
+        String date = cursor.getString(isMovieBookmark ? Constants.MOV_DETAILS_COL_RELEASE_DATE : (isMovie ? Constants.MOV_COL_RELEASE_DATE : Constants.TV_COL_FIRST_AIR_DATE));
         int pos = date.indexOf('-');
         viewHolder.year.setText(date.substring(0, pos >= 0 ? pos : 0));
 
         int fav = 0;
         if (isMovie) {
             Cursor cursor1 = context.getContentResolver().query(
-                    MovieContract.Favourites.buildMoviesUriWithMovieId(cursor.getString(Constants.MOV_COL_MOVIE_ID)),
+                    MovieContract.FavouritesMovies.buildMoviesUriWithMovieId(cursor.getString(isMovieBookmark ? Constants.MOV_DETAILS_COL_MOVIE_ID : Constants.MOV_COL_MOVIE_ID)),
                     null, null, null, null);
             if (!(cursor1 == null || !(cursor1.moveToFirst()) || cursor1.getCount() == 0)) {
                 fav = 1;
                 cursor1.close();
             }
-        } else {
+        } else {/*
             Cursor cursor1 = context.getContentResolver().query(
-                    MovieContract.Favourites.buildTVUriWithTVId(cursor.getString(Constants.TV_COL_ID)),
+                    MovieContract.FavouritesMovies.buildTVUriWithTVId(cursor.getString(Constants.TV_COL_ID)),
                     null, null, null, null);
             if (!(cursor1 == null || !(cursor1.moveToFirst()) || cursor1.getCount() == 0)) {
                 fav = 1;
                 cursor1.close();
-            }
+            }*/
         }
 
         if (fav == 1) {
@@ -124,13 +129,13 @@ public class TVMovieArrayAdapter extends CursorAdapter {
             viewHolder.favIcon.setImageResource(R.drawable.ic_star_border_black_24dp);
         }
 
-        String rating = cursor.getString(isMovie ? Constants.MOV_COL_VOTE_AVERAGE : Constants.TV_COL_VOTE_AVERAGE);
+        String rating = cursor.getString(isMovieBookmark ? Constants.MOV_DETAILS_COL_VOTE_AVERAGE : (isMovie ? Constants.MOV_COL_VOTE_AVERAGE : Constants.TV_COL_VOTE_AVERAGE));
         double vote = Double.parseDouble(rating);
         rating = String.valueOf((double) Math.round(vote * 10d) / 10d);
 
         viewHolder.userRating.setText(String.format(Locale.ENGLISH, "%s/10", rating));
 
-        String popularity = cursor.getString(isMovie ? Constants.MOV_COL_POPULARITY : Constants.TV_COL_POPULARITY);
+        String popularity = cursor.getString(isMovieBookmark ? Constants.MOV_DETAILS_COL_POPULARITY : (isMovie ? Constants.MOV_COL_POPULARITY : Constants.TV_COL_POPULARITY));
         pos = popularity.indexOf(".");
         viewHolder.pop_text.setText(popularity.substring(0, pos >= 0 ? pos : 0));
     }

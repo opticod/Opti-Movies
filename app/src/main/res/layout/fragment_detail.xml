@@ -52,6 +52,7 @@
                     android:layout_marginTop="215dp"
                     android:clickable="true"
                     android:src="@drawable/ic_star_border_black_24dp"
+                    android:visibility="gone"
                     app:backgroundTint="@color/colorPrimary" />
 
                 <android.support.design.widget.FloatingActionButton
@@ -127,14 +128,16 @@
                 android:textAppearance="?android:textAppearanceLarge" />
 
             <TextView
+                android:id="@+id/overview_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginMedium"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
-                android:text="Overview"
+                android:text="@string/overview"
                 android:textAppearance="?android:subtitle"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/overview"
@@ -148,14 +151,16 @@
                 android:textSize="15sp" />
 
             <TextView
+                android:id="@+id/featured_crew_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginMedium"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
-                android:text="Featured Crew"
+                android:text="@string/featured_crew"
                 android:textAppearance="?android:subtitle"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:visibility="gone" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerview_crew"
@@ -180,14 +185,16 @@
 
 
             <TextView
+                android:id="@+id/top_billed_cast_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginMedium"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
-                android:text="Top Billed Cast"
+                android:text="@string/top_billed_cast"
                 android:textAppearance="?android:subtitle"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:visibility="gone" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerview_cast"
@@ -224,14 +231,16 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/status_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
                         android:paddingLeft="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
-                        android:text="Status"
+                        android:text="@string/status"
                         android:textAppearance="?android:subtitle"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/status"
@@ -245,14 +254,16 @@
                         android:textSize="15sp" />
 
                     <TextView
+                        android:id="@+id/original_lang_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
                         android:paddingLeft="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
-                        android:text="Original Language"
+                        android:text="@string/original_language"
                         android:textAppearance="?android:subtitle"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/original_lang"
@@ -266,14 +277,16 @@
                         android:textSize="15sp" />
 
                     <TextView
+                        android:id="@+id/runtime_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
                         android:paddingLeft="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
-                        android:text="Runtime"
+                        android:text="@string/runtime"
                         android:textAppearance="?android:subtitle"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/runtime"
@@ -288,14 +301,16 @@
 
 
                     <TextView
+                        android:id="@+id/homepage_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
                         android:paddingLeft="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
-                        android:text="Homepage"
+                        android:text="@string/homepage"
                         android:textAppearance="?android:subtitle"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/homepage"
@@ -311,14 +326,16 @@
 
 
                     <TextView
+                        android:id="@+id/release_date_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
                         android:paddingLeft="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
-                        android:text="Release Date"
+                        android:text="@string/release_date"
                         android:textAppearance="?android:subtitle"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/release_date"
@@ -340,14 +357,16 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/genre_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
                         android:paddingLeft="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
-                        android:text="Genres"
+                        android:text="@string/genres"
                         android:textAppearance="?android:subtitle"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:visibility="gone" />
 
 
                     <android.support.v7.widget.RecyclerView
@@ -372,14 +391,16 @@
                         android:visibility="gone" />
 
                     <TextView
+                        android:id="@+id/budget_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
                         android:paddingLeft="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
-                        android:text="Budget"
+                        android:text="@string/budget"
                         android:textAppearance="?android:subtitle"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/budget"
@@ -394,14 +415,16 @@
 
 
                     <TextView
+                        android:id="@+id/revenue_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
                         android:paddingLeft="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
-                        android:text="Revenue"
+                        android:text="@string/revenue"
                         android:textAppearance="?android:subtitle"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/revenue"
@@ -421,6 +444,7 @@
 
 
             <TextView
+                android:id="@+id/videos_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginMedium"
@@ -428,7 +452,8 @@
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:text="@string/videos"
                 android:textAppearance="?android:subtitle"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:visibility="gone" />
 
 
             <android.support.v7.widget.RecyclerView
@@ -453,6 +478,7 @@
                 android:visibility="gone" />
 
             <TextView
+                android:id="@+id/reviews_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginMedium"
@@ -460,7 +486,8 @@
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:text="@string/reviews"
                 android:textAppearance="?android:subtitle"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:visibility="gone" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerview_review"
@@ -487,6 +514,7 @@
 
 
             <TextView
+                android:id="@+id/similar_movies_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginMedium"
@@ -494,7 +522,8 @@
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:text="@string/similar_movies"
                 android:textAppearance="?android:subtitle"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:visibility="gone" />
 
 
             <android.support.v7.widget.RecyclerView

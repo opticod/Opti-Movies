@@ -22,7 +22,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import work.technie.popularmovies.data.MovieContract.Cast;
 import work.technie.popularmovies.data.MovieContract.Crew;
-import work.technie.popularmovies.data.MovieContract.Favourites;
+import work.technie.popularmovies.data.MovieContract.FavouritesMovies;
+import work.technie.popularmovies.data.MovieContract.FavouritesTVs;
 import work.technie.popularmovies.data.MovieContract.Genres;
 import work.technie.popularmovies.data.MovieContract.MovieDetails;
 import work.technie.popularmovies.data.MovieContract.Movies;
@@ -176,26 +177,15 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 TV.PREF_REGION + " TEXT,"
                 + "UNIQUE (" + TV.TV_ID + ") ON CONFLICT REPLACE)";
 
-        final String SQL_CREATE__TABLE_FAVOURITES = "CREATE TABLE " + Favourites.TABLE_NAME + " (" +
-                Favourites._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                Favourites.PAGE + "  TEXT," +
-                Favourites.POSTER_PATH + "  TEXT," +
-                Favourites.ADULT + "  TEXT," +
-                Favourites.OVERVIEW + "  TEXT," +
-                Favourites.RELEASE_DATE + "  TEXT," +
-                Favourites.MOVIE_ID + "  TEXT," +
-                Favourites.ORIGINAL_TITLE + "  TEXT," +
-                Favourites.ORIGINAL_LANGUAGE + "  TEXT," +
-                Favourites.TITLE + "  TEXT," +
-                Favourites.BACKDROP_PATH + "  TEXT," +
-                Favourites.POPULARITY + "  TEXT," +
-                Favourites.VOTE_COUNT + "  TEXT," +
-                Favourites.VOTE_AVERAGE + "  TEXT," +
-                Favourites.FAVOURED + " INTEGER NOT NULL DEFAULT 0," +
-                Favourites.SHOWED + " INTEGER NOT NULL DEFAULT 0," +
-                Favourites.DOWNLOADED + " INTEGER NOT NULL DEFAULT 0," +
-                Favourites.SORT_BY + " TEXT,"
-                + "UNIQUE (" + Favourites.MOVIE_ID + ") ON CONFLICT REPLACE)";
+        final String SQL_CREATE__TABLE_FAVOURITES_MOVIES = "CREATE TABLE " + FavouritesMovies.TABLE_NAME + " (" +
+                FavouritesMovies._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                FavouritesMovies.MOVIE_ID + "  TEXT,"
+                + "UNIQUE (" + FavouritesMovies.MOVIE_ID + ") ON CONFLICT REPLACE)";
+
+        final String SQL_CREATE__TABLE_FAVOURITES_TV = "CREATE TABLE " + FavouritesTVs.TABLE_NAME + " (" +
+                FavouritesTVs._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                FavouritesTVs.TV_ID + "  TEXT,"
+                + "UNIQUE (" + FavouritesTVs.TV_ID + ") ON CONFLICT REPLACE)";
 
         final String SQL_CREATE__TABLE_VIDEOS = "CREATE TABLE " + Videos.TABLE_NAME + " (" +
                 Videos._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -228,7 +218,8 @@ public class MovieDBHelper extends SQLiteOpenHelper {
 
         sqLiteDatabase.execSQL(SQL_CREATE__TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE__TABLE_TV);
-        sqLiteDatabase.execSQL(SQL_CREATE__TABLE_FAVOURITES);
+        sqLiteDatabase.execSQL(SQL_CREATE__TABLE_FAVOURITES_MOVIES);
+        sqLiteDatabase.execSQL(SQL_CREATE__TABLE_FAVOURITES_TV);
         sqLiteDatabase.execSQL(SQL_CREATE__TABLE_VIDEOS);
         sqLiteDatabase.execSQL(SQL_CREATE__TABLE_REVIEWS);
         sqLiteDatabase.execSQL(SQL_CREATE__TABLE_GENRES);
@@ -245,7 +236,8 @@ public class MovieDBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Movies.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TV.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Favourites.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + FavouritesMovies.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + FavouritesTVs.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Videos.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Reviews.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Genres.TABLE_NAME);

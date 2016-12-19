@@ -184,25 +184,22 @@ public class Constants {
     };
     public static final String[] FAVOURITE_MOVIE_COLUMNS = {
 
-            MovieContract.Favourites.TABLE_NAME + "." + MovieContract.Favourites._ID,
-            MovieContract.Favourites.PAGE,
-            MovieContract.Favourites.POSTER_PATH,
-            MovieContract.Favourites.ADULT,
-            MovieContract.Favourites.OVERVIEW,
-            MovieContract.Favourites.RELEASE_DATE,
-            MovieContract.Favourites.MOVIE_ID,
-            MovieContract.Favourites.ORIGINAL_TITLE,
-            MovieContract.Favourites.ORIGINAL_LANGUAGE,
-            MovieContract.Favourites.TITLE,
-            MovieContract.Favourites.BACKDROP_PATH,
-            MovieContract.Favourites.POPULARITY,
-            MovieContract.Favourites.VOTE_COUNT,
-            MovieContract.Favourites.VOTE_AVERAGE,
-            MovieContract.Favourites.FAVOURED,
-            MovieContract.Favourites.SHOWED,
-            MovieContract.Favourites.DOWNLOADED,
-            MovieContract.Favourites.SORT_BY
+            MovieContract.FavouritesMovies.TABLE_NAME + "." + MovieContract.FavouritesMovies._ID,
+            MovieContract.FavouritesMovies.MOVIE_ID
     };
+
+    public static final String[] FAVOURITE_TV_COLUMNS = {
+
+            MovieContract.FavouritesTVs.TABLE_NAME + "." + MovieContract.FavouritesTVs._ID,
+            MovieContract.FavouritesTVs.TV_ID
+    };
+
+    public static int FAV_MOV_COL_ID = 0;
+    public static int FAV_MOV_COL_MOVIE_ID = 1;
+
+    public static int FAV_TV_COL_ID = 0;
+    public static int FAV_TV_COL_MOVIE_ID = 1;
+
     public static int PEOPLE_COL__ID = 0;
     public static int PEOPLE_COL_ADULT = 1;
     public static int PEOPLE_COL_BIOGRAPHY = 2;

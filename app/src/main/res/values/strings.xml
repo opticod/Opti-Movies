@@ -36,5 +36,20 @@
     <string name="videos">Videos</string>
     <string name="reviews">Reviews</string>
     <string name="empty">-</string>
+    <string name="bookmarks_empty">NO BOOKMARKS ADDED</string>
+    <string name="overview">Overview</string>
+    <string name="featured_crew">Featured Crew</string>
+    <string name="top_billed_cast">Top Billed Cast</string>
+    <string name="status">Status</string>
+    <string name="original_language">Original Language</string>
+    <string name="runtime">Runtime</string>
+    <string name="homepage">Homepage</string>
+    <string name="release_date">Release Date</string>
+    <string name="genres">Genres</string>
+    <string name="budget">Budget</string>
+    <string name="revenue">Revenue</string>
+    <string name="birthday">Birthday</string>
+    <string name="place_of_birth">Place of Birth</string>
+    <string name="biography">Biography</string>
 
 </resources>

@@ -35,8 +35,8 @@ public class MovieProvider extends ContentProvider {
     static final int REVIEWS_WITH_ID = 301;
     static final int GENRES = 400;
     static final int GENRES_WITH_ID = 401;
-    static final int FAVOURITES = 500;
-    static final int FAVOURITES_WITH_ID = 501;
+    static final int FAVOURITES_MOVIES = 500;
+    static final int FAVOURITES_MOVIES_WITH_ID = 501;
     static final int TV = 600;
     static final int TV_WITH_ID = 601;
     static final int SIMILAR_MOVIES = 700;
@@ -49,6 +49,8 @@ public class MovieProvider extends ContentProvider {
     static final int CREW_WITH_ID = 1001;
     static final int MOVIE_DETAILS = 1100;
     static final int MOVIE_DETAILS_WITH_ID = 1101;
+    static final int FAVOURITES_TVS = 1200;
+    static final int FAVOURITES_TVS_WITH_ID = 1201;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private MovieDBHelper mOpenHelper;
@@ -67,8 +69,10 @@ public class MovieProvider extends ContentProvider {
         matcher.addURI(authority, MovieContract.PATH_REVIEWS + "/*", REVIEWS_WITH_ID);
         matcher.addURI(authority, MovieContract.PATH_GENRES, GENRES);
         matcher.addURI(authority, MovieContract.PATH_GENRES + "/*", GENRES_WITH_ID);
-        matcher.addURI(authority, MovieContract.PATH_FAVOURITES, FAVOURITES);
-        matcher.addURI(authority, MovieContract.PATH_FAVOURITES + "/*", FAVOURITES_WITH_ID);
+        matcher.addURI(authority, MovieContract.PATH_FAVOURITES_MOVIES, FAVOURITES_MOVIES);
+        matcher.addURI(authority, MovieContract.PATH_FAVOURITES_MOVIES + "/*", FAVOURITES_MOVIES_WITH_ID);
+        matcher.addURI(authority, MovieContract.PATH_FAVOURITES_TV, FAVOURITES_TVS);
+        matcher.addURI(authority, MovieContract.PATH_FAVOURITES_TV + "/*", FAVOURITES_TVS_WITH_ID);
         matcher.addURI(authority, MovieContract.PATH_TV, TV);
         matcher.addURI(authority, MovieContract.PATH_TV + "/*", TV_WITH_ID);
         matcher.addURI(authority, MovieContract.PATH_CASTS, CASTS);
@@ -107,10 +111,14 @@ public class MovieProvider extends ContentProvider {
                 return MovieContract.TV.CONTENT_TYPE;
             case TV_WITH_ID:
                 return MovieContract.TV.CONTENT_ITEM_TYPE;
-            case FAVOURITES:
-                return MovieContract.Favourites.CONTENT_TYPE;
-            case FAVOURITES_WITH_ID:
-                return MovieContract.Favourites.CONTENT_ITEM_TYPE;
+            case FAVOURITES_MOVIES:
+                return MovieContract.FavouritesMovies.CONTENT_TYPE;
+            case FAVOURITES_MOVIES_WITH_ID:
+                return MovieContract.FavouritesMovies.CONTENT_ITEM_TYPE;
+            case FAVOURITES_TVS:
+                return MovieContract.FavouritesTVs.CONTENT_TYPE;
+            case FAVOURITES_TVS_WITH_ID:
+                return MovieContract.FavouritesTVs.CONTENT_ITEM_TYPE;
             case VIDEOS:
                 return MovieContract.Videos.CONTENT_TYPE;
             case VIDEOS_WITH_ID:
@@ -201,9 +209,9 @@ public class MovieProvider extends ContentProvider {
                         sortOrder);
                 break;
             }
-            case FAVOURITES: {
+            case FAVOURITES_MOVIES: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
-                        MovieContract.Favourites.TABLE_NAME,
+                        MovieContract.FavouritesMovies.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -213,11 +221,35 @@ public class MovieProvider extends ContentProvider {
                 );
                 break;
             }
-            case FAVOURITES_WITH_ID: {
+            case FAVOURITES_MOVIES_WITH_ID: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
-                        MovieContract.Favourites.TABLE_NAME,
+                        MovieContract.FavouritesMovies.TABLE_NAME,
                         projection,
-                        MovieContract.Favourites.MOVIE_ID + " = ?",
+                        MovieContract.FavouritesMovies.MOVIE_ID + " = ?",
+                        new String[]{String.valueOf(ContentUris.parseId(uri))},
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            }
+
+            case FAVOURITES_TVS: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        MovieContract.FavouritesTVs.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
+            case FAVOURITES_TVS_WITH_ID: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        MovieContract.FavouritesTVs.TABLE_NAME,
+                        projection,
+                        MovieContract.FavouritesTVs.TV_ID + " = ?",
                         new String[]{String.valueOf(ContentUris.parseId(uri))},
                         null,
                         null,
@@ -443,10 +475,18 @@ public class MovieProvider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
             }
-            case FAVOURITES: {
-                long _id = db.insert(MovieContract.Favourites.TABLE_NAME, null, values);
+            case FAVOURITES_MOVIES: {
+                long _id = db.insert(MovieContract.FavouritesMovies.TABLE_NAME, null, values);
                 if (_id > 0)
-                    returnUri = MovieContract.Favourites.buildMoviesUri(_id);
+                    returnUri = MovieContract.FavouritesMovies.buildMoviesUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
+            case FAVOURITES_TVS: {
+                long _id = db.insert(MovieContract.FavouritesTVs.TABLE_NAME, null, values);
+                if (_id > 0)
+                    returnUri = MovieContract.FavouritesTVs.buildTVUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
@@ -550,13 +590,22 @@ public class MovieProvider extends ContentProvider {
                         MovieContract.TV.TV_ID + " = ?",
                         new String[]{String.valueOf(ContentUris.parseId(uri))});
                 break;
-            case FAVOURITES:
+            case FAVOURITES_MOVIES:
                 rowsDeleted = db.delete(
-                        MovieContract.Favourites.TABLE_NAME, selection, selectionArgs);
+                        MovieContract.FavouritesMovies.TABLE_NAME, selection, selectionArgs);
                 break;
-            case FAVOURITES_WITH_ID:
-                rowsDeleted = db.delete(MovieContract.Favourites.TABLE_NAME,
-                        MovieContract.Favourites.MOVIE_ID + " = ?",
+            case FAVOURITES_MOVIES_WITH_ID:
+                rowsDeleted = db.delete(MovieContract.FavouritesMovies.TABLE_NAME,
+                        MovieContract.FavouritesMovies.MOVIE_ID + " = ?",
+                        new String[]{String.valueOf(ContentUris.parseId(uri))});
+                break;
+            case FAVOURITES_TVS:
+                rowsDeleted = db.delete(
+                        MovieContract.FavouritesTVs.TABLE_NAME, selection, selectionArgs);
+                break;
+            case FAVOURITES_TVS_WITH_ID:
+                rowsDeleted = db.delete(MovieContract.FavouritesTVs.TABLE_NAME,
+                        MovieContract.FavouritesTVs.TV_ID + " = ?",
                         new String[]{String.valueOf(ContentUris.parseId(uri))});
                 break;
             case VIDEOS:
@@ -672,14 +721,25 @@ public class MovieProvider extends ContentProvider {
                         new String[]{String.valueOf(ContentUris.parseId(uri))});
                 break;
             }
-            case FAVOURITES:
-                rowsUpdated = db.update(MovieContract.Favourites.TABLE_NAME, values, selection,
+            case FAVOURITES_MOVIES:
+                rowsUpdated = db.update(MovieContract.FavouritesMovies.TABLE_NAME, values, selection,
                         selectionArgs);
                 break;
-            case FAVOURITES_WITH_ID: {
-                rowsUpdated = db.update(MovieContract.Favourites.TABLE_NAME,
+            case FAVOURITES_MOVIES_WITH_ID: {
+                rowsUpdated = db.update(MovieContract.FavouritesMovies.TABLE_NAME,
                         values,
-                        MovieContract.Favourites.MOVIE_ID + " = ?",
+                        MovieContract.FavouritesMovies.MOVIE_ID + " = ?",
+                        new String[]{String.valueOf(ContentUris.parseId(uri))});
+                break;
+            }
+            case FAVOURITES_TVS:
+                rowsUpdated = db.update(MovieContract.FavouritesTVs.TABLE_NAME, values, selection,
+                        selectionArgs);
+                break;
+            case FAVOURITES_TVS_WITH_ID: {
+                rowsUpdated = db.update(MovieContract.FavouritesTVs.TABLE_NAME,
+                        values,
+                        MovieContract.FavouritesTVs.TV_ID + " = ?",
                         new String[]{String.valueOf(ContentUris.parseId(uri))});
                 break;
             }
@@ -820,13 +880,30 @@ public class MovieProvider extends ContentProvider {
                 }
                 getContext().getContentResolver().notifyChange(uri, null);
                 return returnCount;
-            case FAVOURITES:
+            case FAVOURITES_MOVIES:
                 db.beginTransaction();
                 returnCount = 0;
                 try {
                     for (ContentValues value : values) {
 
-                        long _id = db.insert(MovieContract.Favourites.TABLE_NAME, null, value);
+                        long _id = db.insert(MovieContract.FavouritesMovies.TABLE_NAME, null, value);
+                        if (_id != -1) {
+                            returnCount++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return returnCount;
+            case FAVOURITES_TVS:
+                db.beginTransaction();
+                returnCount = 0;
+                try {
+                    for (ContentValues value : values) {
+
+                        long _id = db.insert(MovieContract.FavouritesTVs.TABLE_NAME, null, value);
                         if (_id != -1) {
                             returnCount++;
                         }

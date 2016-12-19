@@ -19,7 +19,8 @@
                 android:id="@+id/profile_img"
                 android:layout_width="fill_parent"
                 android:layout_height="299dp"
-                android:src="@drawable/ic_account_circle_black_48dp" />
+                android:src="@drawable/ic_account_circle_black_48dp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/name"
@@ -32,14 +33,16 @@
                 android:textAppearance="?android:textAppearanceLarge" />
 
             <TextView
+                android:id="@+id/birthday_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginMedium"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
-                android:text="Birthday"
+                android:text="@string/birthday"
                 android:textAppearance="?android:subtitle"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/birthday"
@@ -54,14 +57,16 @@
 
 
             <TextView
+                android:id="@+id/place_of_birth_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginMedium"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
-                android:text="Place of Birth"
+                android:text="@string/place_of_birth"
                 android:textAppearance="?android:subtitle"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/place_of_birth"
@@ -76,14 +81,16 @@
 
 
             <TextView
+                android:id="@+id/biography_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginMedium"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
-                android:text="Biography"
+                android:text="@string/biography"
                 android:textAppearance="?android:subtitle"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/biography"
@@ -97,14 +104,16 @@
                 android:textSize="15sp" />
 
             <TextView
+                android:id="@+id/homepage_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginMedium"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
-                android:text="Homepage"
+                android:text="@string/homepage"
                 android:textAppearance="?android:subtitle"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/homepage_profile"
@@ -119,13 +128,14 @@
                 android:textSize="15sp" />
 
             <ImageView
-                android:id="@+id/tmdb"
+                android:id="@+id/tmdb_profile"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="32dp"
                 android:contentDescription="@string/tmdb_logo_attribution"
                 android:gravity="bottom|end|center"
-                android:src="@drawable/tmdb" />
+                android:src="@drawable/tmdb"
+                android:visibility="gone" />
         </LinearLayout>
     </ScrollView>
 </android.support.v4.widget.SwipeRefreshLayout>

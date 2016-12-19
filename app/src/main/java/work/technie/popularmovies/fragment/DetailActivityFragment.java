@@ -522,7 +522,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                 case FAVOURITE_DETAILS_LOADER:
                     return new CursorLoader(
                             getActivity(),
-                            MovieContract.Favourites.buildMoviesUriWithMovieId(movie_Id),
+                            MovieContract.FavouritesMovies.buildMoviesUriWithMovieId(movie_Id),
                             FAVOURITE_MOVIE_COLUMNS,
                             null,
                             null,
@@ -538,6 +538,21 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         rootView.findViewById(R.id.ten).setVisibility(View.VISIBLE);
         rootView.findViewById(R.id.share).setVisibility(View.VISIBLE);
         rootView.findViewById(R.id.play).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.bookmark).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.overview_title).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.featured_crew_title).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.top_billed_cast_title).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.status_title).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.genre_title).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.original_lang_title).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.runtime_title).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.budget_title).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.revenue_title).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.homepage_title).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.release_date_title).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.videos_title).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.reviews_title).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.similar_movies_title).setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -685,20 +700,31 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                     public void onClick(View view) {
                         Activity mActivity = getActivity();
                         if (mActivity != null) {
-                            Cursor cursor = mActivity.getContentResolver().query(MovieContract.Favourites.buildMoviesUriWithMovieId(movie_Id),
+                            Cursor cursor = mActivity.getContentResolver().query(MovieContract.FavouritesMovies.buildMoviesUriWithMovieId(movie_Id),
                                     FAVOURITE_MOVIE_COLUMNS,
                                     null,
                                     null,
                                     null);
                             if (cursor == null || !(cursor.moveToFirst()) || cursor.getCount() == 0) {
+                                ContentValues sh1 = new ContentValues();
+                                sh1.put(MovieContract.MovieDetails.FAVOURED, "1");
+                                mActivity.getContentResolver().update(
+                                        MovieContract.MovieDetails.CONTENT_URI.buildUpon().appendPath(movie_Id).build(),
+                                        sh1, null, new String[]{movie_Id});
+
                                 ContentValues sh = new ContentValues();
-                                sh.put(MovieContract.Favourites.MOVIE_ID, movie_Id);
-                                mActivity.getContentResolver().insert(MovieContract.Favourites.buildMovieUri(), sh);
+                                sh.put(MovieContract.FavouritesMovies.MOVIE_ID, movie_Id);
+                                mActivity.getContentResolver().insert(MovieContract.FavouritesMovies.buildMovieUri(), sh);
                                 Toast.makeText(getContext(), "Added to bookmarks", Toast.LENGTH_SHORT).show();
                                 bookmark.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_star_black_24dp));
                             } else {
-                                ContentValues sh = new ContentValues();
-                                getActivity().getContentResolver().delete(MovieContract.Favourites.buildMoviesUriWithMovieId(movie_Id), null, null);
+                                ContentValues sh1 = new ContentValues();
+                                sh1.put(MovieContract.MovieDetails.FAVOURED, "0");
+                                mActivity.getContentResolver().update(
+                                        MovieContract.MovieDetails.CONTENT_URI.buildUpon().appendPath(movie_Id).build(),
+                                        sh1, null, new String[]{movie_Id});
+
+                                getActivity().getContentResolver().delete(MovieContract.FavouritesMovies.buildMoviesUriWithMovieId(movie_Id), null, null);
                                 Toast.makeText(getContext(), "Removed from bookmarks", Toast.LENGTH_SHORT).show();
                                 bookmark.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_star_border_black_24dp));
                                 cursor.close();

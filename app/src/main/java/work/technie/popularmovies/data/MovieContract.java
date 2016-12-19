@@ -37,7 +37,8 @@ public class MovieContract {
     public static final String PATH_REVIEWS = "reviews";
     public static final String PATH_GENRES = "genres";
     public static final String PATH_MOVIE_DETAILS = "movie_details";
-    public static final String PATH_FAVOURITES = "favourites";
+    public static final String PATH_FAVOURITES_MOVIES = "favourites_movies";
+    public static final String PATH_FAVOURITES_TV = "favourites_tv";
 
 
     public static final class Movies implements BaseColumns {
@@ -368,41 +369,24 @@ public class MovieContract {
 
     }
 
-    public static final class Favourites implements BaseColumns {
+    public static final class FavouritesMovies implements BaseColumns {
 
-        public static final String TABLE_NAME = "favourites";
-
-        public static final String PAGE = "page";
-        public static final String POSTER_PATH = "poster_path";
-        public static final String ADULT = "adult";
-        public static final String OVERVIEW = "overview";
-        public static final String RELEASE_DATE = "release_date";
+        public static final String TABLE_NAME = "favourites_movies";
         public static final String MOVIE_ID = "id";
-        public static final String ORIGINAL_TITLE = "original_title";
-        public static final String ORIGINAL_LANGUAGE = "original_language";
-        public static final String TITLE = "title";
-        public static final String BACKDROP_PATH = "backdrop_path";
-        public static final String POPULARITY = "popularity";
-        public static final String VOTE_COUNT = "vote_count";
-        public static final String VOTE_AVERAGE = "vote_average";
-        public static final String FAVOURED = "favoured";
-        public static final String SHOWED = "shown";
-        public static final String DOWNLOADED = "downloaded";
-        public static final String SORT_BY = "sort_by";
 
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(PATH_FAVOURITES).build();
+        static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_FAVOURITES_MOVIES).build();
 
-        public static final String CONTENT_TYPE =
-                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FAVOURITES;
-        public static final String CONTENT_ITEM_TYPE =
-                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FAVOURITES;
+        static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FAVOURITES_MOVIES;
+        static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FAVOURITES_MOVIES;
 
-        public static Uri buildMoviesUri(long id) {
+        static Uri buildMoviesUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        //content://work....../favourites/MovieId
+        //content://work....../favourites_movies/MovieId
         public static Uri buildMoviesUriWithMovieId(String MovieId) {
             return CONTENT_URI.buildUpon().appendPath(MovieId).build();
         }
@@ -414,10 +398,36 @@ public class MovieContract {
         public static String getIDFromUri(Uri uri) {
             return uri.getPathSegments().get(1);
         }
+    }
 
+    public static final class FavouritesTVs implements BaseColumns {
 
-        public static Uri buildTVUriWithTVId(String tvId) {
+        public static final String TABLE_NAME = "favourites_tv";
+        public static final String TV_ID = "id";
+
+        static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_FAVOURITES_TV).build();
+
+        static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FAVOURITES_TV;
+        static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FAVOURITES_TV;
+
+        static Uri buildTVUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        //content://work....../favourites_tv/tvId
+        public static Uri buildMoviesUriWithMovieId(String tvId) {
             return CONTENT_URI.buildUpon().appendPath(tvId).build();
+        }
+
+        public static Uri buildTVUri() {
+            return CONTENT_URI.buildUpon().build();
+        }
+
+        public static String getIDFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
         }
     }
 
