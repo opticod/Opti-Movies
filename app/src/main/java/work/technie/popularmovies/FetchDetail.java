@@ -41,19 +41,21 @@ import work.technie.popularmovies.data.MovieContract.MovieDetails;
 import work.technie.popularmovies.data.MovieContract.Reviews;
 import work.technie.popularmovies.data.MovieContract.SimilarMovies;
 import work.technie.popularmovies.data.MovieContract.Videos;
+import work.technie.popularmovies.utils.AsyncResponse;
 
 
 /**
  * Created by anupam on 24/12/15.
  */
-public class FetchDetailMovie extends AsyncTask<String, Void, Void> {
+public class FetchDetail extends AsyncTask<String, Void, Void> {
 
     private final String LOG_TAG = FetchTVMovieTask.class.getSimpleName();
 
     private final Context mContext;
+    public AsyncResponse response = null;
     private boolean DEBUG = true;
 
-    public FetchDetailMovie(Context context) {
+    public FetchDetail(Context context) {
         mContext = context;
     }
 
@@ -127,6 +129,10 @@ public class FetchDetailMovie extends AsyncTask<String, Void, Void> {
                 site = trailerInfo.getString(Videos.SITE);
                 size = trailerInfo.getString(Videos.SIZE);
                 type = trailerInfo.getString(Videos.TYPE);
+
+                if (!site.trim().equalsIgnoreCase("youtube")) {
+                    continue;
+                }
 
                 ContentValues movieValues = new ContentValues();
 
@@ -247,6 +253,7 @@ public class FetchDetailMovie extends AsyncTask<String, Void, Void> {
                 // Then add the data, along with the corresponding name of the data type,
                 // so the content provider knows what kind of value is being inserted.
 
+                movieValues.put(SimilarMovies.MOVIE_ID_OLD, movie_id);
                 movieValues.put(MovieContract.SimilarMovies.PAGE, page);
                 movieValues.put(MovieContract.SimilarMovies.POSTER_PATH, postURL);
                 movieValues.put(MovieContract.SimilarMovies.ADULT, adult);
@@ -526,5 +533,11 @@ public class FetchDetailMovie extends AsyncTask<String, Void, Void> {
         }
         // This will only happen if there was an error getting or parsing the forecast.
         return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void result) {
+        super.onPostExecute(result);
+        response.onFinish(true);
     }
 }

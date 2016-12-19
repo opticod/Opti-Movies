@@ -1,0 +1,29 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/marginMedium"
+    android:paddingRight="@dimen/marginMedium"
+    android:weightSum="1">
+
+    <TextView
+        android:id="@+id/crew_name"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end|center"
+        android:layout_weight="0.5"
+        android:gravity="center"
+        android:textAppearance="?android:titleCondensed"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/crew_department"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="end|center"
+        android:layout_weight="0.5"
+        android:gravity="center"
+        android:textAppearance="?android:content"
+        android:textColor="@color/secondary_text"
+        android:textSize="15sp" />
+</LinearLayout>

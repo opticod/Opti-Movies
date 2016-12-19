@@ -4,35 +4,39 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    card_view:cardBackgroundColor="#FFFFFF"
     card_view:cardCornerRadius="4dp"
     card_view:cardElevation="4dp"
     card_view:cardUseCompatPadding="true">
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:orientation="vertical" android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="@dimen/text_margin">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
-                android:paddingTop="15dp"
-                android:id="@+id/review_author"
-                android:background="@drawable/touch_selector"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
-                android:paddingTop="15dp"
-                android:id="@+id/review_content"
-                android:background="@drawable/touch_selector"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
-                android:paddingTop="15dp"
-                android:id="@+id/review_url"
-                android:autoLink="web"
-                android:background="@drawable/touch_selector"/>
-        </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/text_margin">
+
+        <TextView
+            android:id="@+id/review_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:content"
+            android:textColor="@color/secondary_text"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/review_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="20"
+            android:paddingTop="15dp"
+            android:textAppearance="?android:content"
+            android:textColor="@color/secondary_text"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/review_url"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:paddingTop="15dp" />
+    </LinearLayout>
 </android.support.v7.widget.CardView>

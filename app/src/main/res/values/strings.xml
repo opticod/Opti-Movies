@@ -31,5 +31,10 @@
     <string name="pref_sort_favourite">s</string>
     <string name="no_data">NO DATA AVAILABLE</string>
     <string name="loading">Loading</string>
+    <string name="tmdb_logo_attribution">TMDB Logo Attribution</string>
+    <string name="similar_movies">Similar Movies</string>
+    <string name="videos">Videos</string>
+    <string name="reviews">Reviews</string>
+    <string name="empty">-</string>
 
 </resources>

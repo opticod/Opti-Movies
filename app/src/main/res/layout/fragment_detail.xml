@@ -1,7 +1,8 @@
 <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/detail_swipe_refresh"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:transitionGroup="true">
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -41,7 +42,6 @@
                     android:id="@+id/poster"
                     android:layout_width="155dp"
                     android:layout_height="200dp"
-                    android:layout_marginLeft="16dp"
                     android:layout_marginTop="150dp" />
 
                 <android.support.design.widget.FloatingActionButton
@@ -134,156 +134,410 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/marginMedium"
                 android:textAllCaps="true"
-                android:textColor="#8a000000"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textAppearance="?android:textAppearanceLarge" />
 
             <TextView
-                android:id="@+id/relDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/orgTitle"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="@dimen/marginMedium"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/genreNames"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/relDate"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/voteAvg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/genreNames"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/popularity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/genreNames"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:textSize="14sp" />
+                android:text="Overview"
+                android:textAppearance="?android:subtitle"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/overview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/popularity"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/marginMedium"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
+                android:textAppearance="?android:content"
+                android:textColor="@color/secondary_text"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginMedium"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:text="Featured Crew"
+                android:textAppearance="?android:subtitle"
                 android:textSize="16sp" />
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/show"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_below="@+id/overview"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="30dp"
-                android:clickable="true"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:src="@drawable/show"
-                android:visibility="gone"
-                app:backgroundTint="@color/colorPrimary" />
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/hide"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_below="@+id/overview"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="20dp"
-                android:clickable="true"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:src="@drawable/hide"
-                android:visibility="gone"
-                app:backgroundTint="@color/colorPrimary" />
-
-            <ListView
-                android:id="@+id/listview_genre"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview_crew"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/overview"
-                android:nestedScrollingEnabled="true"
+                android:layout_marginTop="@dimen/marginMedium"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin" />
+
+            <TextView
+                android:id="@+id/empty_crew"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginMedium"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
+                android:text="@string/empty"
+                android:textAppearance="?android:content"
+                android:textColor="@color/secondary_text"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginMedium"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:text="Top Billed Cast"
+                android:textAppearance="?android:subtitle"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview_cast"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/marginMedium"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin" />
+
+            <TextView
+                android:id="@+id/empty_cast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginMedium"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:text="@string/empty"
+                android:textAppearance="?android:content"
+                android:textColor="@color/secondary_text"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:text="Status"
+                        android:textAppearance="?android:subtitle"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:textAppearance="?android:content"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:text="Original Language"
+                        android:textAppearance="?android:subtitle"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/original_lang"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:textAppearance="?android:content"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:text="Runtime"
+                        android:textAppearance="?android:subtitle"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/runtime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:textAppearance="?android:content"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="15sp" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:text="Homepage"
+                        android:textAppearance="?android:subtitle"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/homepage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginMedium"
+                        android:autoLink="web"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:textAppearance="?android:content"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="15sp" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:text="Release Date"
+                        android:textAppearance="?android:subtitle"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/release_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:textAppearance="?android:content"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:text="Genres"
+                        android:textAppearance="?android:subtitle"
+                        android:textSize="16sp" />
+
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recyclerview_genre"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin" />
+
+                    <TextView
+                        android:id="@+id/empty_genre"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:text="@string/empty"
+                        android:textAppearance="?android:content"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="15sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:text="Budget"
+                        android:textAppearance="?android:subtitle"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/budget"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:textAppearance="?android:content"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="15sp" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:text="Revenue"
+                        android:textAppearance="?android:subtitle"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/revenue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:textAppearance="?android:content"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="15sp" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginMedium"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:text="@string/videos"
+                android:textAppearance="?android:subtitle"
+                android:textSize="16sp" />
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview_videos"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/marginMedium"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin" />
+
+            <TextView
+                android:id="@+id/empty_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginMedium"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:text="@string/empty"
+                android:textAppearance="?android:content"
+                android:textColor="@color/secondary_text"
+                android:textSize="15sp"
                 android:visibility="gone" />
 
             <TextView
-                android:id="@+id/TrailerText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/hide"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/marginMedium"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
-                android:text="TRAILERS :"
-                android:textAllCaps="true"
-                android:textColor="#8a000000"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:visibility="gone" />
+                android:text="@string/reviews"
+                android:textAppearance="?android:subtitle"
+                android:textSize="16sp" />
 
-            <ListView
-                android:id="@+id/listview_trailer"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview_review"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/TrailerText"
-                android:layout_marginTop="20dp"
-                android:nestedScrollingEnabled="true"
+                android:layout_marginTop="@dimen/marginMedium"
+                android:nestedScrollingEnabled="false"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:visibility="gone" />
+                android:paddingRight="@dimen/activity_horizontal_margin" />
+
 
             <TextView
-                android:id="@+id/ReviewsText"
+                android:id="@+id/empty_review"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/listview_trailer"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/marginMedium"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
-                android:text="REVIEWS :"
-                android:textAllCaps="true"
-                android:textColor="#8a000000"
-                android:textSize="20sp"
-                android:textStyle="bold"
+                android:text="@string/empty"
+                android:textAppearance="?android:content"
+                android:textColor="@color/secondary_text"
+                android:textSize="15sp"
                 android:visibility="gone" />
 
-            <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/listview_review"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/ReviewsText"
-                android:layout_marginTop="20dp"
-                android:nestedScrollingEnabled="true"
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginMedium"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
+                android:text="@string/similar_movies"
+                android:textAppearance="?android:subtitle"
+                android:textSize="16sp" />
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview_similar_movies"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/marginMedium"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin" />
+
+            <TextView
+                android:id="@+id/empty_similar_movies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginMedium"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:text="@string/empty"
+                android:textAppearance="?android:content"
+                android:textColor="@color/secondary_text"
+                android:textSize="15sp"
                 android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/tmdb"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_below="@+id/ReviewsText"
-                android:layout_marginTop="20dp"
-                android:gravity="bottom|right"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:src="@drawable/tmdb"
-                android:visibility="visible" />
+                android:layout_marginTop="32dp"
+                android:contentDescription="@string/tmdb_logo_attribution"
+                android:gravity="bottom|end|center"
+                android:src="@drawable/tmdb" />
         </LinearLayout>
     </ScrollView>
 

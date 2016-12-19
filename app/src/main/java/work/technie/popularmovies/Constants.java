@@ -28,8 +28,85 @@ public class Constants {
             MovieContract.Movies.DOWNLOADED,
             MovieContract.Movies.MODE
     };
+
     public static final String[] MOVIE_COLUMNS_MIN = {
             MovieContract.Movies.TABLE_NAME + "." + MovieContract.Movies._ID
+    };
+
+
+    public static final String[] MOVIE_DETAILS_COLUMNS_MIN = {
+            MovieContract.MovieDetails.TABLE_NAME + "." + MovieContract.MovieDetails._ID,
+            MovieContract.MovieDetails.MOVIE_ID
+    };
+
+    public static final String[] MOVIE_DETAILS_COLUMNS = {
+
+            MovieContract.MovieDetails.TABLE_NAME + "." + MovieContract.MovieDetails._ID,
+            MovieContract.MovieDetails.MOVIE_ID,
+            MovieContract.MovieDetails.ADULT,
+            MovieContract.MovieDetails.BACKDROP_PATH,
+            MovieContract.MovieDetails.BUDGET,
+            MovieContract.MovieDetails.HOMEPAGE,
+            MovieContract.MovieDetails.ORIGINAL_LANGUAGE,
+            MovieContract.MovieDetails.ORIGINAL_TITLE,
+            MovieContract.MovieDetails.OVERVIEW,
+            MovieContract.MovieDetails.POPULARITY,
+            MovieContract.MovieDetails.POSTER_PATH,
+            MovieContract.MovieDetails.RELEASE_DATE,
+            MovieContract.MovieDetails.REVENUE,
+            MovieContract.MovieDetails.RUNTIME,
+            MovieContract.MovieDetails.STATUS,
+            MovieContract.MovieDetails.TAGLINE,
+            MovieContract.MovieDetails.TITLE,
+            MovieContract.MovieDetails.VOTE_AVERAGE,
+            MovieContract.MovieDetails.VOTE_COUNT,
+            MovieContract.MovieDetails.FAVOURED,
+            MovieContract.MovieDetails.SHOWED,
+            MovieContract.MovieDetails.DOWNLOADED
+    };
+    public static final String[] CREW_COLUMNS = {
+
+            MovieContract.Crew.TABLE_NAME + "." + MovieContract.Crew._ID,
+            MovieContract.Crew.CREDIT_ID,
+            MovieContract.Crew.DEPARTMENT,
+            MovieContract.Crew.ID,
+            MovieContract.Crew.JOB,
+            MovieContract.Crew.NAME,
+            MovieContract.Crew.PROFILE_PATH,
+            MovieContract.Crew.MOVIE_ID
+    };
+    public static final String[] CAST_COLUMNS = {
+
+            MovieContract.Cast._ID,
+            MovieContract.Cast.CAST_ID,
+            MovieContract.Cast.CHARACTER,
+            MovieContract.Cast.CREDIT_ID,
+            MovieContract.Cast.ID,
+            MovieContract.Cast.NAME,
+            MovieContract.Cast.ORDER,
+            MovieContract.Cast.PROFILE_PATH,
+            MovieContract.Cast.MOVIE_ID
+    };
+    public static final String[] SIMILAR_MOVIE_COLUMNS = {
+
+            MovieContract.SimilarMovies.TABLE_NAME + "." + MovieContract.SimilarMovies._ID,
+            MovieContract.SimilarMovies.MOVIE_ID_OLD,
+            MovieContract.SimilarMovies.PAGE,
+            MovieContract.SimilarMovies.POSTER_PATH,
+            MovieContract.SimilarMovies.ADULT,
+            MovieContract.SimilarMovies.OVERVIEW,
+            MovieContract.SimilarMovies.RELEASE_DATE,
+            MovieContract.SimilarMovies.MOVIE_ID,
+            MovieContract.SimilarMovies.ORIGINAL_TITLE,
+            MovieContract.SimilarMovies.ORIGINAL_LANGUAGE,
+            MovieContract.SimilarMovies.TITLE,
+            MovieContract.SimilarMovies.BACKDROP_PATH,
+            MovieContract.SimilarMovies.POPULARITY,
+            MovieContract.SimilarMovies.VOTE_COUNT,
+            MovieContract.SimilarMovies.VOTE_AVERAGE,
+            MovieContract.SimilarMovies.FAVOURED,
+            MovieContract.SimilarMovies.SHOWED,
+            MovieContract.SimilarMovies.DOWNLOADED,
     };
     public static final String[] TV_COLUMNS_MIN = {
             MovieContract.TV.TABLE_NAME + "." + MovieContract.TV._ID
@@ -106,6 +183,64 @@ public class Constants {
             MovieContract.Favourites.DOWNLOADED,
             MovieContract.Favourites.SORT_BY
     };
+    public static int MOV_DETAILS_COL_ID = 0;
+    public static int MOV_DETAILS_COL_MOVIE_ID = 1;
+    public static int MOV_DETAILS_COL_ADULT = 2;
+    public static int MOV_DETAILS_COL_BACKDROP_PATH = 3;
+    public static int MOV_DETAILS_COL_BUDGET = 4;
+    public static int MOV_DETAILS_COL_HOMEPAGE = 5;
+    public static int MOV_DETAILS_COL_ORIGINAL_LANGUAGE = 6;
+    public static int MOV_DETAILS_COL_ORIGINAL_TITLE = 7;
+    public static int MOV_DETAILS_COL_OVERVIEW = 8;
+    public static int MOV_DETAILS_COL_POPULARITY = 9;
+    public static int MOV_DETAILS_COL_POSTER_PATH = 10;
+    public static int MOV_DETAILS_COL_RELEASE_DATE = 11;
+    public static int MOV_DETAILS_COL_REVENUE = 12;
+    public static int MOV_DETAILS_COL_RUNTIME = 13;
+    public static int MOV_DETAILS_COL_STATUS = 14;
+    public static int MOV_DETAILS_COL_TAGLINE = 15;
+    public static int MOV_DETAILS_COL_TITLE = 16;
+    public static int MOV_DETAILS_COL_VOTE_AVERAGE = 17;
+    public static int MOV_DETAILS_COL_VOTE_COUNT = 18;
+    public static int MOV_DETAILS_COL_FAVOURED = 19;
+    public static int MOV_DETAILS_COL_SHOWED = 20;
+    public static int MOV_DETAILS_COL_DOWNLOADED = 21;
+    public static int CREW_COL__ID = 0;
+    public static int CREW_COL_CREDIT_ID = 1;
+    public static int CREW_COL_DEPARTMENT = 2;
+    public static int CREW_COL_ID = 3;
+    public static int CREW_COL_JOB = 4;
+    public static int CREW_COL_NAME = 5;
+    public static int CREW_COL_PROFILE_PATH = 6;
+    public static int CREW_COL_MOVIE_ID = 7;
+    public static int CAST_COL__ID = 0;
+    public static int CAST_COL_CAST_ID = 1;
+    public static int CAST_COL_CHARACTER = 2;
+    public static int CAST_COL_CREDIT_ID = 3;
+    public static int CAST_COL_ID = 4;
+    public static int CAST_COL_NAME = 5;
+    public static int CAST_COL_ORDER = 6;
+    public static int CAST_COL_PROFILE_PATH = 7;
+    public static int CAST_COL_MOVIE_ID = 8;
+    public static int SIMILAR_MOV_COL_ID = 0;
+    public static int SIMILAR_MOV_COL_MOVIE_ID_OLD = 1;
+    public static int SIMILAR_MOV_COL_PAGE = 2;
+    public static int SIMILAR_MOV_COL_POSTER_PATH = 3;
+    public static int SIMILAR_MOV_COL_ADULT = 4;
+    public static int SIMILAR_MOV_COL_OVERVIEW = 5;
+    public static int SIMILAR_MOV_COL_RELEASE_DATE = 6;
+    public static int SIMILAR_MOV_COL_MOVIE_ID = 7;
+    public static int SIMILAR_MOV_COL_ORIGINAL_TITLE = 8;
+    public static int SIMILAR_MOV_COL_ORIGINAL_LANG = 9;
+    public static int SIMILAR_MOV_COL_TITLE = 10;
+    public static int SIMILAR_MOV_COL_BACKDROP_PATH = 11;
+    public static int SIMILAR_MOV_COL_POPULARITY = 12;
+    public static int SIMILAR_MOV_COL_VOTE_COUNT = 13;
+    public static int SIMILAR_MOV_COL_VOTE_AVERAGE = 14;
+    public static int SIMILAR_MOV_COL_FAVOURED = 15;
+    public static int SIMILAR_MOV_COL_SHOWED = 16;
+    public static int SIMILAR_MOV_COL_DOWNLOADED = 17;
+
     public static int MOV_COL_ID = 0;
     public static int MOV_COL_PAGE = 1;
     public static int MOV_COL_POSTER_PATH = 2;
@@ -141,12 +276,16 @@ public class Constants {
     public static int TV_COL_SHOWED = 14;
     public static int TV_COL_DOWNLOADED = 15;
     public static int TV_COL_MODE = 16;
-    public static int COL_TRAILER_ID = 0;
-    public static int COL_TRAILER_NAME = 1;
-    public static int COL_TRAILER_SIZE = 2;
-    public static int COL_TRAILER_SOURCE = 3;
-    public static int COL_TRAILER_TYPE = 4;
-    public static int COL_TRAILER_MOVIE_ID = 5;
+
+    public static int COL_VIDEOS_ID = 0;
+    public static int COL_VIDEOS__ID = 1;
+    public static int COL_VIDEOS_KEY = 2;
+    public static int COL_VIDEOS_NAME = 3;
+    public static int COL_VIDEOS_SITE = 4;
+    public static int COL_VIDEOS_SIZE = 5;
+    public static int COL_VIDEOS_TYPE = 6;
+    public static int COL_VIDEOS_MOVIE_ID = 7;
+
     public static int COL_REVIEW_ID = 0;
     public static int COL_REVIEW_PAGE = 1;
     public static int COL_REVIEW_TOTAL_PAGE = 2;
@@ -156,6 +295,7 @@ public class Constants {
     public static int COL_REVIEW_CONTENT = 6;
     public static int COL_REVIEW_URL = 7;
     public static int COL_REVIEW_MOVIE_ID = 8;
+
     public static int COL_GENRE_ID = 0;
     public static int COL_GENRE_NAME = 1;
     public static int COL_GENRE_ID_GENRE = 3;
