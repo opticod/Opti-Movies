@@ -112,6 +112,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getActivity().getWindow().setStatusBarColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark));
         }
+        reLoadData();
     }
 
     @Override
@@ -168,55 +169,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         }
 
         if (!isMovieBookmark && !isTVBookmark) {
-
-            final boolean PREF_CHILD;
-            final String PREF_LANGUAGE;
-            final String PREF_REGION;
-
-            String KEY_ADULT = "child_mode";
-            String KEY_LANGUAGE = "language";
-            String KEY_REGION = "region";
-
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
-            PREF_CHILD = sharedPreferences.getBoolean(KEY_ADULT, true);
-            PREF_LANGUAGE = sharedPreferences.getString(KEY_LANGUAGE, "");
-            PREF_REGION = sharedPreferences.getString(KEY_REGION, "");
-            int count;
-
-            Uri Uri = isMovie ? MovieContract.Movies.buildMovieUri() : MovieContract.TV.buildTVUri();
-            count = mActivity.getContentResolver().query(Uri,
-                    isMovie ? Constants.MOVIE_COLUMNS_MIN : Constants.TV_COLUMNS_MIN,
-                    MovieContract.Movies.MODE + " = ? AND " + MovieContract.Movies.PREF_ADULT + " = ? AND " + MovieContract.Movies.PREF_LANGUAGE + " = ? AND " + MovieContract.Movies.PREF_REGION + " = ? ",
-                    new String[]{MODE, String.valueOf(!PREF_CHILD), PREF_LANGUAGE, PREF_REGION},
-                    null).getCount();
-
-            if (count == 0) {
-                if (!Utility.hasNetworkConnection(getActivity())) {
-                    Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_LONG).show();
-                } else {
-                    swipeRefreshLayout.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(true);
-                        }
-                    });
-                    updateMovieList();
-                }
-            }
-            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    if (Utility.hasNetworkConnection(getActivity())) {
-                        getActivity().getContentResolver().delete(isMovie ? MovieContract.Movies.CONTENT_URI : MovieContract.TV.CONTENT_URI,
-                                MovieContract.Movies.MODE + " = ? AND " + MovieContract.Movies.PREF_ADULT + " = ? AND " + MovieContract.Movies.PREF_LANGUAGE + " = ? AND " + MovieContract.Movies.PREF_REGION + " = ? ",
-                                new String[]{MODE, String.valueOf(!PREF_CHILD), PREF_LANGUAGE, PREF_REGION});
-                        updateMovieList();
-                    } else {
-                        Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_SHORT).show();
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                }
-            });
+            reLoadData();
         }
 
         listAdapter =
@@ -271,6 +224,65 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
 
         return rootView;
+    }
+
+    public void reLoadData() {
+        Activity mActivity = getActivity();
+        if (mActivity != null) {
+            final boolean PREF_CHILD;
+            final String PREF_LANGUAGE;
+            final String PREF_REGION;
+
+            String KEY_ADULT = "child_mode";
+            String KEY_LANGUAGE = "language";
+            String KEY_REGION = "region";
+
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
+            PREF_CHILD = sharedPreferences.getBoolean(KEY_ADULT, true);
+            PREF_LANGUAGE = sharedPreferences.getString(KEY_LANGUAGE, "");
+            PREF_REGION = sharedPreferences.getString(KEY_REGION, "");
+            int count = 0;
+
+            Uri Uri = isMovie ? MovieContract.Movies.buildMovieUri() : MovieContract.TV.buildTVUri();
+            Cursor cursor = mActivity.getContentResolver().query(Uri,
+                    isMovie ? Constants.MOVIE_COLUMNS_MIN : Constants.TV_COLUMNS_MIN,
+                    MovieContract.Movies.MODE + " = ? AND " + MovieContract.Movies.PREF_ADULT + " = ? AND " + MovieContract.Movies.PREF_LANGUAGE + " = ? AND " + MovieContract.Movies.PREF_REGION + " = ? ",
+                    new String[]{MODE, String.valueOf(!PREF_CHILD), PREF_LANGUAGE, PREF_REGION},
+                    null);
+            if (cursor != null) {
+                count = cursor.getCount();
+                cursor.close();
+            }
+
+            if (count == 0) {
+                if (!Utility.hasNetworkConnection(getActivity())) {
+                    Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_LONG).show();
+                } else {
+                    swipeRefreshLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipeRefreshLayout.setRefreshing(true);
+                        }
+                    });
+                    updateMovieList();
+                }
+            }
+
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    if (Utility.hasNetworkConnection(getActivity())) {
+                        getActivity().getContentResolver().delete(isMovie ? MovieContract.Movies.CONTENT_URI : MovieContract.TV.CONTENT_URI,
+                                MovieContract.Movies.MODE + " = ? AND " + MovieContract.Movies.PREF_ADULT + " = ? AND " + MovieContract.Movies.PREF_LANGUAGE + " = ? AND " + MovieContract.Movies.PREF_REGION + " = ? ",
+                                new String[]{MODE, String.valueOf(!PREF_CHILD), PREF_LANGUAGE, PREF_REGION});
+                        updateMovieList();
+                    } else {
+                        Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_SHORT).show();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }
+            });
+        }
     }
 
     @Override

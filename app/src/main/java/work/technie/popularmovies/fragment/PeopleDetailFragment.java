@@ -106,13 +106,17 @@ public class PeopleDetailFragment extends Fragment implements LoaderManager.Load
             }
         });
 
-        int count;
+        int count = 0;
 
         Uri Uri = MovieContract.People.buildPersonUri();
-        count = getActivity().getContentResolver().query(Uri, Constants.PEOPLE_DETAILS_COLUMNS_MIN,
+        Cursor cursor = getActivity().getContentResolver().query(Uri, Constants.PEOPLE_DETAILS_COLUMNS_MIN,
                 MovieContract.People.ID + " = ? ",
                 new String[]{people_Id},
-                null).getCount();
+                null);
+        if (cursor != null) {
+            count = cursor.getCount();
+            cursor.close();
+        }
 
         if (count == 0) {
             if (!Utility.hasNetworkConnection(getActivity())) {

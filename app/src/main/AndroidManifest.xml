@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="work.technie.popularmovies">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CLEAR_APP_CACHE" />
     <uses-permission
         android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application

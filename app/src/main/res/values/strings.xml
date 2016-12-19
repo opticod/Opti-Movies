@@ -51,5 +51,6 @@
     <string name="birthday">Birthday</string>
     <string name="place_of_birth">Place of Birth</string>
     <string name="biography">Biography</string>
+    <string name="pref_description_delete">Delete all saved bookmarks, database storage and cache.</string>
 
 </resources>

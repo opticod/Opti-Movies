@@ -35,7 +35,6 @@ public class GenreMovieAdapter extends
         RecyclerView.Adapter<GenreMovieAdapter.ViewHolder> {
     private static final String LOG_TAG = GenreMovieAdapter.class.getSimpleName();
     private Cursor cursor;
-    private Context context;
 
     public GenreMovieAdapter(Cursor cursor) {
         this.cursor = cursor;
@@ -43,7 +42,7 @@ public class GenreMovieAdapter extends
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        context = parent.getContext();
+        Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View view = inflater.inflate(R.layout.list_genre_movie, parent, false);
@@ -70,7 +69,7 @@ public class GenreMovieAdapter extends
 
         final TextView genre;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             genre = (TextView) view.findViewById(R.id.genre);
         }

@@ -132,7 +132,7 @@ public class MovieContract {
             return CONTENT_URI.buildUpon().appendPath(MovieId).build();
         }
 
-        public static Uri buildMovieUri() {
+        public static Uri buildSimilarMovieUri() {
             return CONTENT_URI.buildUpon().build();
         }
 
@@ -226,7 +226,7 @@ public class MovieContract {
             return CONTENT_URI.buildUpon().appendPath(MovieId).build();
         }
 
-        public static Uri buildMovieUri() {
+        public static Uri buildCastUri() {
             return CONTENT_URI.buildUpon().build();
         }
 
@@ -460,7 +460,7 @@ public class MovieContract {
             return CONTENT_URI.buildUpon().appendPath(MovieId).build();
         }
 
-        public static Uri buildMovieUri() {
+        public static Uri buildVideosUri() {
             return CONTENT_URI.buildUpon().build();
         }
 
@@ -538,7 +538,7 @@ public class MovieContract {
             return CONTENT_URI.buildUpon().appendPath(MovieId).build();
         }
 
-        public static Uri buildMovieUri() {
+        public static Uri buildGenreUri() {
             return CONTENT_URI.buildUpon().build();
         }
 

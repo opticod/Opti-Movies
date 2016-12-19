@@ -15,4 +15,9 @@
         android:key="language"
         android:title="@string/pref_language" />
 
+    <Preference
+        android:key="delete"
+        android:summary="@string/pref_description_delete"
+        android:title="Delete Database" />
+
 </PreferenceScreen>

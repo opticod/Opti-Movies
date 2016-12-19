@@ -25,6 +25,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 import work.technie.popularmovies.R;
 
 import static work.technie.popularmovies.Constants.COL_REVIEW_AUTHOR;
@@ -63,7 +65,7 @@ public class ReviewMovieAdapter extends
 
         viewHolder.author.setText(Html.fromHtml("<font color=\"#212121\">By " + author_name + ":</font>"));
         viewHolder.contentView.setText(content);
-        viewHolder.urlView.setText("Look more at:  " + url);
+        viewHolder.urlView.setText(String.format(Locale.ENGLISH, "Look more at:  %s", url));
     }
 
     @Override
@@ -76,7 +78,7 @@ public class ReviewMovieAdapter extends
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public final TextView urlView;
+        final TextView urlView;
         final TextView author;
         final TextView contentView;
 

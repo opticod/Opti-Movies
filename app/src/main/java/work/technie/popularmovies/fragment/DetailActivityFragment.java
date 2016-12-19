@@ -349,8 +349,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                     null,
                     null
             );
-            if (mCursor != null) {
-                mCursor.moveToFirst();
+            if (!(mCursor == null || !(mCursor.moveToFirst()) || mCursor.getCount() == 0)) {
                 firstVideoLink += mCursor.getString(Constants.COL_VIDEOS_KEY);
                 mCursor.close();
             }
@@ -471,13 +470,15 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             }
         });
 
-        int count;
+        int count = 0;
 
         Uri Uri = MovieContract.MovieDetails.buildMovieDetailsUri();
-        count = getActivity().getContentResolver().query(Uri, Constants.MOVIE_DETAILS_COLUMNS_MIN,
+        Cursor cursor = getActivity().getContentResolver().query(Uri, Constants.MOVIE_DETAILS_COLUMNS_MIN,
                 MovieContract.MovieDetails.MOVIE_ID + " = ? ",
                 new String[]{movie_Id},
-                null).getCount();
+                null);
+        if (cursor != null)
+            count = cursor.getCount();
 
         if (count == 0) {
             if (!Utility.hasNetworkConnection(getActivity())) {

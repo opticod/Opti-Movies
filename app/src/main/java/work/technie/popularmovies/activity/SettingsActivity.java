@@ -8,11 +8,14 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Locale;
 
 import work.technie.popularmovies.R;
+import work.technie.popularmovies.data.MovieContract;
 
 /**
  * Created by anupam on 16/12/16.
@@ -94,6 +97,20 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         lp.setEntryValues(countryCode);
     }
 
+    public static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (String mChildren : children) {
+                boolean success = deleteDir(new File(dir, mChildren));
+                if (!success) {
+                    return false;
+                }
+            }
+            return dir.delete();
+        } else
+            return dir != null && dir.isFile() && dir.delete();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -115,6 +132,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         String KEY_REGION = "region";
         String KEY_LANGUAGE = "language";
+        String KEY_DELETE = "delete";
 
         final ListPreference listPreferenceRegion = (ListPreference) findPreference(KEY_REGION);
         final ListPreference listPreferenceLanguage = (ListPreference) findPreference(KEY_LANGUAGE);
@@ -146,6 +164,36 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             listPreferenceLanguage.setSummary(listPreferenceLanguage.getEntries()[prefIndex]);
         }
 
+        Preference deletePreference = findPreference(KEY_DELETE);
+        deletePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                deleteCache();
+                getContentResolver().delete(MovieContract.Movies.buildMovieUri(), null, null);
+                getContentResolver().delete(MovieContract.TV.buildTVUri(), null, null);
+                getContentResolver().delete(MovieContract.Videos.buildVideosUri(), null, null);
+                getContentResolver().delete(MovieContract.SimilarMovies.buildSimilarMovieUri(), null, null);
+                getContentResolver().delete(MovieContract.Cast.buildCastUri(), null, null);
+                getContentResolver().delete(MovieContract.Crew.buildCrewUri(), null, null);
+                getContentResolver().delete(MovieContract.People.buildPersonUri(), null, null);
+                getContentResolver().delete(MovieContract.Reviews.buildReviewUri(), null, null);
+                getContentResolver().delete(MovieContract.Genres.buildGenreUri(), null, null);
+                getContentResolver().delete(MovieContract.MovieDetails.buildMovieDetailsUri(), null, null);
+                getContentResolver().delete(MovieContract.FavouritesTVs.buildTVUri(), null, null);
+                getContentResolver().delete(MovieContract.FavouritesMovies.buildMovieUri(), null, null);
+                Toast.makeText(getApplicationContext(), "Successfully Deleted", Toast.LENGTH_SHORT).show();
+
+                return false;
+            }
+        });
+    }
+
+    public void deleteCache() {
+        try {
+            File dir = getCacheDir();
+            deleteDir(dir);
+        } catch (Exception ignored) {
+        }
     }
 
     @Override
