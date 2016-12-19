@@ -39,6 +39,11 @@ public class Constants {
             MovieContract.MovieDetails.MOVIE_ID
     };
 
+    public static final String[] PEOPLE_DETAILS_COLUMNS_MIN = {
+            MovieContract.People.TABLE_NAME + "." + MovieContract.People._ID,
+            MovieContract.People.ID
+    };
+
     public static final String[] MOVIE_DETAILS_COLUMNS = {
 
             MovieContract.MovieDetails.TABLE_NAME + "." + MovieContract.MovieDetails._ID,
@@ -162,6 +167,21 @@ public class Constants {
             MovieContract.Genres.TABLE_NAME + "." + MovieContract.Genres.ID_GENRES,
             MovieContract.Genres.TABLE_NAME + "." + MovieContract.Genres.MOVIE_ID
     };
+    public static final String[] PEOPLE_COLUMNS = {
+
+            MovieContract.People.TABLE_NAME + "." + MovieContract.People._ID,
+            MovieContract.People.ADULT,
+            MovieContract.People.BIOGRAPHY,
+            MovieContract.People.BIRTHDAY,
+            MovieContract.People.DEATHDAY,
+            MovieContract.People.GENDER,
+            MovieContract.People.HOMEPAGE,
+            MovieContract.People.ID,
+            MovieContract.People.NAME,
+            MovieContract.People.PLACE_OF_BIRTH,
+            MovieContract.People.POPULARITY,
+            MovieContract.People.PROFILE_PATH
+    };
     private static final String[] FAVOURITE_MOVIE_COLUMNS = {
 
             MovieContract.Favourites.TABLE_NAME + "." + MovieContract.Favourites._ID,
@@ -183,6 +203,20 @@ public class Constants {
             MovieContract.Favourites.DOWNLOADED,
             MovieContract.Favourites.SORT_BY
     };
+    public static int PEOPLE_COL__ID = 0;
+    public static int PEOPLE_COL_ADULT = 1;
+    public static int PEOPLE_COL_BIOGRAPHY = 2;
+    public static int PEOPLE_COL_BIRTHDAY = 3;
+    public static int PEOPLE_COL_DEATHDAY = 4;
+    public static int PEOPLE_COL_GENDER = 5;
+    public static int PEOPLE_COL_HOMEPAGE = 6;
+    public static int PEOPLE_COL_ID = 7;
+    public static int PEOPLE_COL_NAME = 8;
+    public static int PEOPLE_COL_PLACE_OF_BIRTH = 9;
+    public static int PEOPLE_COL_POPULARITY = 10;
+    public static int PEOPLE_COL_PROFILE_PATH = 11;
+
+
     public static int MOV_DETAILS_COL_ID = 0;
     public static int MOV_DETAILS_COL_MOVIE_ID = 1;
     public static int MOV_DETAILS_COL_ADULT = 2;

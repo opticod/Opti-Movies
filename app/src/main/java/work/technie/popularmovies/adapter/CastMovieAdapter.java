@@ -32,6 +32,7 @@ import com.squareup.picasso.Picasso;
 import work.technie.popularmovies.Constants;
 import work.technie.popularmovies.R;
 import work.technie.popularmovies.utils.RoundedTransformation;
+import work.technie.popularmovies.utils.ViewHolderUtil;
 
 /**
  * Created by anupam on 27/12/15.
@@ -41,6 +42,7 @@ public class CastMovieAdapter extends RecyclerView.Adapter<CastMovieAdapter.View
 
     private Cursor cursor;
     private Context context;
+    private ViewHolderUtil.SetOnClickListener listener;
 
     public CastMovieAdapter(Cursor cursor) {
         this.cursor = cursor;
@@ -100,6 +102,7 @@ public class CastMovieAdapter extends RecyclerView.Adapter<CastMovieAdapter.View
                 });
 
         holder.profile.setAdjustViewBounds(true);
+        holder.setItemClickListener(listener);
     }
 
     @Override
@@ -110,17 +113,42 @@ public class CastMovieAdapter extends RecyclerView.Adapter<CastMovieAdapter.View
         return 0;
     }
 
+    public Cursor getCursor() {
+        return cursor;
+    }
+
+    public void setOnClickListener(ViewHolderUtil.SetOnClickListener clickListener) {
+        this.listener = clickListener;
+    }
+
+    public interface SetOnClickListener extends ViewHolderUtil.SetOnClickListener {
+        void onItemClick(int position, View itemView);
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         final ImageView profile;
         final TextView name;
         final TextView character;
+        private ViewHolderUtil.SetOnClickListener listener;
 
-        ViewHolder(View view) {
+        ViewHolder(final View view) {
             super(view);
             profile = (ImageView) view.findViewById(R.id.cast_image);
             name = (TextView) view.findViewById(R.id.cast_name);
             character = (TextView) view.findViewById(R.id.cast_character);
+            view.setClickable(true);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        listener.onItemClick(getAdapterPosition(), view);
+                    }
+                }
+            });
+        }
+
+        void setItemClickListener(ViewHolderUtil.SetOnClickListener itemClickListener) {
+            this.listener = itemClickListener;
         }
     }
-
 }

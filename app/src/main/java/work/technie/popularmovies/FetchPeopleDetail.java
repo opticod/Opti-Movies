@@ -42,8 +42,6 @@ public class FetchPeopleDetail extends AsyncTask<String, Void, Void> {
     private void getMovieDataFromJson(String movieJsonStr)
             throws JSONException {
 
-        final String POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185";
-
         try {
             JSONObject profileJson = new JSONObject(movieJsonStr);
             ContentValues[] cvArray = new ContentValues[1];
@@ -71,26 +69,25 @@ public class FetchPeopleDetail extends AsyncTask<String, Void, Void> {
             place_of_birth = profileJson.getString(People.PLACE_OF_BIRTH);
             popularity = profileJson.getString(People.POPULARITY);
 
-            profile_path = Uri.parse(POSTER_BASE_URL).buildUpon().
-                    appendEncodedPath(profileJson.getString(People.PROFILE_PATH)).build().toString();
+            profile_path = profileJson.getString(People.PROFILE_PATH);
 
-            ContentValues movieValues = new ContentValues();
+            ContentValues profileValues = new ContentValues();
 
             // Then add the data, along with the corresponding name of the data type,
             // so the content provider knows what kind of value is being inserted.
 
-            movieValues.put(People.ADULT, adult);
-            movieValues.put(People.BIOGRAPHY, biography);
-            movieValues.put(People.BIRTHDAY, birthday);
-            movieValues.put(People.DEATHDAY, deathday);
-            movieValues.put(People.GENDER, gender);
-            movieValues.put(People.HOMEPAGE, homepage);
-            movieValues.put(People.ID, id);
-            movieValues.put(People.NAME, name);
-            movieValues.put(People.PLACE_OF_BIRTH, place_of_birth);
-            movieValues.put(People.POPULARITY, popularity);
-            movieValues.put(People.PROFILE_PATH, profile_path);
-            cvArray[0] = movieValues;
+            profileValues.put(People.ADULT, adult);
+            profileValues.put(People.BIOGRAPHY, biography);
+            profileValues.put(People.BIRTHDAY, birthday);
+            profileValues.put(People.DEATHDAY, deathday);
+            profileValues.put(People.GENDER, gender);
+            profileValues.put(People.HOMEPAGE, homepage);
+            profileValues.put(People.ID, id);
+            profileValues.put(People.NAME, name);
+            profileValues.put(People.PLACE_OF_BIRTH, place_of_birth);
+            profileValues.put(People.POPULARITY, popularity);
+            profileValues.put(People.PROFILE_PATH, profile_path);
+            cvArray[0] = profileValues;
             mContext.getContentResolver().bulkInsert(People.CONTENT_URI, cvArray);
 
         } catch (JSONException e) {

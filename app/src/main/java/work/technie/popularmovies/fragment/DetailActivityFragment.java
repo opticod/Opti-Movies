@@ -29,6 +29,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -56,7 +57,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import work.technie.popularmovies.Constants;
@@ -102,6 +102,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     private static final String MOVIE_SHARE_HASHTAG = " #PopularMovieApp";
     private static final int MOVIE_DETAILS_LOADER = 0;
     private final String DETAIL_FRAGMENT_TAG = "DFTAG";
+    private final String PROFILE_DETAIL_FRAGMENT_TAG = "PDFTAG";
 
     private View rootView;
     private String movie_Id;
@@ -376,6 +377,72 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                 }
             });
 
+            castListAdapter.setOnClickListener(new CastMovieAdapter.SetOnClickListener() {
+                @Override
+                public void onItemClick(int position, View view) {
+                    Cursor cursor = castListAdapter.getCursor();
+                    cursor.moveToPosition(position);
+                    Activity mActivity = getActivity();
+
+                    PeopleDetailFragment fragment = new PeopleDetailFragment();
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        current.setSharedElementReturnTransition(TransitionInflater.from(
+                                mActivity).inflateTransition(R.transition.change_image_trans));
+                        current.setExitTransition(TransitionInflater.from(
+                                mActivity).inflateTransition(android.R.transition.fade));
+
+                        fragment.setSharedElementEnterTransition(TransitionInflater.from(
+                                mActivity).inflateTransition(R.transition.change_image_trans));
+                        fragment.setEnterTransition(TransitionInflater.from(
+                                mActivity).inflateTransition(android.R.transition.fade));
+                    }
+
+                    Bundle arguments = new Bundle();
+                    arguments.putString(Intent.EXTRA_TEXT, cursor.getString(Constants.CAST_COL_ID));
+                    fragment.setArguments(arguments);
+                    FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                            .addToBackStack(null)
+                            .commit();
+
+                }
+            });
+
+            crewListAdapter.setOnClickListener(new CrewMovieAdapter.SetOnClickListener() {
+                @Override
+                public void onItemClick(int position, View view) {
+                    Cursor cursor = crewListAdapter.getCursor();
+                    cursor.moveToPosition(position);
+                    Activity mActivity = getActivity();
+
+                    PeopleDetailFragment fragment = new PeopleDetailFragment();
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        current.setSharedElementReturnTransition(TransitionInflater.from(
+                                mActivity).inflateTransition(R.transition.change_image_trans));
+                        current.setExitTransition(TransitionInflater.from(
+                                mActivity).inflateTransition(android.R.transition.fade));
+
+                        fragment.setSharedElementEnterTransition(TransitionInflater.from(
+                                mActivity).inflateTransition(R.transition.change_image_trans));
+                        fragment.setEnterTransition(TransitionInflater.from(
+                                mActivity).inflateTransition(android.R.transition.fade));
+                    }
+
+                    Bundle arguments = new Bundle();
+                    arguments.putString(Intent.EXTRA_TEXT, cursor.getString(Constants.CREW_COL_ID));
+                    fragment.setArguments(arguments);
+                    FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                            .addToBackStack(null)
+                            .commit();
+
+                }
+            });
+
         }
     }
 
@@ -548,7 +615,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                     SimpleDateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy", Locale.getDefault());
 
                     ((TextView) rootView.findViewById(R.id.release_date))
-                            .setText(formatter.format(date));
+                            .setText(date != null ? formatter.format(date) : "-");
                 } else {
                     ((TextView) rootView.findViewById(R.id.release_date))
                             .setText("-");
@@ -609,18 +676,13 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     }
 
     public void changeSystemToolbarColor(Palette palette) {
-        List<Palette.Swatch> vibrant = palette.getSwatches();
-        for (Palette.Swatch s : vibrant) {
-            if (s != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    Activity mActivity = getActivity();
-                    if (mActivity != null) {
-                        mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                        mActivity.getWindow().setStatusBarColor(s.getRgb());
-                    }
-                }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Activity mActivity = getActivity();
+            if (mActivity != null) {
+                int color = palette.getDarkMutedColor(ContextCompat.getColor(mActivity, R.color.colorPrimaryDark));
+                mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                mActivity.getWindow().setStatusBarColor(color);
             }
         }
-
     }
 }

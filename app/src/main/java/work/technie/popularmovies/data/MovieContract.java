@@ -263,12 +263,12 @@ public class MovieContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        //content://work....../people/MovieId
-        public static Uri buildPeopleUriWithMovieId(String MovieId) {
-            return CONTENT_URI.buildUpon().appendPath(MovieId).build();
+        //content://work....../people/peopleId
+        public static Uri buildPeopleUriWithPeopleId(String peopleId) {
+            return CONTENT_URI.buildUpon().appendPath(peopleId).build();
         }
 
-        public static Uri buildMovieUri() {
+        public static Uri buildPersonUri() {
             return CONTENT_URI.buildUpon().build();
         }
 
