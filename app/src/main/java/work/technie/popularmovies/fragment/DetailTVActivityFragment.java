@@ -599,7 +599,7 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
                 double vote = Double.parseDouble(votAvg);
                 votAvg = String.valueOf((double) Math.round(vote * 10d) / 10d);
                 ((TextView) rootView.findViewById(R.id.vote))
-                        .setText(votAvg);
+                        .setText(votAvg.equals("10.0") ? "10" : votAvg);
                 String backdropURL = data.getString(TV_DETAILS_COL_BACKDROP_PATH);
                 final ImageView backdrop = (ImageView) rootView.findViewById(R.id.backdropImg);
 

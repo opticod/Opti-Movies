@@ -571,7 +571,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
                 double vote = Double.parseDouble(votAvg);
                 votAvg = String.valueOf((double) Math.round(vote * 10d) / 10d);
                 ((TextView) rootView.findViewById(R.id.vote))
-                        .setText(votAvg);
+                        .setText(votAvg.equals("10.0") ? "10" : votAvg);
                 String backdropURL = data.getString(MOV_COL_BACKDROP_PATH);
                 final ImageView backdrop = (ImageView) rootView.findViewById(R.id.backdropImg);
 
