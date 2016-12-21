@@ -121,8 +121,6 @@ public class MovieProvider extends ContentProvider {
         matcher.addURI(authority, MovieContract.PATH_TV_SEASONS + "/*", TV_SEASONS_WITH_ID);
         matcher.addURI(authority, MovieContract.PATH_TV_VIDEOS, TV_VIDEOS);
         matcher.addURI(authority, MovieContract.PATH_TV_VIDEOS + "/*", TV_VIDEOS_WITH_ID);
-        matcher.addURI(authority, MovieContract.PATH_TV_SEASONS, TV_SEASONS);
-        matcher.addURI(authority, MovieContract.PATH_TV_SEASONS + "/*", TV_SEASONS_WITH_ID);
         matcher.addURI(authority, MovieContract.PATH_TV_CAST, TV_CAST);
         matcher.addURI(authority, MovieContract.PATH_TV_CAST + "/*", TV_CAST_WITH_ID);
         matcher.addURI(authority, MovieContract.PATH_TV_SIMILAR, TV_SIMILAR);
@@ -667,7 +665,7 @@ public class MovieProvider extends ContentProvider {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         MovieContract.TVSeasons.TABLE_NAME,
                         projection,
-                        MovieContract.TV.TV_ID + " = ?",
+                        MovieContract.TVSeasons.TV_ID + " = ?",
                         new String[]{String.valueOf(ContentUris.parseId(uri))},
                         null,
                         null,

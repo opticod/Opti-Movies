@@ -783,7 +783,7 @@ public class MovieContract {
         }
 
         //content://work....../favourites_tv/tvId
-        public static Uri buildMoviesUriWithMovieId(String tvId) {
+        public static Uri buildMoviesUriWithTvId(String tvId) {
             return CONTENT_URI.buildUpon().appendPath(tvId).build();
         }
 
