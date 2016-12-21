@@ -13,5 +13,6 @@
     <dimen name="spacing_normal">16dp</dimen>
     <dimen name="image_width">120dp</dimen>
     <dimen name="marginMedium">16dp</dimen>
+    <dimen name="detail_backdrop_height">256dp</dimen>
 
 </resources>

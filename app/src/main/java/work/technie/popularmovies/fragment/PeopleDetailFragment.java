@@ -8,13 +8,16 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +60,7 @@ public class PeopleDetailFragment extends Fragment implements LoaderManager.Load
     private View rootView;
     private String people_Id;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private CollapsingToolbarLayout collapsingToolbar;
 
     private void updateDetailList() {
         FetchPeopleDetail fetchTask = new FetchPeopleDetail(getActivity());
@@ -77,6 +81,14 @@ public class PeopleDetailFragment extends Fragment implements LoaderManager.Load
             imageBitmap = arguments.getParcelable("POSTER_IMAGE");
         }
         rootView = inflater.inflate(R.layout.fragment_people, container, false);
+
+        final Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        collapsingToolbar =
+                (CollapsingToolbarLayout) rootView.findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar.setTitle(" ");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             rootView.findViewById(R.id.profile_img).setTransitionName(transitionName);
@@ -179,8 +191,7 @@ public class PeopleDetailFragment extends Fragment implements LoaderManager.Load
 
                 defaultShow();
                 String name = data.getString(PEOPLE_COL_NAME).trim();
-                ((TextView) rootView.findViewById(R.id.name))
-                        .setText(name.isEmpty() || name.equalsIgnoreCase("null") ? "-" : name);
+                collapsingToolbar.setTitle(name.isEmpty() || name.equalsIgnoreCase("null") ? "-" : name);
 
                 String biography = data.getString(PEOPLE_COL_BIOGRAPHY).trim();
                 ((TextView) rootView.findViewById(R.id.biography))
@@ -254,8 +265,10 @@ public class PeopleDetailFragment extends Fragment implements LoaderManager.Load
             Activity mActivity = getActivity();
             if (mActivity != null) {
                 int color = palette.getDarkMutedColor(ContextCompat.getColor(mActivity, R.color.colorPrimaryDark));
+                final int color2 = palette.getMutedColor(ContextCompat.getColor(mActivity, R.color.colorPrimary));
                 mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
                 mActivity.getWindow().setStatusBarColor(color);
+                collapsingToolbar.setContentScrimColor(color2);
             }
         }
     }
