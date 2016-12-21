@@ -181,6 +181,19 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 getContentResolver().delete(MovieContract.MovieDetails.buildMovieDetailsUri(), null, null);
                 getContentResolver().delete(MovieContract.FavouritesTVs.buildTVUri(), null, null);
                 getContentResolver().delete(MovieContract.FavouritesMovies.buildMovieUri(), null, null);
+
+                getContentResolver().delete(MovieContract.TV.buildTVUri(), null, null);
+                getContentResolver().delete(MovieContract.TVDetails.buildTVDetailsUri(), null, null);
+                getContentResolver().delete(MovieContract.TVCast.buildCastUri(), null, null);
+                getContentResolver().delete(MovieContract.TVCreator.buildTVCreatorUri(), null, null);
+                getContentResolver().delete(MovieContract.TVEpisodeRuntime.buildTVEpisodeRuntimeUri(), null, null);
+                getContentResolver().delete(MovieContract.TVGenres.buildGenreUri(), null, null);
+                getContentResolver().delete(MovieContract.TVNetworks.buildGenreUri(), null, null);
+                getContentResolver().delete(MovieContract.TVSeasons.buildGenreUri(), null, null);
+                getContentResolver().delete(MovieContract.TVSimilar.buildSimilarTVUri(), null, null);
+                getContentResolver().delete(MovieContract.TVEpisodeRuntime.buildTVEpisodeRuntimeUri(), null, null);
+                getContentResolver().delete(MovieContract.TVVideos.buildTVVideosUri(), null, null);
+
                 Toast.makeText(getApplicationContext(), "Successfully Deleted", Toast.LENGTH_SHORT).show();
 
                 return false;
