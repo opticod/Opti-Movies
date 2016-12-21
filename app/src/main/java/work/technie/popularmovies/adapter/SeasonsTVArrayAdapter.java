@@ -29,30 +29,24 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.util.Locale;
+
 import work.technie.popularmovies.Constants;
 import work.technie.popularmovies.R;
 import work.technie.popularmovies.utils.RoundedTransformation;
 import work.technie.popularmovies.utils.ViewHolderUtil;
 
-/**
- * Created by anupam on 27/12/15.
- */
-public class CastMovieAdapter extends RecyclerView.Adapter<CastMovieAdapter.ViewHolder> {
-    private static final String LOG_TAG = CastMovieAdapter.class.getSimpleName();
+
+public class SeasonsTVArrayAdapter extends
+        RecyclerView.Adapter<SeasonsTVArrayAdapter.ViewHolder> {
+    private static final String LOG_TAG = SeasonsTVArrayAdapter.class.getSimpleName();
 
     private Cursor cursor;
     private Context context;
     private ViewHolderUtil.SetOnClickListener listener;
-    private boolean isTV;
 
-    public CastMovieAdapter(Cursor cursor) {
+    public SeasonsTVArrayAdapter(Cursor cursor) {
         this.cursor = cursor;
-        this.isTV = false;
-    }
-
-    public CastMovieAdapter(Cursor cursor, boolean isTV) {
-        this.cursor = cursor;
-        this.isTV = isTV;
     }
 
     @Override
@@ -60,30 +54,25 @@ public class CastMovieAdapter extends RecyclerView.Adapter<CastMovieAdapter.View
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View view = inflater.inflate(R.layout.list_cast_movie, parent, false);
+        View view = inflater.inflate(R.layout.list_item_tv_seasons, parent, false);
 
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder viewHolder, int position) {
         cursor.moveToPosition(position);
-        final String cast_name = cursor.getString(isTV ? Constants.TV_CAST_COL_NAME : Constants.CAST_COL_NAME);
-        final String cast_character = cursor.getString(isTV ? Constants.TV_CAST_COL_CHARACTER : Constants.CAST_COL_CHARACTER);
-        holder.name.setText(cast_name);
-        holder.character.setText(cast_character);
 
-        final String PROFILE_BASE_URL = "http://image.tmdb.org/t/p/w92";
-        final String profileURL = PROFILE_BASE_URL + cursor.getString(isTV ? Constants.TV_CAST_COL_PROFILE_PATH : Constants.CAST_COL_PROFILE_PATH);
-
+        final String POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185";
+        final String url = POSTER_BASE_URL + cursor.getString(Constants.TV_SEASON_COL_POSTER_PATH);
         Picasso
                 .with(context)
-                .load(profileURL)
+                .load(url)
                 .networkPolicy(NetworkPolicy.OFFLINE)
                 .transform(new RoundedTransformation(10, 10))
                 .fit()
                 .centerCrop()
-                .into(holder.profile, new Callback() {
+                .into(viewHolder.imageView, new Callback() {
                     @Override
                     public void onSuccess() {
                     }
@@ -92,11 +81,11 @@ public class CastMovieAdapter extends RecyclerView.Adapter<CastMovieAdapter.View
                     public void onError() {
                         Picasso
                                 .with(context)
-                                .load(profileURL)
-                                .error(R.drawable.ic_account_circle_black_48dp)
+                                .load(url)
+                                .error(R.mipmap.ic_launcher)
                                 .fit()
                                 .centerCrop()
-                                .into(holder.profile, new Callback() {
+                                .into(viewHolder.imageView, new Callback() {
                                     @Override
                                     public void onSuccess() {
                                     }
@@ -107,9 +96,10 @@ public class CastMovieAdapter extends RecyclerView.Adapter<CastMovieAdapter.View
                                 });
                     }
                 });
-
-        holder.profile.setAdjustViewBounds(true);
-        holder.setItemClickListener(listener);
+        viewHolder.imageView.setAdjustViewBounds(true);
+        viewHolder.name.setText(String.format(Locale.ENGLISH, "EPISODE COUNT: %s", cursor.getString(Constants.TV_SEASON_COL_EPISODE_COUNT)));
+        viewHolder.count.setText(String.format(Locale.ENGLISH, "%s.", cursor.getString(Constants.TV_SEASON_COL_SEASON_NUMBER)));
+        viewHolder.setItemClickListener(listener);
     }
 
     @Override
@@ -133,16 +123,17 @@ public class CastMovieAdapter extends RecyclerView.Adapter<CastMovieAdapter.View
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        final ImageView profile;
+
+        final ImageView imageView;
         final TextView name;
-        final TextView character;
+        final TextView count;
         private ViewHolderUtil.SetOnClickListener listener;
 
         ViewHolder(final View view) {
             super(view);
-            profile = (ImageView) view.findViewById(R.id.cast_image);
-            name = (TextView) view.findViewById(R.id.cast_name);
-            character = (TextView) view.findViewById(R.id.cast_character);
+            imageView = (ImageView) view.findViewById(R.id.similar_movie_poster);
+            name = (TextView) view.findViewById(R.id.name);
+            count = (TextView) view.findViewById(R.id.season_count);
             view.setClickable(true);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -157,5 +148,6 @@ public class CastMovieAdapter extends RecyclerView.Adapter<CastMovieAdapter.View
         void setItemClickListener(ViewHolderUtil.SetOnClickListener itemClickListener) {
             this.listener = itemClickListener;
         }
+
     }
 }

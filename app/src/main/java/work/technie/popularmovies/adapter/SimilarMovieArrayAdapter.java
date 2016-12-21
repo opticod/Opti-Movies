@@ -42,9 +42,16 @@ public class SimilarMovieArrayAdapter extends
     private Cursor cursor;
     private Context context;
     private ViewHolderUtil.SetOnClickListener listener;
+    private boolean isTV;
 
     public SimilarMovieArrayAdapter(Cursor cursor) {
         this.cursor = cursor;
+        this.isTV = false;
+    }
+
+    public SimilarMovieArrayAdapter(Cursor cursor, boolean isTV) {
+        this.cursor = cursor;
+        this.isTV = isTV;
     }
 
     @Override
@@ -61,7 +68,7 @@ public class SimilarMovieArrayAdapter extends
     public void onBindViewHolder(final ViewHolder viewHolder, int position) {
         cursor.moveToPosition(position);
 
-        final String url = cursor.getString(Constants.SIMILAR_MOV_COL_POSTER_PATH);
+        final String url = cursor.getString(isTV ? Constants.TV_SIMILAR_COL_POSTER_PATH : Constants.SIMILAR_MOV_COL_POSTER_PATH);
         Picasso
                 .with(context)
                 .load(url)
@@ -94,7 +101,7 @@ public class SimilarMovieArrayAdapter extends
                     }
                 });
         viewHolder.imageView.setAdjustViewBounds(true);
-        viewHolder.name.setText(cursor.getString(Constants.SIMILAR_MOV_COL_ORIGINAL_TITLE));
+        viewHolder.name.setText(cursor.getString(isTV ? Constants.TV_SIMILAR_COL_ORIGINAL_NAME : Constants.SIMILAR_MOV_COL_ORIGINAL_TITLE));
         viewHolder.setItemClickListener(listener);
     }
 
