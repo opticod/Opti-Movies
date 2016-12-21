@@ -17,6 +17,7 @@
 package work.technie.popularmovies.fragment;
 
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -104,9 +105,9 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
     private static final String MOVIE_SHARE_HASHTAG = " #PopularMovieApp";
     private static final int MOVIE_DETAILS_LOADER = 0;
     private static final int FAVOURITE_DETAILS_LOADER = 1;
+    private static final String DARK_MUTED_COLOR = "dark_muted_color";
     private final String DETAIL_FRAGMENT_TAG = "DFTAG";
     private final String PROFILE_DETAIL_FRAGMENT_TAG = "PDFTAG";
-
     private View rootView;
     private String movie_Id;
     private Fragment current;
@@ -117,7 +118,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
     private VideoMovieAdapter videoListAdapter;
     private ReviewMovieAdapter reviewListAdapter;
     private GenreMovieAdapter genreListAdapter;
-
+    private int dark_muted_color;
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean reLoadPoster;
     private boolean isFlingerCastSet;
@@ -126,6 +127,31 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
         FetchMovieDetail fetchTask = new FetchMovieDetail(getActivity());
         fetchTask.response = this;
         fetchTask.execute(movie_Id);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null && savedInstanceState.containsKey(DARK_MUTED_COLOR)) {
+            dark_muted_color = savedInstanceState.getInt(DARK_MUTED_COLOR);
+            changeColor(getActivity());
+        } else {
+            dark_muted_color = 0;
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (dark_muted_color != 0) {
+            changeColor(getActivity());
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(DARK_MUTED_COLOR, dark_muted_color);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -322,7 +348,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
                     fragment.setArguments(arguments);
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
                     fragmentManager.beginTransaction()
-                            .add(R.id.frag_container, fragment, DETAIL_FRAGMENT_TAG)
+                            .replace(R.id.frag_container, fragment, DETAIL_FRAGMENT_TAG)
                             .addToBackStack(null)
                             .commit();
                 }
@@ -406,7 +432,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
                     fragment.setArguments(arguments);
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
                     fragmentManager.beginTransaction()
-                            .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                            .replace(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
                             .addToBackStack(null)
                             .commit();
 
@@ -439,7 +465,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
                     fragment.setArguments(arguments);
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
                     fragmentManager.beginTransaction()
-                            .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                            .replace(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
                             .addToBackStack(null)
                             .commit();
 
@@ -759,10 +785,15 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Activity mActivity = getActivity();
             if (mActivity != null) {
-                int color = palette.getDarkMutedColor(ContextCompat.getColor(mActivity, R.color.colorPrimaryDark));
-                mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                mActivity.getWindow().setStatusBarColor(color);
+                dark_muted_color = palette.getDarkMutedColor(ContextCompat.getColor(mActivity, R.color.colorPrimaryDark));
+                changeColor(mActivity);
             }
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public void changeColor(Activity mActivity) {
+        mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        mActivity.getWindow().setStatusBarColor(dark_muted_color);
     }
 }

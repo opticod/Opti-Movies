@@ -17,6 +17,7 @@
 package work.technie.popularmovies.fragment;
 
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -108,9 +109,9 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
     private static final int FAVOURITE_DETAILS_LOADER = 1;
     private static final int NETWORK_LOADER = 2;
     private static final int RUNTIME_LOADER = 3;
+    private static final String DARK_MUTED_COLOR = "dark_muted_color";
     private final String DETAIL_FRAGMENT_TAG = "DFTAG";
     private final String PROFILE_DETAIL_FRAGMENT_TAG = "PDFTAG";
-
     private View rootView;
     private String tv_id;
     private Fragment current;
@@ -121,15 +122,40 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
     private SimilarMovieArrayAdapter similarTVListAdapter;
     private VideoMovieAdapter videoListAdapter;
     private GenreMovieAdapter genreListAdapter;
-
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean reLoadPoster;
     private boolean isFlingerCastSet;
+    private int dark_muted_color;
 
     private void updateDetailList() {
         FetchTVDetail fetchTask = new FetchTVDetail(getActivity());
         fetchTask.response = this;
         fetchTask.execute(tv_id);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null && savedInstanceState.containsKey(DARK_MUTED_COLOR)) {
+            dark_muted_color = savedInstanceState.getInt(DARK_MUTED_COLOR);
+            changeColor(getActivity());
+        } else {
+            dark_muted_color = 0;
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (dark_muted_color != 0) {
+            changeColor(getActivity());
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(DARK_MUTED_COLOR, dark_muted_color);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -327,7 +353,7 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
                     fragment.setArguments(arguments);
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
                     fragmentManager.beginTransaction()
-                            .add(R.id.frag_container, fragment, DETAIL_FRAGMENT_TAG)
+                            .replace(R.id.frag_container, fragment, DETAIL_FRAGMENT_TAG)
                             .addToBackStack(null)
                             .commit();
                 }
@@ -411,7 +437,7 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
                     fragment.setArguments(arguments);
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
                     fragmentManager.beginTransaction()
-                            .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                            .replace(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
                             .addToBackStack(null)
                             .commit();
 
@@ -444,7 +470,7 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
                     fragment.setArguments(arguments);
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
                     fragmentManager.beginTransaction()
-                            .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                            .replace(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
                             .addToBackStack(null)
                             .commit();
 
@@ -818,10 +844,15 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Activity mActivity = getActivity();
             if (mActivity != null) {
-                int color = palette.getDarkMutedColor(ContextCompat.getColor(mActivity, R.color.colorPrimaryDark));
-                mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                mActivity.getWindow().setStatusBarColor(color);
+                dark_muted_color = palette.getDarkMutedColor(ContextCompat.getColor(mActivity, R.color.colorPrimaryDark));
+                changeColor(mActivity);
             }
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public void changeColor(Activity mActivity) {
+        mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        mActivity.getWindow().setStatusBarColor(dark_muted_color);
     }
 }
