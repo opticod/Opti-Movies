@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:transitionGroup="true"
-        tools:context="work.technie.popularmovies.fragment.DetailActivityFragment">
+        tools:context="work.technie.popularmovies.fragment.DetailTVActivityFragment">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -253,6 +253,30 @@
                         android:textColor="@color/secondary_text"
                         android:textSize="15sp" />
 
+
+                    <TextView
+                        android:id="@+id/network_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:text="@string/network"
+                        android:textAppearance="?android:subtitle"
+                        android:textSize="16sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/network"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:textAppearance="?android:content"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="15sp" />
+
                     <TextView
                         android:id="@+id/original_lang_title"
                         android:layout_width="wrap_content"
@@ -323,30 +347,6 @@
                         android:textAppearance="?android:content"
                         android:textColor="@color/secondary_text"
                         android:textSize="15sp" />
-
-
-                    <TextView
-                        android:id="@+id/release_date_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/marginMedium"
-                        android:paddingLeft="@dimen/activity_horizontal_margin"
-                        android:paddingRight="@dimen/activity_horizontal_margin"
-                        android:text="@string/release_date"
-                        android:textAppearance="?android:subtitle"
-                        android:textSize="16sp"
-                        android:visibility="gone" />
-
-                    <TextView
-                        android:id="@+id/release_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/marginMedium"
-                        android:paddingLeft="@dimen/activity_horizontal_margin"
-                        android:paddingRight="@dimen/activity_horizontal_margin"
-                        android:textAppearance="?android:content"
-                        android:textColor="@color/secondary_text"
-                        android:textSize="15sp" />
                 </LinearLayout>
 
 
@@ -386,19 +386,20 @@
                         android:textSize="15sp"
                         android:visibility="gone" />
 
+
                     <TextView
-                        android:id="@+id/budget_title"
+                        android:id="@+id/first_air_date_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
                         android:paddingRight="@dimen/activity_horizontal_margin"
-                        android:text="@string/budget"
+                        android:text="@string/first_air_date"
                         android:textAppearance="?android:subtitle"
                         android:textSize="16sp"
                         android:visibility="gone" />
 
                     <TextView
-                        android:id="@+id/budget"
+                        android:id="@+id/first_air_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
@@ -407,20 +408,19 @@
                         android:textColor="@color/secondary_text"
                         android:textSize="15sp" />
 
-
                     <TextView
-                        android:id="@+id/revenue_title"
+                        android:id="@+id/last_air_date_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
                         android:paddingRight="@dimen/activity_horizontal_margin"
-                        android:text="@string/revenue"
+                        android:text="@string/last_air_date"
                         android:textAppearance="?android:subtitle"
                         android:textSize="16sp"
                         android:visibility="gone" />
 
                     <TextView
-                        android:id="@+id/revenue"
+                        android:id="@+id/last_air_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
@@ -428,12 +428,45 @@
                         android:textAppearance="?android:content"
                         android:textColor="@color/secondary_text"
                         android:textSize="15sp" />
-
 
                 </LinearLayout>
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/seasons_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginMedium"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:text="@string/seasons"
+                android:textAppearance="?android:subtitle"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview_seasons"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/marginMedium"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin" />
+
+
+            <TextView
+                android:id="@+id/empty_seasons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginMedium"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:text="@string/empty"
+                android:textAppearance="?android:content"
+                android:textColor="@color/secondary_text"
+                android:textSize="15sp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/videos_title"
@@ -470,56 +503,20 @@
                 android:visibility="gone" />
 
             <TextView
-                android:id="@+id/reviews_title"
+                android:id="@+id/similar_tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginMedium"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
-                android:text="@string/reviews"
-                android:textAppearance="?android:subtitle"
-                android:textSize="16sp"
-                android:visibility="gone" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerview_review"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/marginMedium"
-                android:nestedScrollingEnabled="false"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin" />
-
-
-            <TextView
-                android:id="@+id/empty_review"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/marginMedium"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:text="@string/empty"
-                android:textAppearance="?android:content"
-                android:textColor="@color/secondary_text"
-                android:textSize="15sp"
-                android:visibility="gone" />
-
-
-            <TextView
-                android:id="@+id/similar_movies_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/marginMedium"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:text="@string/similar_movies"
+                android:text="@string/similar_tv_shows"
                 android:textAppearance="?android:subtitle"
                 android:textSize="16sp"
                 android:visibility="gone" />
 
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerview_similar_movies"
+                android:id="@+id/recyclerview_similar_tv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/marginMedium"
@@ -527,7 +524,7 @@
                 android:paddingRight="@dimen/activity_horizontal_margin" />
 
             <TextView
-                android:id="@+id/empty_similar_movies"
+                android:id="@+id/empty_similar_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginMedium"
