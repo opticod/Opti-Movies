@@ -1,5 +1,6 @@
 package work.technie.popularmovies.fragment;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -56,15 +57,31 @@ import static work.technie.popularmovies.Constants.PEOPLE_COL_PLACE_OF_BIRTH;
 
 public class PeopleDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, AsyncResponse {
     private static final int PEOPLE_DETAILS_LOADER = 0;
-
+    private static final String DARK_MUTED_COLOR = "dark_muted_color";
+    private static final String MUTED_COLOR = "muted_color";
     private View rootView;
     private String people_Id;
     private SwipeRefreshLayout swipeRefreshLayout;
     private CollapsingToolbarLayout collapsingToolbar;
+    private int dark_muted_color;
+    private int muted_color;
+
 
     private void updateDetailList() {
         FetchPeopleDetail fetchTask = new FetchPeopleDetail(getActivity());
         fetchTask.execute(people_Id);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null && savedInstanceState.containsKey(DARK_MUTED_COLOR) && savedInstanceState.containsKey(MUTED_COLOR)) {
+            dark_muted_color = savedInstanceState.getInt(DARK_MUTED_COLOR);
+            muted_color = savedInstanceState.getInt(MUTED_COLOR);
+        } else {
+            dark_muted_color = 0;
+            muted_color = 0;
+        }
     }
 
     @Override
@@ -92,6 +109,10 @@ public class PeopleDetailFragment extends Fragment implements LoaderManager.Load
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             rootView.findViewById(R.id.profile_img).setTransitionName(transitionName);
+        }
+
+        if (dark_muted_color != 0 && muted_color != 0) {
+            changeColor(getActivity());
         }
 
         if (imageBitmap != null) {
@@ -149,6 +170,13 @@ public class PeopleDetailFragment extends Fragment implements LoaderManager.Load
     public void onActivityCreated(Bundle savedInstanceState) {
         getLoaderManager().initLoader(PEOPLE_DETAILS_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(DARK_MUTED_COLOR, dark_muted_color);
+        outState.putInt(MUTED_COLOR, muted_color);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -264,12 +292,17 @@ public class PeopleDetailFragment extends Fragment implements LoaderManager.Load
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Activity mActivity = getActivity();
             if (mActivity != null) {
-                int color = palette.getDarkMutedColor(ContextCompat.getColor(mActivity, R.color.colorPrimaryDark));
-                final int color2 = palette.getMutedColor(ContextCompat.getColor(mActivity, R.color.colorPrimary));
-                mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                mActivity.getWindow().setStatusBarColor(color);
-                collapsingToolbar.setContentScrimColor(color2);
+                dark_muted_color = palette.getDarkMutedColor(ContextCompat.getColor(mActivity, R.color.colorPrimaryDark));
+                muted_color = palette.getMutedColor(ContextCompat.getColor(mActivity, R.color.colorPrimary));
+                changeColor(mActivity);
             }
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public void changeColor(Activity mActivity) {
+        mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        mActivity.getWindow().setStatusBarColor(dark_muted_color);
+        collapsingToolbar.setContentScrimColor(muted_color);
     }
 }
