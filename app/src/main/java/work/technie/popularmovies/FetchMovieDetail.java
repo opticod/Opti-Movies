@@ -47,7 +47,7 @@ import work.technie.popularmovies.utils.AsyncResponse;
 /**
  * Created by anupam on 24/12/15.
  */
-public class FetchDetail extends AsyncTask<String, Void, Void> {
+public class FetchMovieDetail extends AsyncTask<String, Void, Void> {
 
     private final String LOG_TAG = FetchTVMovieTask.class.getSimpleName();
 
@@ -55,7 +55,7 @@ public class FetchDetail extends AsyncTask<String, Void, Void> {
     public AsyncResponse response = null;
     private boolean DEBUG = true;
 
-    public FetchDetail(Context context) {
+    public FetchMovieDetail(Context context) {
         mContext = context;
     }
 

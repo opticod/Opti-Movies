@@ -1,6 +1,7 @@
 package work.technie.popularmovies;
 
 import work.technie.popularmovies.data.MovieContract;
+import work.technie.popularmovies.data.MovieContract.TVDetails;
 
 /**
  * Created by anupam on 13/12/16.
@@ -39,11 +40,33 @@ public class Constants {
             MovieContract.MovieDetails.MOVIE_ID
     };
 
+    public static final String[] TV_DETAILS_COLUMNS_MIN = {
+            MovieContract.TVDetails.TABLE_NAME + "." + MovieContract.TVDetails._ID,
+            MovieContract.TVDetails.TV_ID
+    };
+
     public static final String[] PEOPLE_DETAILS_COLUMNS_MIN = {
             MovieContract.People.TABLE_NAME + "." + MovieContract.People._ID,
             MovieContract.People.ID
     };
 
+
+    public static final String[] CREATOR_COLUMNS = {
+            MovieContract.TVCreator.TABLE_NAME + "." + MovieContract.TVCreator._ID,
+            MovieContract.TVCreator.TV_ID,
+            MovieContract.TVCreator.ID,
+            MovieContract.TVCreator.NAME,
+            MovieContract.TVCreator.PROFILE_PATH
+    };
+
+    public static final String[] TV_SEASONS_COLUMNS = {
+            MovieContract.TVSeasons.TABLE_NAME + "." + MovieContract.TVSeasons._ID,
+            MovieContract.TVSeasons.ID,
+            MovieContract.TVSeasons.EPISODE_COUNT,
+            MovieContract.TVSeasons.TV_ID,
+            MovieContract.TVSeasons.SEASON_NUMBER,
+            MovieContract.TVSeasons.POSTER_PATH
+    };
     public static final String[] MOVIE_DETAILS_COLUMNS = {
 
             MovieContract.MovieDetails.TABLE_NAME + "." + MovieContract.MovieDetails._ID,
@@ -92,6 +115,17 @@ public class Constants {
             MovieContract.Cast.PROFILE_PATH,
             MovieContract.Cast.MOVIE_ID
     };
+    public static final String[] TVCAST_COLUMNS = {
+
+            MovieContract.TVCast._ID,
+            MovieContract.TVCast.CHARACTER,
+            MovieContract.TVCast.CREDIT_ID,
+            MovieContract.TVCast.ID,
+            MovieContract.TVCast.NAME,
+            MovieContract.TVCast.ORDER,
+            MovieContract.TVCast.PROFILE_PATH,
+            MovieContract.TVCast.TV_ID
+    };
     public static final String[] SIMILAR_MOVIE_COLUMNS = {
 
             MovieContract.SimilarMovies.TABLE_NAME + "." + MovieContract.SimilarMovies._ID,
@@ -112,6 +146,13 @@ public class Constants {
             MovieContract.SimilarMovies.FAVOURED,
             MovieContract.SimilarMovies.SHOWED,
             MovieContract.SimilarMovies.DOWNLOADED,
+    };
+    public static final String[] TV_SIMILAR_MOVIE_COLUMNS = {
+
+            MovieContract.TVSimilar.TABLE_NAME + "." + MovieContract.TVSimilar._ID,
+            MovieContract.TVSimilar.POSTER_PATH,
+            MovieContract.TVSimilar.TV_ID,
+            MovieContract.TVSimilar.ORIGINAL_NAME,
     };
     public static final String[] TV_COLUMNS_MIN = {
             MovieContract.TV.TABLE_NAME + "." + MovieContract.TV._ID
@@ -136,6 +177,29 @@ public class Constants {
             MovieContract.TV.DOWNLOADED,
             MovieContract.TV.MODE
     };
+    public static final String[] TV_DETAILS_COLUMNS = {
+
+            TVDetails.TABLE_NAME + "." + TVDetails._ID,
+            TVDetails.TV_ID,
+            TVDetails.BACKDROP_PATH,
+            TVDetails.FIRST_AIR_DATE,
+            TVDetails.HOMEPAGE,
+            TVDetails.IN_PRODUCTION,
+            TVDetails.LAST_AIR_DATE,
+            TVDetails.NAME,
+            TVDetails.NUMBER_OF_EPISODES,
+            TVDetails.NUMBER_OF_SEASONS,
+            TVDetails.ORIGINAL_LANG,
+            TVDetails.ORIGINAL_NAME,
+            TVDetails.OVERVIEW,
+            TVDetails.POPULARITY,
+            TVDetails.POSTER_PATH,
+            TVDetails.STATUS,
+            TVDetails.TYPE,
+            TVDetails.VOTE_AVERAGE,
+            TVDetails.VOTE_COUNT,
+            TVDetails.FAVOURED
+    };
     public static final String[] VIDEO_COLUMNS = {
 
             MovieContract.Videos.TABLE_NAME + "." + MovieContract.Videos._ID,
@@ -146,6 +210,17 @@ public class Constants {
             MovieContract.Videos.TABLE_NAME + "." + MovieContract.Videos.SIZE,
             MovieContract.Videos.TABLE_NAME + "." + MovieContract.Videos.TYPE,
             MovieContract.Videos.TABLE_NAME + "." + MovieContract.Videos.MOVIE_ID,
+    };
+    public static final String[] TV_VIDEO_COLUMNS = {
+
+            MovieContract.TVVideos.TABLE_NAME + "." + MovieContract.TVVideos._ID,
+            MovieContract.TVVideos.TABLE_NAME + "." + MovieContract.TVVideos.VIDEO_ID,
+            MovieContract.TVVideos.TABLE_NAME + "." + MovieContract.TVVideos.KEY,
+            MovieContract.TVVideos.TABLE_NAME + "." + MovieContract.TVVideos.NAME,
+            MovieContract.TVVideos.TABLE_NAME + "." + MovieContract.TVVideos.SITE,
+            MovieContract.TVVideos.TABLE_NAME + "." + MovieContract.TVVideos.SIZE,
+            MovieContract.TVVideos.TABLE_NAME + "." + MovieContract.TVVideos.TYPE,
+            MovieContract.TVVideos.TABLE_NAME + "." + MovieContract.TVVideos.TV_ID,
     };
     public static final String[] REVIEW_COLUMNS = {
 
@@ -167,6 +242,13 @@ public class Constants {
             MovieContract.Genres.TABLE_NAME + "." + MovieContract.Genres.ID_GENRES,
             MovieContract.Genres.TABLE_NAME + "." + MovieContract.Genres.MOVIE_ID
     };
+    public static final String[] TV_GENRE_COLUMNS = {
+
+            MovieContract.TVGenres.TABLE_NAME + "." + MovieContract.TVGenres._ID,
+            MovieContract.TVGenres.TABLE_NAME + "." + MovieContract.TVGenres.NAME,
+            MovieContract.TVGenres.TABLE_NAME + "." + MovieContract.TVGenres.ID_GENRES,
+            MovieContract.TVGenres.TABLE_NAME + "." + MovieContract.TVGenres.TV_ID
+    };
     public static final String[] PEOPLE_COLUMNS = {
 
             MovieContract.People.TABLE_NAME + "." + MovieContract.People._ID,
@@ -187,12 +269,75 @@ public class Constants {
             MovieContract.FavouritesMovies.TABLE_NAME + "." + MovieContract.FavouritesMovies._ID,
             MovieContract.FavouritesMovies.MOVIE_ID
     };
-
     public static final String[] FAVOURITE_TV_COLUMNS = {
 
             MovieContract.FavouritesTVs.TABLE_NAME + "." + MovieContract.FavouritesTVs._ID,
             MovieContract.FavouritesTVs.TV_ID
     };
+    public static final String[] TV_NETWORKS_COLUMNS = {
+
+            MovieContract.TVNetworks.TABLE_NAME + "." + MovieContract.TVNetworks._ID,
+            MovieContract.TVNetworks.ID,
+            MovieContract.TVNetworks.NAME,
+            MovieContract.TVNetworks.TV_ID
+    };
+    public static final String[] TV_RUNTIME_EPISODES_COLUMNS = {
+
+            MovieContract.TVEpisodeRuntime.TABLE_NAME + "." + MovieContract.TVEpisodeRuntime._ID,
+            MovieContract.TVEpisodeRuntime.TV_ID,
+            MovieContract.TVEpisodeRuntime.TIME
+    };
+    public static int TV_SEASON_COL__ID = 0;
+    public static int TV_SEASON_COL_ID = 1;
+    public static int TV_SEASON_COL_EPISODE_COUNT = 2;
+    public static int TV_SEASON_COL_TV_ID = 3;
+    public static int TV_SEASON_COL_SEASON_NUMBER = 4;
+    public static int TV_SEASON_COL_POSTER_PATH = 5;
+    public static int CREATOR_COL__ID = 0;
+    public static int CREATOR_COL_TV_ID = 1;
+    public static int CREATOR_COL_ID = 2;
+    public static int CREATOR_COL_NAME = 3;
+    public static int CREATOR_COL_PROFILE_PATH = 4;
+    public static int TV_CAST_COL__ID = 0;
+    public static int TV_CAST_COL_CHARACTER = 1;
+    public static int TV_CAST_COL_CREDIT_ID = 2;
+    public static int TV_CAST_COL_ID = 3;
+    public static int TV_CAST_COL_NAME = 4;
+    public static int TV_CAST_COL_ORDER = 5;
+    public static int TV_CAST_COL_PROFILE_PATH = 6;
+    public static int TV_CAST_COL_MOVIE_ID = 7;
+    public static int TV_SIMILAR_COL_ID = 0;
+    public static int TV_SIMILAR_COL_POSTER_PATH = 1;
+    public static int TV_SIMILAR_COL_TV_ID = 2;
+    public static int TV_SIMILAR_COL_ORIGINAL_NAME = 3;
+    public static int TV_DETAILS_COL_ID = 0;
+    public static int TV_DETAILS_COL_TV_ID = 1;
+    public static int TV_DETAILS_COL_BACKDROP_PATH = 2;
+    public static int TV_DETAILS_COL_FIRST_AIR_DATE = 3;
+    public static int TV_DETAILS_COL_HOMEPAGE = 4;
+    public static int TV_DETAILS_COL_IN_PRODUCTION = 5;
+    public static int TV_DETAILS_COL_LAST_AIR_DATE = 6;
+    public static int TV_DETAILS_COL_NAME = 7;
+    public static int TV_DETAILS_COL_NUMBER_OF_EPISODES = 8;
+    public static int TV_DETAILS_COL_NUMBER_OF_SEASONS = 9;
+    public static int TV_DETAILS_COL_ORIGINAL_LANG = 10;
+    public static int TV_DETAILS_COL_ORIGINAL_NAME = 11;
+    public static int TV_DETAILS_COL_OVERVIEW = 12;
+    public static int TV_DETAILS_COL_POPULARITY = 13;
+    public static int TV_DETAILS_COL_POSTER_PATH = 14;
+    public static int TV_DETAILS_COL_STATUS = 15;
+    public static int TV_DETAILS_COL_TYPE = 16;
+    public static int TV_DETAILS_COL_VOTE_AVERAGE = 17;
+    public static int TV_DETAILS_COL_VOTE_COUNT = 18;
+    public static int TV_DETAILS_COL_FAVOURED = 19;
+    public static int TV_RUNTIME_EPISODE_COL__ID = 0;
+    public static int TV_RUNTIME_EPISODE_COL_TV_ID = 1;
+    public static int TV_RUNTIME_EPISODE_COL_TIME = 2;
+
+    public static int TV_NETWORKS_COL__ID = 0;
+    public static int TV_NETWORKS_COL_ID = 1;
+    public static int TV_NETWORKS_COL_NAME = 2;
+    public static int TV_NETWORKS_COL_TV_ID = 3;
 
     public static int FAV_MOV_COL_ID = 0;
     public static int FAV_MOV_COL_MOVIE_ID = 1;
@@ -309,13 +454,21 @@ public class Constants {
     public static int TV_COL_MODE = 16;
 
     public static int COL_VIDEOS_ID = 0;
-    public static int COL_VIDEOS__ID = 1;
+    public static int COL_VIDEOS_VIDEO_ID = 1;
     public static int COL_VIDEOS_KEY = 2;
     public static int COL_VIDEOS_NAME = 3;
     public static int COL_VIDEOS_SITE = 4;
     public static int COL_VIDEOS_SIZE = 5;
     public static int COL_VIDEOS_TYPE = 6;
     public static int COL_VIDEOS_MOVIE_ID = 7;
+
+    public static int COL_VIDEOS_TV_VIDEO_ID = 1;
+    public static int COL_VIDEOS_TV_KEY = 2;
+    public static int COL_VIDEOS_TV_NAME = 3;
+    public static int COL_VIDEOS_TV_SITE = 4;
+    public static int COL_VIDEOS_TV_SIZE = 5;
+    public static int COL_VIDEOS_TV_TYPE = 6;
+    public static int COL_VIDEOS_TV_ID = 7;
 
     public static int COL_REVIEW_ID = 0;
     public static int COL_REVIEW_PAGE = 1;
@@ -331,6 +484,7 @@ public class Constants {
     public static int COL_GENRE_NAME = 1;
     public static int COL_GENRE_ID_GENRE = 3;
     public static int COL_GENRE_MOVIE_ID = 4;
+    public static int COL_GENRE_TV_ID = 4;
 
 
 }

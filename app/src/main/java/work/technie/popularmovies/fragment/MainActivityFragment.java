@@ -206,7 +206,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                     }
 
                     ((Callback) getActivity())
-                            .onItemSelected(cursor.getString(isMovieBookmark ? Constants.MOV_DETAILS_COL_MOVIE_ID : (isMovie ? Constants.MOV_COL_MOVIE_ID : Constants.TV_COL_TV_ID)), imageView, current);
+                            .onItemSelected(cursor.getString(isMovieBookmark ? Constants.MOV_DETAILS_COL_MOVIE_ID : (isMovie ? Constants.MOV_COL_MOVIE_ID : Constants.TV_COL_TV_ID)), imageView, current, isMovieBookmark, isTVBookmark, isMovie);
                 }
                 mPosition = position;
             }
@@ -385,10 +385,13 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     public interface Callback {
         /**
          * DetailFragmentCallback for when an item has been selected.
-         *  @param movieUri
+         * @param movieUri
          * @param view
          * @param current
+         * @param isMovieBookmark
+         * @param isTVBookmark
+         * @param isMovie
          */
-        void onItemSelected(String movieUri, ImageView view, Fragment current);
+        void onItemSelected(String movieUri, ImageView view, Fragment current, boolean isMovieBookmark, boolean isTVBookmark, boolean isMovie);
     }
 }
