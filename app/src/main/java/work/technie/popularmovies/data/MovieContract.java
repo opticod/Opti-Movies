@@ -394,7 +394,7 @@ public class MovieContract {
         public static final String NAME = "name";
         public static final String CREDIT_ID = "credit_id";
         public static final String CHARACTER = "character";
-        public static final String ORDER = "order";
+        public static final String ORDER = "order_guest";
         public static final String PROFILE_PATH = "profile_path";
 
         public static final Uri CONTENT_URI =

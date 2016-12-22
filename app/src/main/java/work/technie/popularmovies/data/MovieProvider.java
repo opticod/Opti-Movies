@@ -139,8 +139,8 @@ public class MovieProvider extends ContentProvider {
         matcher.addURI(authority, MovieContract.PATH_TV_EPISODE_GUEST_STAR + "/*", TV_EPISODE_GUEST_STAR_WITH_ID);
         matcher.addURI(authority, MovieContract.PATH_TV_EPISODE, TV_EPISODE);
         matcher.addURI(authority, MovieContract.PATH_TV_EPISODE + "/*", TV_EPISODE_WITH_ID);
-        matcher.addURI(authority, MovieContract.PATH_TV_SEASONS, TV_SEASONS);
-        matcher.addURI(authority, MovieContract.PATH_TV_SEASONS + "/*", TV_SEASONS_WITH_ID);
+        matcher.addURI(authority, MovieContract.PATH_TV_SEASON_DETAILS, TV_SEASON_DETAILS);
+        matcher.addURI(authority, MovieContract.PATH_TV_SEASON_DETAILS + "/*", TV_SEASON_DETAILS_WITH_ID);
 
         return matcher;
 

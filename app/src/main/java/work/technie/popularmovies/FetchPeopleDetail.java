@@ -16,6 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import work.technie.popularmovies.data.MovieContract.People;
+import work.technie.popularmovies.utils.AsyncResponse;
 
 /**
  * Created by anupam on 16/12/16.
@@ -26,6 +27,7 @@ public class FetchPeopleDetail extends AsyncTask<String, Void, Void> {
     private final String LOG_TAG = FetchTVMovieTask.class.getSimpleName();
 
     private final Context mContext;
+    public AsyncResponse response = null;
     private boolean DEBUG = true;
 
     public FetchPeopleDetail(Context context) {
