@@ -59,5 +59,8 @@
     <string name="similar_tv_shows">Similar TV Shows</string>
     <string name="air_date">Air date</string>
     <string name="episodes">Episodes</string>
+    <string name="vote_avg">Vote Average</string>
+    <string name="guest_star">Guest Star</string>
+    <string name="season_regulars">Season Regulars</string>
 
 </resources>

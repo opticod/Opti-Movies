@@ -330,8 +330,8 @@ public class MovieContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        //content://work....../tv_episode/seasonId
-        public static Uri buildEpisodeUriWithSeasonId(String seasonId) {
+        //content://work....../tv_episode/episodeId
+        public static Uri buildEpisodeUriWithEpisodeId(String seasonId) {
             return CONTENT_URI.buildUpon().appendPath(seasonId).build();
         }
 

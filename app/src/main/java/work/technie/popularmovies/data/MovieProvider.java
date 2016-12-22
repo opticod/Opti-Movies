@@ -838,7 +838,7 @@ public class MovieProvider extends ContentProvider {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         MovieContract.TVEpisode.TABLE_NAME,
                         projection,
-                        MovieContract.TVEpisode.SEASON_ID + " = ?",
+                        MovieContract.TVEpisode.ID + " = ?",
                         new String[]{String.valueOf(ContentUris.parseId(uri))},
                         null,
                         null,
@@ -1315,7 +1315,7 @@ public class MovieProvider extends ContentProvider {
                 break;
             case TV_EPISODE_WITH_ID:
                 rowsDeleted = db.delete(MovieContract.TVEpisode.TABLE_NAME,
-                        MovieContract.TVEpisode.SEASON_ID + " = ?",
+                        MovieContract.TVEpisode.ID + " = ?",
                         new String[]{String.valueOf(ContentUris.parseId(uri))});
                 break;
             case TV_SEASON_DETAILS:
@@ -1595,7 +1595,7 @@ public class MovieProvider extends ContentProvider {
             case TV_EPISODE_WITH_ID: {
                 rowsUpdated = db.update(MovieContract.TVEpisode.TABLE_NAME,
                         values,
-                        MovieContract.TVEpisode.SEASON_ID + " = ?",
+                        MovieContract.TVEpisode.ID + " = ?",
                         new String[]{String.valueOf(ContentUris.parseId(uri))});
                 break;
             }

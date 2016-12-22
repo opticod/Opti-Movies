@@ -87,8 +87,21 @@
                     android:paddingLeft="@dimen/activity_horizontal_margin"
                     android:paddingRight="@dimen/activity_horizontal_margin" />
 
+                <TextView
+                    android:id="@+id/empty_episode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/marginMedium"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:text="@string/empty"
+                    android:textAppearance="?android:content"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="15sp"
+                    android:visibility="gone" />
+
                 <ImageView
-                    android:id="@+id/tmdb_profile"
+                    android:id="@+id/tmdb_season"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginTop="32dp"

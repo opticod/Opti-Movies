@@ -336,14 +336,6 @@ public class Constants {
             MovieContract.TVEpisodeGuestStar.ORDER,
             MovieContract.TVEpisodeGuestStar.PROFILE_PATH
     };
-    public static int TV_SEASON_DETAILS_COL__ID = 0;
-    public static int TV_SEASON_DETAILS_COL_SEASON_ID = 1;
-    public static int TV_SEASON_DETAILS_COL_AIR_DATE = 2;
-    public static int TV_SEASON_DETAILS_COL_NAME = 3;
-    public static int TV_SEASON_DETAILS_COL_OVERVIEW = 4;
-    public static int TV_SEASON_DETAILS_COL_SEASON__ID = 5;
-    public static int TV_SEASON_DETAILS_COL_POSTER_PATH = 6;
-    public static int TV_SEASON_DETAILS_COL_SEASON_NUMBER = 7;
     public static int TV_EPISODE_COL__ID = 0;
     public static int TV_EPISODE_COL_SEASON_ID = 1;
     public static int TV_EPISODE_COL_AIR_DATE = 2;
@@ -356,6 +348,15 @@ public class Constants {
     public static int TV_EPISODE_COL_STILL_PATH = 9;
     public static int TV_EPISODE_COL_VOTE_AVERAGE = 10;
     public static int TV_EPISODE_COL_VOTE_COUNT = 11;
+    public static int TV_SEASON_DETAILS_COL__ID = 0;
+    public static int TV_SEASON_DETAILS_COL_SEASON_ID = 1;
+    public static int TV_SEASON_DETAILS_COL_AIR_DATE = 2;
+    public static int TV_SEASON_DETAILS_COL_NAME = 3;
+    public static int TV_SEASON_DETAILS_COL_OVERVIEW = 4;
+    public static int TV_SEASON_DETAILS_COL_SEASON__ID = 5;
+    public static int TV_SEASON_DETAILS_COL_POSTER_PATH = 6;
+    public static int TV_SEASON_DETAILS_COL_SEASON_NUMBER = 7;
+
     public static int TV_EPISODE_CREW_COL__ID = 0;
     public static int TV_EPISODE_CREW_COL_EPISODE_ID = 1;
     public static int TV_EPISODE_CREW_COL_ID = 2;
