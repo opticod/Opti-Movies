@@ -477,6 +477,40 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
                 }
             });
 
+            seasonsTVArrayAdapter.setOnClickListener(new SeasonsTVArrayAdapter.SetOnClickListener() {
+                @Override
+                public void onItemClick(int position, View view) {
+                    Cursor cursor = seasonsTVArrayAdapter.getCursor();
+                    cursor.moveToPosition(position);
+                    Activity mActivity = getActivity();
+
+                    SeasonDetailFragment fragment = new SeasonDetailFragment();
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        current.setSharedElementReturnTransition(TransitionInflater.from(
+                                mActivity).inflateTransition(R.transition.change_image_trans));
+                        current.setExitTransition(TransitionInflater.from(
+                                mActivity).inflateTransition(android.R.transition.fade));
+
+                        fragment.setSharedElementEnterTransition(TransitionInflater.from(
+                                mActivity).inflateTransition(R.transition.change_image_trans));
+                        fragment.setEnterTransition(TransitionInflater.from(
+                                mActivity).inflateTransition(android.R.transition.fade));
+                    }
+
+                    Bundle arguments = new Bundle();
+                    arguments.putString(Intent.EXTRA_TEXT, cursor.getString(Constants.TV_SEASON_COL_TV_ID));
+                    arguments.putString(Intent.EXTRA_CC, cursor.getString(Constants.TV_SEASON_COL_SEASON_NUMBER));
+                    arguments.putString(Intent.EXTRA_BCC, cursor.getString(Constants.TV_SEASON_COL_ID));
+                    fragment.setArguments(arguments);
+                    FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                            .addToBackStack(null)
+                            .commit();
+
+                }
+            });
         }
     }
 

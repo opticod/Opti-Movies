@@ -37,30 +37,30 @@ import java.util.Date;
 import java.util.Locale;
 
 import work.technie.popularmovies.Constants;
-import work.technie.popularmovies.FetchPeopleDetail;
+import work.technie.popularmovies.FetchSeasonDetail;
 import work.technie.popularmovies.R;
 import work.technie.popularmovies.data.MovieContract;
 import work.technie.popularmovies.utils.AsyncResponse;
 import work.technie.popularmovies.utils.PaletteTransformation;
 import work.technie.popularmovies.utils.Utility;
 
-import static work.technie.popularmovies.Constants.PEOPLE_COLUMNS;
-import static work.technie.popularmovies.Constants.PEOPLE_COL_BIOGRAPHY;
-import static work.technie.popularmovies.Constants.PEOPLE_COL_BIRTHDAY;
-import static work.technie.popularmovies.Constants.PEOPLE_COL_HOMEPAGE;
-import static work.technie.popularmovies.Constants.PEOPLE_COL_NAME;
-import static work.technie.popularmovies.Constants.PEOPLE_COL_PLACE_OF_BIRTH;
+import static work.technie.popularmovies.Constants.TV_SEASON_DETAILS_COLUMNS;
+import static work.technie.popularmovies.Constants.TV_SEASON_DETAILS_COL_AIR_DATE;
+import static work.technie.popularmovies.Constants.TV_SEASON_DETAILS_COL_NAME;
+import static work.technie.popularmovies.Constants.TV_SEASON_DETAILS_COL_OVERVIEW;
 
 /**
  * Created by anupam on 19/12/16.
  */
 
-public class PeopleDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, AsyncResponse {
-    private static final int PEOPLE_DETAILS_LOADER = 0;
+public class SeasonDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, AsyncResponse {
+    private static final int SEASON_DETAILS_LOADER = 0;
     private static final String DARK_MUTED_COLOR = "dark_muted_color";
     private static final String MUTED_COLOR = "muted_color";
     private View rootView;
-    private String people_Id;
+    private String season_Id;
+    private String tv_Id;
+    private String season_number;
     private SwipeRefreshLayout swipeRefreshLayout;
     private CollapsingToolbarLayout collapsingToolbar;
     private int dark_muted_color;
@@ -68,9 +68,9 @@ public class PeopleDetailFragment extends Fragment implements LoaderManager.Load
 
 
     private void updateDetailList() {
-        FetchPeopleDetail fetchTask = new FetchPeopleDetail(getActivity());
+        FetchSeasonDetail fetchTask = new FetchSeasonDetail(getActivity());
         fetchTask.response = this;
-        fetchTask.execute(people_Id);
+        fetchTask.execute(tv_Id, season_number);
     }
 
     @Override
@@ -94,11 +94,13 @@ public class PeopleDetailFragment extends Fragment implements LoaderManager.Load
         String transitionName = "";
 
         if (arguments != null) {
-            people_Id = arguments.getString(Intent.EXTRA_TEXT);
+            tv_Id = arguments.getString(Intent.EXTRA_TEXT);
+            season_number = arguments.getString(Intent.EXTRA_CC);
+            season_Id = arguments.getString(Intent.EXTRA_BCC);
             transitionName = arguments.getString("TRANS_NAME");
             imageBitmap = arguments.getParcelable("POSTER_IMAGE");
         }
-        rootView = inflater.inflate(R.layout.fragment_people, container, false);
+        rootView = inflater.inflate(R.layout.fragment_seasons, container, false);
 
         final Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -109,7 +111,7 @@ public class PeopleDetailFragment extends Fragment implements LoaderManager.Load
         collapsingToolbar.setTitle(" ");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            rootView.findViewById(R.id.profile_img).setTransitionName(transitionName);
+            rootView.findViewById(R.id.season_img).setTransitionName(transitionName);
         }
 
         if (dark_muted_color != 0 && muted_color != 0) {
@@ -122,12 +124,12 @@ public class PeopleDetailFragment extends Fragment implements LoaderManager.Load
 
     public void loadData(final View rootView) {
 
-        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.detail_people_swipe_refresh);
+        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.detail_season_swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 if (Utility.hasNetworkConnection(getActivity())) {
-                    getActivity().getContentResolver().delete(MovieContract.People.buildPeopleUriWithPeopleId(people_Id), null, null);
+                    getActivity().getContentResolver().delete(MovieContract.TVSeasonDetails.buildSeasonDetailsUriWithSeasonId(season_Id), null, null);
                     updateDetailList();
                 } else {
                     Toast.makeText(getContext(), "Network Not Available!", Toast.LENGTH_SHORT).show();
@@ -138,10 +140,10 @@ public class PeopleDetailFragment extends Fragment implements LoaderManager.Load
 
         int count = 0;
 
-        Uri Uri = MovieContract.People.buildPersonUri();
-        Cursor cursor = getActivity().getContentResolver().query(Uri, Constants.PEOPLE_DETAILS_COLUMNS_MIN,
-                MovieContract.People.ID + " = ? ",
-                new String[]{people_Id},
+        Uri Uri = MovieContract.TVSeasonDetails.buildSeasonDetailsUri();
+        Cursor cursor = getActivity().getContentResolver().query(Uri, Constants.TV_SEASON_DETAILS_COLUMNS,
+                MovieContract.TVSeasonDetails.SEASON_ID + " = ? ",
+                new String[]{season_Id},
                 null);
         if (cursor != null) {
             count = cursor.getCount();
@@ -165,7 +167,7 @@ public class PeopleDetailFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        getLoaderManager().initLoader(PEOPLE_DETAILS_LOADER, null, this);
+        getLoaderManager().initLoader(SEASON_DETAILS_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -178,15 +180,15 @@ public class PeopleDetailFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if (null != people_Id) {
+        if (null != season_Id) {
             // Now create and return a CursorLoader that will take care of
             // creating a Cursor for the data being displayed.
             switch (id) {
-                case PEOPLE_DETAILS_LOADER:
+                case SEASON_DETAILS_LOADER:
                     return new CursorLoader(
                             getActivity(),
-                            MovieContract.People.buildPeopleUriWithPeopleId(people_Id),
-                            PEOPLE_COLUMNS,
+                            MovieContract.TVSeasonDetails.buildSeasonDetailsUriWithSeasonId(season_Id),
+                            TV_SEASON_DETAILS_COLUMNS,
                             null,
                             null,
                             null
@@ -197,12 +199,10 @@ public class PeopleDetailFragment extends Fragment implements LoaderManager.Load
     }
 
     public void defaultShow() {
-        rootView.findViewById(R.id.profile_img).setVisibility(View.VISIBLE);
-        rootView.findViewById(R.id.birthday_title).setVisibility(View.VISIBLE);
-        rootView.findViewById(R.id.place_of_birth_title).setVisibility(View.VISIBLE);
-        rootView.findViewById(R.id.biography_title).setVisibility(View.VISIBLE);
-        rootView.findViewById(R.id.homepage_title).setVisibility(View.VISIBLE);
-        rootView.findViewById(R.id.tmdb_profile).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.season_img).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.overview_title).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.air_date_title).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.episodes_title).setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -212,48 +212,40 @@ public class PeopleDetailFragment extends Fragment implements LoaderManager.Load
             return;
         }
         switch (loader.getId()) {
-            case PEOPLE_DETAILS_LOADER:
+            case SEASON_DETAILS_LOADER:
 
                 defaultShow();
-                String name = data.getString(PEOPLE_COL_NAME).trim();
-                collapsingToolbar.setTitle(name.isEmpty() || name.equalsIgnoreCase("null") ? "-" : name);
+                String name = data.getString(TV_SEASON_DETAILS_COL_NAME).trim();
+                collapsingToolbar.setTitle(name.isEmpty() || name.equalsIgnoreCase("null") ? "-" : "Season " + (season_number + 1) + ": " + name);
 
-                String biography = data.getString(PEOPLE_COL_BIOGRAPHY).trim();
-                ((TextView) rootView.findViewById(R.id.biography))
-                        .setText(biography.isEmpty() || biography.equalsIgnoreCase("null") ? "-" : biography);
+                String overview = data.getString(TV_SEASON_DETAILS_COL_OVERVIEW).trim();
+                ((TextView) rootView.findViewById(R.id.overview))
+                        .setText(overview.isEmpty() || overview.equalsIgnoreCase("null") ? "-" : overview);
 
-                String place_of_birth = data.getString(PEOPLE_COL_PLACE_OF_BIRTH).trim();
-                ((TextView) rootView.findViewById(R.id.place_of_birth))
-                        .setText(place_of_birth.isEmpty() || place_of_birth.equalsIgnoreCase("null") ? "-" : place_of_birth);
+                String air_date_title = data.getString(TV_SEASON_DETAILS_COL_AIR_DATE).trim();
 
-                String homepage = data.getString(PEOPLE_COL_HOMEPAGE).trim();
-                ((TextView) rootView.findViewById(R.id.homepage_profile))
-                        .setText(homepage.isEmpty() || homepage.equalsIgnoreCase("null") ? "-" : homepage);
-
-                String birthDate = data.getString(PEOPLE_COL_BIRTHDAY).trim();
-
-                if (!birthDate.isEmpty() && !birthDate.equalsIgnoreCase("null")) {
+                if (!air_date_title.isEmpty() && !air_date_title.equalsIgnoreCase("null")) {
                     DateFormat inputFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                     Date date = null;
                     try {
-                        date = inputFormatter.parse(birthDate);
+                        date = inputFormatter.parse(air_date_title);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
                     SimpleDateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy", Locale.getDefault());
 
-                    ((TextView) rootView.findViewById(R.id.birthday))
+                    ((TextView) rootView.findViewById(R.id.air_date))
                             .setText(date != null ? formatter.format(date) : "-");
                 } else {
-                    ((TextView) rootView.findViewById(R.id.birthday))
+                    ((TextView) rootView.findViewById(R.id.air_date))
                             .setText("-");
                 }
 
                 final String PROFILE_BASE_URL = "http://image.tmdb.org/t/p/w185";
-                final String profileURL = data.getString(Constants.PEOPLE_COL_PROFILE_PATH).trim();
+                final String profileURL = data.getString(Constants.TV_SEASON_DETAILS_COL_POSTER_PATH).trim();
 
                 if (!profileURL.isEmpty() && !profileURL.equalsIgnoreCase("null")) {
-                    final ImageView profile_img = (ImageView) rootView.findViewById(R.id.profile_img);
+                    final ImageView profile_img = (ImageView) rootView.findViewById(R.id.season_img);
                     Picasso.with(getActivity())
                             .load(PROFILE_BASE_URL + profileURL)
                             .fit().centerCrop()

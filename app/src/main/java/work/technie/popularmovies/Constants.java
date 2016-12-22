@@ -287,6 +287,93 @@ public class Constants {
             MovieContract.TVEpisodeRuntime.TV_ID,
             MovieContract.TVEpisodeRuntime.TIME
     };
+
+    public static final String[] TV_SEASON_DETAILS_COLUMNS = {
+
+            MovieContract.TVSeasonDetails.TABLE_NAME + "." + MovieContract.TVSeasonDetails._ID,
+            MovieContract.TVSeasonDetails.SEASON_ID,
+            MovieContract.TVSeasonDetails.AIR_DATE,
+            MovieContract.TVSeasonDetails.NAME,
+            MovieContract.TVSeasonDetails.OVERVIEW,
+            MovieContract.TVSeasonDetails.SEASON__ID,
+            MovieContract.TVSeasonDetails.POSTER_PATH,
+            MovieContract.TVSeasonDetails.SEASON_NUMBER,
+    };
+    public static final String[] TV_EPISODE_COLUMNS = {
+
+            MovieContract.TVEpisode.TABLE_NAME + "." + MovieContract.TVEpisode._ID,
+            MovieContract.TVEpisode.SEASON_ID,
+            MovieContract.TVEpisode.AIR_DATE,
+            MovieContract.TVEpisode.EPISODE_NUMBER,
+            MovieContract.TVEpisode.NAME,
+            MovieContract.TVEpisode.OVERVIEW,
+            MovieContract.TVEpisode.ID,
+            MovieContract.TVEpisode.PRODUCTION_CODE,
+            MovieContract.TVEpisode.SEASON_NUMBER,
+            MovieContract.TVEpisode.STILL_PATH,
+            MovieContract.TVEpisode.VOTE_AVERAGE,
+            MovieContract.TVEpisode.VOTE_COUNT,
+    };
+    public static final String[] TV_EPISODE_CREW_COLUMNS = {
+
+            MovieContract.TVEpisodeCrew.TABLE_NAME + "." + MovieContract.TVEpisodeCrew._ID,
+            MovieContract.TVEpisodeCrew.EPISODE_ID,
+            MovieContract.TVEpisodeCrew.ID,
+            MovieContract.TVEpisodeCrew.CREDIT_ID,
+            MovieContract.TVEpisodeCrew.NAME,
+            MovieContract.TVEpisodeCrew.DEPARTMENT,
+            MovieContract.TVEpisodeCrew.JOB,
+            MovieContract.TVEpisodeCrew.PROFILE_PATH
+    };
+    public static final String[] TV_EPISODE_GUEST_COLUMNS = {
+
+            MovieContract.TVEpisodeGuestStar.TABLE_NAME + "." + MovieContract.TVEpisodeGuestStar._ID,
+            MovieContract.TVEpisodeGuestStar.EPISODE_ID,
+            MovieContract.TVEpisodeGuestStar.ID,
+            MovieContract.TVEpisodeGuestStar.NAME,
+            MovieContract.TVEpisodeGuestStar.CREDIT_ID,
+            MovieContract.TVEpisodeGuestStar.CHARACTER,
+            MovieContract.TVEpisodeGuestStar.ORDER,
+            MovieContract.TVEpisodeGuestStar.PROFILE_PATH
+    };
+    public static int TV_SEASON_DETAILS_COL__ID = 0;
+    public static int TV_SEASON_DETAILS_COL_SEASON_ID = 1;
+    public static int TV_SEASON_DETAILS_COL_AIR_DATE = 2;
+    public static int TV_SEASON_DETAILS_COL_NAME = 3;
+    public static int TV_SEASON_DETAILS_COL_OVERVIEW = 4;
+    public static int TV_SEASON_DETAILS_COL_SEASON__ID = 5;
+    public static int TV_SEASON_DETAILS_COL_POSTER_PATH = 6;
+    public static int TV_SEASON_DETAILS_COL_SEASON_NUMBER = 7;
+    public static int TV_EPISODE_COL__ID = 0;
+    public static int TV_EPISODE_COL_SEASON_ID = 1;
+    public static int TV_EPISODE_COL_AIR_DATE = 2;
+    public static int TV_EPISODE_COL_EPISODE_NUMBER = 3;
+    public static int TV_EPISODE_COL_NAME = 4;
+    public static int TV_EPISODE_COL_OVERVIEW = 5;
+    public static int TV_EPISODE_COL_ID = 6;
+    public static int TV_EPISODE_COL_PRODUCTION_CODE = 7;
+    public static int TV_EPISODE_COL_SEASON_NUMBER = 8;
+    public static int TV_EPISODE_COL_STILL_PATH = 9;
+    public static int TV_EPISODE_COL_VOTE_AVERAGE = 10;
+    public static int TV_EPISODE_COL_VOTE_COUNT = 11;
+    public static int TV_EPISODE_CREW_COL__ID = 0;
+    public static int TV_EPISODE_CREW_COL_EPISODE_ID = 1;
+    public static int TV_EPISODE_CREW_COL_ID = 2;
+    public static int TV_EPISODE_CREW_COL_CREDIT_ID = 3;
+    public static int TV_EPISODE_CREW_COL_NAME = 4;
+    public static int TV_EPISODE_CREW_COL_DEPARTMENT = 5;
+    public static int TV_EPISODE_CREW_COL_JOB = 6;
+    public static int TV_EPISODE_CREW_COL_PROFILE_PATH = 7;
+    public static int TV_EPISODE_GUEST_COL__ID = 0;
+    public static int TV_EPISODE_GUEST_COL_EPISODE_ID = 1;
+    public static int TV_EPISODE_GUEST_COL_ID = 2;
+    public static int TV_EPISODE_GUEST_COL_NAME = 3;
+    public static int TV_EPISODE_GUEST_COL_CREDIT_ID = 4;
+    public static int TV_EPISODE_GUEST_COL_CHARACTER = 5;
+    public static int TV_EPISODE_GUEST_COL_ORDER = 6;
+    public static int TV_EPISODE_GUEST_COL_PROFILE_PATH = 7;
+
+
     public static int TV_SEASON_COL__ID = 0;
     public static int TV_SEASON_COL_ID = 1;
     public static int TV_SEASON_COL_EPISODE_COUNT = 2;

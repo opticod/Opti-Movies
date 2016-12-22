@@ -98,7 +98,7 @@ public class SeasonsTVArrayAdapter extends
                 });
         viewHolder.imageView.setAdjustViewBounds(true);
         viewHolder.name.setText(String.format(Locale.ENGLISH, "EPISODE COUNT: %s", cursor.getString(Constants.TV_SEASON_COL_EPISODE_COUNT)));
-        viewHolder.count.setText(String.format(Locale.ENGLISH, "%s.", cursor.getString(Constants.TV_SEASON_COL_SEASON_NUMBER)));
+        viewHolder.count.setText(String.format(Locale.ENGLISH, "%d.", cursor.getInt(Constants.TV_SEASON_COL_SEASON_NUMBER) + 1));
         viewHolder.setItemClickListener(listener);
     }
 
