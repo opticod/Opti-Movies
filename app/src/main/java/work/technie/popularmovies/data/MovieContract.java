@@ -51,6 +51,11 @@ public class MovieContract {
     public static final String PATH_TV_CAST = "tv_cast";
     public static final String PATH_TV_SIMILAR = "tv_similar";
 
+    public static final String PATH_TV_EPISODE_CREW = "tv_episode_crew";
+    public static final String PATH_TV_EPISODE_GUEST_STAR = "tv_episode_guest_star";
+    public static final String PATH_TV_EPISODE = "tv_episode";
+    public static final String PATH_TV_SEASON_DETAILS = "tv_season_details";
+
 
     public static final class Movies implements BaseColumns {
 
@@ -249,6 +254,167 @@ public class MovieContract {
         }
 
         public static Uri buildTVDetailsUri() {
+            return CONTENT_URI.buildUpon().build();
+        }
+
+        public static String getIDFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+
+    }
+
+    public static final class TVSeasonDetails implements BaseColumns {
+
+        public static final String TABLE_NAME = "tv_season_details";
+
+        public static final String SEASON_ID = "season_id";
+        public static final String AIR_DATE = "air_date";
+        public static final String NAME = "name";
+        public static final String OVERVIEW = "overview";
+        public static final String SEASON__ID = "season__id";
+        public static final String POSTER_PATH = "poster_path";
+        public static final String SEASON_NUMBER = "season_number";
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_TV_SEASON_DETAILS).build();
+
+        static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TV_SEASON_DETAILS;
+        static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TV_SEASON_DETAILS;
+
+        static Uri buildTVSeasonDetailsUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        //content://work....../tv_season_details/seasonId
+        public static Uri buildSeasonDetailsUriWithSeasonId(String seasonId) {
+            return CONTENT_URI.buildUpon().appendPath(seasonId).build();
+        }
+
+        public static Uri buildSeasonDetailsUri() {
+            return CONTENT_URI.buildUpon().build();
+        }
+
+        public static String getIDFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+
+    }
+
+    public static final class TVEpisode implements BaseColumns {
+
+        public static final String TABLE_NAME = "tv_episode";
+
+        public static final String SEASON_ID = "season_id";
+        public static final String AIR_DATE = "air_date";
+        public static final String EPISODE_NUMBER = "episode_number";
+        public static final String NAME = "name";
+        public static final String OVERVIEW = "overview";
+        public static final String ID = "id";
+        public static final String PRODUCTION_CODE = "production_code";
+        public static final String SEASON_NUMBER = "season_number";
+        public static final String STILL_PATH = "still_path";
+        public static final String VOTE_AVERAGE = "vote_average";
+        public static final String VOTE_COUNT = "vote_count";
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_TV_EPISODE).build();
+
+        static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TV_EPISODE;
+        static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TV_EPISODE;
+
+        static Uri buildTVEpisodeUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        //content://work....../tv_episode/seasonId
+        public static Uri buildEpisodeUriWithSeasonId(String seasonId) {
+            return CONTENT_URI.buildUpon().appendPath(seasonId).build();
+        }
+
+        public static Uri buildEpisodeUri() {
+            return CONTENT_URI.buildUpon().build();
+        }
+
+        public static String getIDFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+
+    }
+
+    public static final class TVEpisodeCrew implements BaseColumns {
+
+        public static final String TABLE_NAME = "tv_episode_crew";
+
+        public static final String EPISODE_ID = "episode_id";
+        public static final String ID = "id";
+        public static final String CREDIT_ID = "credit_id";
+        public static final String NAME = "name";
+        public static final String DEPARTMENT = "department";
+        public static final String JOB = "job";
+        public static final String PROFILE_PATH = "profile_path";
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_TV_EPISODE_CREW).build();
+
+        static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TV_EPISODE_CREW;
+        static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TV_EPISODE_CREW;
+
+        static Uri buildTVEpisodeCrewUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        //content://work....../tv_episode_crew/episodeId
+        public static Uri buildEpisodeCrewUriWithEpisodeId(String episodeId) {
+            return CONTENT_URI.buildUpon().appendPath(episodeId).build();
+        }
+
+        public static Uri buildEpisodeCrewUri() {
+            return CONTENT_URI.buildUpon().build();
+        }
+
+        public static String getIDFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+
+    }
+
+
+    public static final class TVEpisodeGuestStar implements BaseColumns {
+
+        public static final String TABLE_NAME = "tv_episode_guest_star";
+
+        public static final String EPISODE_ID = "episode_id";
+        public static final String ID = "id";
+        public static final String NAME = "name";
+        public static final String CREDIT_ID = "credit_id";
+        public static final String CHARACTER = "character";
+        public static final String ORDER = "order";
+        public static final String PROFILE_PATH = "profile_path";
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_TV_EPISODE_GUEST_STAR).build();
+
+        static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TV_EPISODE_GUEST_STAR;
+        static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TV_EPISODE_GUEST_STAR;
+
+        static Uri buildTVEpisodeGuestStarUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        //content://work....../tv_episode_guest_star/episodeId
+        public static Uri buildEpisodeGuestStarUriWithEpisodeId(String episodeId) {
+            return CONTENT_URI.buildUpon().appendPath(episodeId).build();
+        }
+
+        public static Uri buildEpisodeGuestStarUri() {
             return CONTENT_URI.buildUpon().build();
         }
 

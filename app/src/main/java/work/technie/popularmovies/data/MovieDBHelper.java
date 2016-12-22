@@ -34,9 +34,13 @@ import work.technie.popularmovies.data.MovieContract.TV;
 import work.technie.popularmovies.data.MovieContract.TVCast;
 import work.technie.popularmovies.data.MovieContract.TVCreator;
 import work.technie.popularmovies.data.MovieContract.TVDetails;
+import work.technie.popularmovies.data.MovieContract.TVEpisode;
+import work.technie.popularmovies.data.MovieContract.TVEpisodeCrew;
+import work.technie.popularmovies.data.MovieContract.TVEpisodeGuestStar;
 import work.technie.popularmovies.data.MovieContract.TVEpisodeRuntime;
 import work.technie.popularmovies.data.MovieContract.TVGenres;
 import work.technie.popularmovies.data.MovieContract.TVNetworks;
+import work.technie.popularmovies.data.MovieContract.TVSeasonDetails;
 import work.technie.popularmovies.data.MovieContract.TVSeasons;
 import work.technie.popularmovies.data.MovieContract.TVSimilar;
 import work.technie.popularmovies.data.MovieContract.TVVideos;
@@ -326,6 +330,54 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 TVVideos.TV_ID + "  TEXT ," +
                 "UNIQUE (" + TVVideos.TV_ID + " , " + TVVideos.VIDEO_ID + ") ON CONFLICT REPLACE)";
 
+        final String SQL_CREATE__TABLE_TV_SEASON_DETAILS = "CREATE TABLE " + TVSeasonDetails.TABLE_NAME + " (" +
+                TVSeasonDetails._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                TVSeasonDetails.SEASON_ID + "  TEXT," +
+                TVSeasonDetails.AIR_DATE + "  TEXT," +
+                TVSeasonDetails.NAME + "  TEXT," +
+                TVSeasonDetails.OVERVIEW + "  TEXT," +
+                TVSeasonDetails.SEASON__ID + "  TEXT," +
+                TVSeasonDetails.POSTER_PATH + "  TEXT," +
+                TVSeasonDetails.SEASON_NUMBER + "  TEXT ," +
+                "UNIQUE (" + TVSeasonDetails.SEASON_ID + " , " + TVSeasonDetails.SEASON__ID + ") ON CONFLICT REPLACE)";
+
+        final String SQL_CREATE__TABLE_TV_EPISODE = "CREATE TABLE " + TVEpisode.TABLE_NAME + " (" +
+                TVEpisode._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                TVEpisode.SEASON_ID + "  TEXT," +
+                TVEpisode.AIR_DATE + "  TEXT," +
+                TVEpisode.EPISODE_NUMBER + "  TEXT," +
+                TVEpisode.NAME + "  TEXT," +
+                TVEpisode.OVERVIEW + "  TEXT," +
+                TVEpisode.ID + "  TEXT," +
+                TVEpisode.PRODUCTION_CODE + "  TEXT," +
+                TVEpisode.SEASON_NUMBER + "  TEXT," +
+                TVEpisode.STILL_PATH + "  TEXT," +
+                TVEpisode.VOTE_AVERAGE + "  TEXT ," +
+                TVEpisode.VOTE_COUNT + "  TEXT ," +
+                "UNIQUE (" + TVEpisode.SEASON_ID + " , " + TVEpisode.ID + ") ON CONFLICT REPLACE)";
+
+        final String SQL_CREATE__TABLE_TV_EPISODE_CREW = "CREATE TABLE " + TVEpisodeCrew.TABLE_NAME + " (" +
+                TVEpisodeCrew._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                TVEpisodeCrew.EPISODE_ID + "  TEXT," +
+                TVEpisodeCrew.ID + "  TEXT," +
+                TVEpisodeCrew.CREDIT_ID + "  TEXT," +
+                TVEpisodeCrew.NAME + "  TEXT," +
+                TVEpisodeCrew.DEPARTMENT + "  TEXT," +
+                TVEpisodeCrew.JOB + "  TEXT," +
+                TVEpisodeCrew.PROFILE_PATH + "  TEXT," +
+                "UNIQUE (" + TVEpisodeCrew.EPISODE_ID + " , " + TVEpisodeCrew.ID + ") ON CONFLICT REPLACE)";
+
+        final String SQL_CREATE__TABLE_TV_EPISODE_GUEST_STAR = "CREATE TABLE " + TVEpisodeGuestStar.TABLE_NAME + " (" +
+                TVEpisodeGuestStar._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                TVEpisodeGuestStar.EPISODE_ID + "  TEXT," +
+                TVEpisodeGuestStar.ID + "  TEXT," +
+                TVEpisodeGuestStar.CREDIT_ID + "  TEXT," +
+                TVEpisodeGuestStar.NAME + "  TEXT," +
+                TVEpisodeGuestStar.CHARACTER + "  TEXT," +
+                TVEpisodeGuestStar.ORDER + "  TEXT," +
+                TVEpisodeGuestStar.PROFILE_PATH + "  TEXT," +
+                "UNIQUE (" + TVEpisodeGuestStar.EPISODE_ID + " , " + TVEpisodeGuestStar.ID + ") ON CONFLICT REPLACE)";
+
         sqLiteDatabase.execSQL(SQL_CREATE__TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE__TABLE_FAVOURITES_MOVIES);
         sqLiteDatabase.execSQL(SQL_CREATE__TABLE_VIDEOS);
@@ -349,6 +401,10 @@ public class MovieDBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_CREATE__TABLE_TV_VIDEOS);
         sqLiteDatabase.execSQL(SQL_CREATE__TABLE_TVCAST);
         sqLiteDatabase.execSQL(SQL_CREATE__TABLE_TV_SIMILAR);
+        sqLiteDatabase.execSQL(SQL_CREATE__TABLE_TV_SEASON_DETAILS);
+        sqLiteDatabase.execSQL(SQL_CREATE__TABLE_TV_EPISODE);
+        sqLiteDatabase.execSQL(SQL_CREATE__TABLE_TV_EPISODE_CREW);
+        sqLiteDatabase.execSQL(SQL_CREATE__TABLE_TV_EPISODE_GUEST_STAR);
 
     }
 
@@ -377,6 +433,10 @@ public class MovieDBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TVVideos.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TVCast.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TVSimilar.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TVEpisodeGuestStar.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TVEpisode.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TVSeasonDetails.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TVEpisodeCrew.TABLE_NAME);
 
         onCreate(sqLiteDatabase);
     }

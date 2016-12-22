@@ -71,6 +71,14 @@ public class MovieProvider extends ContentProvider {
     static final int TV_CAST_WITH_ID = 2001;
     static final int TV_SIMILAR = 2100;
     static final int TV_SIMILAR_WITH_ID = 2101;
+    static final int TV_EPISODE_CREW = 2200;
+    static final int TV_EPISODE_CREW_WITH_ID = 2201;
+    static final int TV_EPISODE_GUEST_STAR = 2300;
+    static final int TV_EPISODE_GUEST_STAR_WITH_ID = 2301;
+    static final int TV_EPISODE = 2400;
+    static final int TV_EPISODE_WITH_ID = 2401;
+    static final int TV_SEASON_DETAILS = 2500;
+    static final int TV_SEASON_DETAILS_WITH_ID = 2501;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private MovieDBHelper mOpenHelper;
@@ -125,6 +133,14 @@ public class MovieProvider extends ContentProvider {
         matcher.addURI(authority, MovieContract.PATH_TV_CAST + "/*", TV_CAST_WITH_ID);
         matcher.addURI(authority, MovieContract.PATH_TV_SIMILAR, TV_SIMILAR);
         matcher.addURI(authority, MovieContract.PATH_TV_SIMILAR + "/*", TV_SIMILAR_WITH_ID);
+        matcher.addURI(authority, MovieContract.PATH_TV_EPISODE_CREW, TV_EPISODE_CREW);
+        matcher.addURI(authority, MovieContract.PATH_TV_EPISODE_CREW + "/*", TV_EPISODE_CREW_WITH_ID);
+        matcher.addURI(authority, MovieContract.PATH_TV_EPISODE_GUEST_STAR, TV_EPISODE_GUEST_STAR);
+        matcher.addURI(authority, MovieContract.PATH_TV_EPISODE_GUEST_STAR + "/*", TV_EPISODE_GUEST_STAR_WITH_ID);
+        matcher.addURI(authority, MovieContract.PATH_TV_EPISODE, TV_EPISODE);
+        matcher.addURI(authority, MovieContract.PATH_TV_EPISODE + "/*", TV_EPISODE_WITH_ID);
+        matcher.addURI(authority, MovieContract.PATH_TV_SEASONS, TV_SEASONS);
+        matcher.addURI(authority, MovieContract.PATH_TV_SEASONS + "/*", TV_SEASONS_WITH_ID);
 
         return matcher;
 
@@ -231,6 +247,22 @@ public class MovieProvider extends ContentProvider {
                 return MovieContract.TVSimilar.CONTENT_TYPE;
             case TV_SIMILAR_WITH_ID:
                 return MovieContract.TVSimilar.CONTENT_ITEM_TYPE;
+            case TV_EPISODE_CREW:
+                return MovieContract.TVEpisode.CONTENT_TYPE;
+            case TV_EPISODE_CREW_WITH_ID:
+                return MovieContract.TVEpisode.CONTENT_ITEM_TYPE;
+            case TV_EPISODE_GUEST_STAR:
+                return MovieContract.TVEpisodeGuestStar.CONTENT_TYPE;
+            case TV_EPISODE_GUEST_STAR_WITH_ID:
+                return MovieContract.TVEpisodeGuestStar.CONTENT_ITEM_TYPE;
+            case TV_EPISODE:
+                return MovieContract.TVEpisode.CONTENT_TYPE;
+            case TV_EPISODE_WITH_ID:
+                return MovieContract.TVEpisode.CONTENT_ITEM_TYPE;
+            case TV_SEASON_DETAILS:
+                return MovieContract.TVSeasonDetails.CONTENT_TYPE;
+            case TV_SEASON_DETAILS_WITH_ID:
+                return MovieContract.TVSeasonDetails.CONTENT_ITEM_TYPE;
 
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -744,6 +776,98 @@ public class MovieProvider extends ContentProvider {
                         sortOrder);
                 break;
             }
+            case TV_EPISODE_CREW: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        MovieContract.TVEpisodeCrew.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
+            case TV_EPISODE_CREW_WITH_ID: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        MovieContract.TVEpisodeCrew.TABLE_NAME,
+                        projection,
+                        MovieContract.TVEpisodeCrew.EPISODE_ID + " = ?",
+                        new String[]{String.valueOf(ContentUris.parseId(uri))},
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            }
+            case TV_EPISODE_GUEST_STAR: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        MovieContract.TVEpisodeGuestStar.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
+            case TV_EPISODE_GUEST_STAR_WITH_ID: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        MovieContract.TVEpisodeGuestStar.TABLE_NAME,
+                        projection,
+                        MovieContract.TVEpisodeGuestStar.EPISODE_ID + " = ?",
+                        new String[]{String.valueOf(ContentUris.parseId(uri))},
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            }
+            case TV_EPISODE: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        MovieContract.TVEpisode.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
+            case TV_EPISODE_WITH_ID: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        MovieContract.TVEpisode.TABLE_NAME,
+                        projection,
+                        MovieContract.TVEpisode.SEASON_ID + " = ?",
+                        new String[]{String.valueOf(ContentUris.parseId(uri))},
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            }
+            case TV_SEASON_DETAILS: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        MovieContract.TVSeasonDetails.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
+            case TV_SEASON_DETAILS_WITH_ID: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        MovieContract.TVSeasonDetails.TABLE_NAME,
+                        projection,
+                        MovieContract.TVSeasonDetails.SEASON_ID + " = ?",
+                        new String[]{String.valueOf(ContentUris.parseId(uri))},
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            }
 
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -925,6 +1049,38 @@ public class MovieProvider extends ContentProvider {
                 long _id = db.insert(MovieContract.TVSimilar.TABLE_NAME, null, values);
                 if (_id > 0)
                     returnUri = MovieContract.TVSimilar.buildSimilarTVUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
+            case TV_EPISODE_CREW: {
+                long _id = db.insert(MovieContract.TVEpisodeCrew.TABLE_NAME, null, values);
+                if (_id > 0)
+                    returnUri = MovieContract.TVEpisodeCrew.buildTVEpisodeCrewUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
+            case TV_EPISODE_GUEST_STAR: {
+                long _id = db.insert(MovieContract.TVEpisodeGuestStar.TABLE_NAME, null, values);
+                if (_id > 0)
+                    returnUri = MovieContract.TVEpisodeGuestStar.buildTVEpisodeGuestStarUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
+            case TV_EPISODE: {
+                long _id = db.insert(MovieContract.TVEpisode.TABLE_NAME, null, values);
+                if (_id > 0)
+                    returnUri = MovieContract.TVEpisode.buildTVEpisodeUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
+            case TV_SEASON_DETAILS: {
+                long _id = db.insert(MovieContract.TVSeasonDetails.TABLE_NAME, null, values);
+                if (_id > 0)
+                    returnUri = MovieContract.TVSeasonDetails.buildTVSeasonDetailsUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
@@ -1133,6 +1289,42 @@ public class MovieProvider extends ContentProvider {
             case TV_SIMILAR_WITH_ID:
                 rowsDeleted = db.delete(MovieContract.TVSimilar.TABLE_NAME,
                         MovieContract.TVSimilar.TV_ID_OLD + " = ?",
+                        new String[]{String.valueOf(ContentUris.parseId(uri))});
+                break;
+            case TV_EPISODE_CREW:
+                rowsDeleted = db.delete(
+                        MovieContract.TVEpisodeCrew.TABLE_NAME, selection, selectionArgs);
+                break;
+            case TV_EPISODE_CREW_WITH_ID:
+                rowsDeleted = db.delete(MovieContract.TVEpisodeCrew.TABLE_NAME,
+                        MovieContract.TVEpisodeCrew.EPISODE_ID + " = ?",
+                        new String[]{String.valueOf(ContentUris.parseId(uri))});
+                break;
+            case TV_EPISODE_GUEST_STAR:
+                rowsDeleted = db.delete(
+                        MovieContract.TVEpisodeGuestStar.TABLE_NAME, selection, selectionArgs);
+                break;
+            case TV_EPISODE_GUEST_STAR_WITH_ID:
+                rowsDeleted = db.delete(MovieContract.TVEpisodeGuestStar.TABLE_NAME,
+                        MovieContract.TVEpisodeGuestStar.EPISODE_ID + " = ?",
+                        new String[]{String.valueOf(ContentUris.parseId(uri))});
+                break;
+            case TV_EPISODE:
+                rowsDeleted = db.delete(
+                        MovieContract.TVEpisode.TABLE_NAME, selection, selectionArgs);
+                break;
+            case TV_EPISODE_WITH_ID:
+                rowsDeleted = db.delete(MovieContract.TVEpisode.TABLE_NAME,
+                        MovieContract.TVEpisode.SEASON_ID + " = ?",
+                        new String[]{String.valueOf(ContentUris.parseId(uri))});
+                break;
+            case TV_SEASON_DETAILS:
+                rowsDeleted = db.delete(
+                        MovieContract.TVSeasonDetails.TABLE_NAME, selection, selectionArgs);
+                break;
+            case TV_SEASON_DETAILS_WITH_ID:
+                rowsDeleted = db.delete(MovieContract.TVSeasonDetails.TABLE_NAME,
+                        MovieContract.TVSeasonDetails.SEASON_ID + " = ?",
                         new String[]{String.valueOf(ContentUris.parseId(uri))});
                 break;
 
@@ -1382,6 +1574,50 @@ public class MovieProvider extends ContentProvider {
                 rowsUpdated = db.update(MovieContract.TVSimilar.TABLE_NAME,
                         values,
                         MovieContract.TVSimilar.TV_ID_OLD + " = ?",
+                        new String[]{String.valueOf(ContentUris.parseId(uri))});
+                break;
+            }
+            case TV_EPISODE_CREW:
+                rowsUpdated = db.update(MovieContract.TVEpisodeCrew.TABLE_NAME, values, selection,
+                        selectionArgs);
+                break;
+            case TV_EPISODE_CREW_WITH_ID: {
+                rowsUpdated = db.update(MovieContract.TVEpisodeCrew.TABLE_NAME,
+                        values,
+                        MovieContract.TVEpisodeCrew.EPISODE_ID + " = ?",
+                        new String[]{String.valueOf(ContentUris.parseId(uri))});
+                break;
+            }
+            case TV_EPISODE:
+                rowsUpdated = db.update(MovieContract.TVEpisode.TABLE_NAME, values, selection,
+                        selectionArgs);
+                break;
+            case TV_EPISODE_WITH_ID: {
+                rowsUpdated = db.update(MovieContract.TVEpisode.TABLE_NAME,
+                        values,
+                        MovieContract.TVEpisode.SEASON_ID + " = ?",
+                        new String[]{String.valueOf(ContentUris.parseId(uri))});
+                break;
+            }
+            case TV_EPISODE_GUEST_STAR:
+                rowsUpdated = db.update(MovieContract.TVEpisodeGuestStar.TABLE_NAME, values, selection,
+                        selectionArgs);
+                break;
+            case TV_EPISODE_GUEST_STAR_WITH_ID: {
+                rowsUpdated = db.update(MovieContract.TVEpisodeGuestStar.TABLE_NAME,
+                        values,
+                        MovieContract.TVEpisodeGuestStar.EPISODE_ID + " = ?",
+                        new String[]{String.valueOf(ContentUris.parseId(uri))});
+                break;
+            }
+            case TV_SEASON_DETAILS:
+                rowsUpdated = db.update(MovieContract.TVSeasonDetails.TABLE_NAME, values, selection,
+                        selectionArgs);
+                break;
+            case TV_SEASON_DETAILS_WITH_ID: {
+                rowsUpdated = db.update(MovieContract.TVSeasonDetails.TABLE_NAME,
+                        values,
+                        MovieContract.TVSeasonDetails.SEASON_ID + " = ?",
                         new String[]{String.valueOf(ContentUris.parseId(uri))});
                 break;
             }
@@ -1749,6 +1985,74 @@ public class MovieProvider extends ContentProvider {
                     for (ContentValues value : values) {
 
                         long _id = db.insert(MovieContract.FavouritesTVs.TABLE_NAME, null, value);
+                        if (_id != -1) {
+                            returnCount++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return returnCount;
+            case TV_EPISODE_CREW:
+                db.beginTransaction();
+                returnCount = 0;
+                try {
+                    for (ContentValues value : values) {
+
+                        long _id = db.insert(MovieContract.TVEpisodeCrew.TABLE_NAME, null, value);
+                        if (_id != -1) {
+                            returnCount++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return returnCount;
+            case TV_EPISODE:
+                db.beginTransaction();
+                returnCount = 0;
+                try {
+                    for (ContentValues value : values) {
+
+                        long _id = db.insert(MovieContract.TVEpisode.TABLE_NAME, null, value);
+                        if (_id != -1) {
+                            returnCount++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return returnCount;
+            case TV_EPISODE_GUEST_STAR:
+                db.beginTransaction();
+                returnCount = 0;
+                try {
+                    for (ContentValues value : values) {
+
+                        long _id = db.insert(MovieContract.TVEpisodeGuestStar.TABLE_NAME, null, value);
+                        if (_id != -1) {
+                            returnCount++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return returnCount;
+            case TV_SEASON_DETAILS:
+                db.beginTransaction();
+                returnCount = 0;
+                try {
+                    for (ContentValues value : values) {
+
+                        long _id = db.insert(MovieContract.TVSeasonDetails.TABLE_NAME, null, value);
                         if (_id != -1) {
                             returnCount++;
                         }
