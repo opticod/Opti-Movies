@@ -11,9 +11,10 @@
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
-            android:layout_height="140dp"
+            android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="50dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="50dp"
             android:src="@drawable/logo" />
 
         <TextView
@@ -53,17 +54,24 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="@dimen/cardview_default_radius"
+            android:gravity="center"
             android:paddingLeft="45dp"
             android:paddingRight="45dp"
             android:text="@string/about_text" />
 
+        <ImageButton
+            android:id="@+id/github_link"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/github_mark" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
-            android:layout_marginTop="20dp"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="48dp"
             android:src="@drawable/tmdb" />
 
     </LinearLayout>
