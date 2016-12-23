@@ -352,12 +352,8 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
                 public void onItemClick(int position, View view) {
                     Cursor cursor = videoListAdapter.getCursor();
                     cursor.moveToPosition(position);
-                    Activity mActivity = getActivity();
                     final String source = cursor.getString(COL_VIDEOS_KEY);
-                    final String trailerUrl = "https://www.youtube.com/watch?v=" + source;
-
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(trailerUrl));
-                    mActivity.startActivity(intent);
+                    Utility.playVideo(getActivity(), source);
                 }
             });
 
@@ -380,8 +376,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
             play.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(finalFirstVideoLink));
-                    startActivity(intent);
+                    Utility.playVideo(getActivity(), finalFirstVideoLink);
                 }
             });
 

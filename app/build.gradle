@@ -6,9 +6,9 @@ android {
     defaultConfig {
         applicationId "work.technie.popularmovies"
         minSdkVersion 15
-        targetSdkVersion 21
-        versionCode 1
-        versionName "1.0"
+        targetSdkVersion 25
+        versionCode 2
+        versionName "2.0"
     }
     buildTypes {
         release {
@@ -25,7 +25,7 @@ repositories {
 
 }
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile files('libs/YouTubeAndroidPlayerApi.jar')
     testCompile 'junit:junit:4.12'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'com.android.support:appcompat-v7:25.1.0'

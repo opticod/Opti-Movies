@@ -33,7 +33,7 @@
                     android:layout_width="320dp"
                     android:layout_height="320dp"
                     android:layout_marginLeft="40dp"
-                    android:layout_marginTop="170dp"
+                    android:layout_marginTop="245dp"
                     android:foreground="#fafafa"
                     android:rotation="20"
                     android:src="@drawable/white" />

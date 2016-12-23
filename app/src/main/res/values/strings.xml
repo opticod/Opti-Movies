@@ -62,5 +62,6 @@
     <string name="vote_avg">Vote Average</string>
     <string name="guest_star">Guest Star</string>
     <string name="season_regulars">Season Regulars</string>
+    <string name="youtube_not_installed">Sorry, Can\'t Play! YouTube is not installed on this device.</string>
 
 </resources>
