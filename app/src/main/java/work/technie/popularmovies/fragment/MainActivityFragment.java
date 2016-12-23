@@ -112,7 +112,6 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getActivity().getWindow().setStatusBarColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark));
         }
-        reLoadData();
     }
 
     @Override
@@ -206,7 +205,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                     }
 
                     ((Callback) getActivity())
-                            .onItemSelected(cursor.getString(isMovieBookmark ? Constants.MOV_DETAILS_COL_MOVIE_ID : (isMovie ? Constants.MOV_COL_MOVIE_ID : Constants.TV_COL_TV_ID)), imageView, current, isMovieBookmark, isTVBookmark, isMovie);
+                            .onItemSelected(cursor.getString(isTVBookmark ? Constants.TV_DETAILS_COL_TV_ID : (isMovieBookmark ? Constants.MOV_DETAILS_COL_MOVIE_ID : (isMovie ? Constants.MOV_COL_MOVIE_ID : Constants.TV_COL_TV_ID))), imageView, current, isMovieBookmark, isTVBookmark, isMovie);
                 }
                 mPosition = position;
             }
@@ -302,6 +301,15 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                     MovieContract.MovieDetails.FAVOURED + " = ? ",
                     new String[]{"1"},
                     " CAST ( " + MovieContract.Movies._ID + " AS REAL ) ASC");
+        }
+        if (isTVBookmark) {
+            Uri Uri = MovieContract.TVDetails.buildTVDetailsUri();
+            return new CursorLoader(getActivity(),
+                    Uri,
+                    Constants.TV_DETAILS_COLUMNS,
+                    MovieContract.TVDetails.FAVOURED + " = ? ",
+                    new String[]{"1"},
+                    " CAST ( " + MovieContract.TVDetails._ID + " AS REAL ) ASC");
         }
         final boolean PREF_CHILD;
         final String PREF_LANGUAGE;
