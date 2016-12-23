@@ -1,15 +1,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingLeft="@dimen/marginMedium"
-    android:weightSum="1">
+    android:paddingStart="@dimen/marginMedium"
+    android:weightSum="1"
+    tools:ignore="RtlSymmetry">
 
     <ImageView
         android:id="@+id/cast_image"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_gravity="center"
+        android:contentDescription="Cast Image"
         android:padding="8dp" />
 
     <TextView

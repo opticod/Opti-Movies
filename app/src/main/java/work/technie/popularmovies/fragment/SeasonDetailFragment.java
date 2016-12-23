@@ -98,7 +98,6 @@ public class SeasonDetailFragment extends Fragment implements LoaderManager.Load
                              Bundle savedInstanceState) {
         Bundle arguments = getArguments();
 
-        Bitmap imageBitmap = null;
         String transitionName = "";
 
         if (arguments != null) {
@@ -106,7 +105,6 @@ public class SeasonDetailFragment extends Fragment implements LoaderManager.Load
             season_number = arguments.getString(Intent.EXTRA_CC);
             season_Id = arguments.getString(Intent.EXTRA_BCC);
             transitionName = arguments.getString("TRANS_NAME");
-            imageBitmap = arguments.getParcelable("POSTER_IMAGE");
         }
         rootView = inflater.inflate(R.layout.fragment_seasons, container, false);
 
@@ -131,7 +129,7 @@ public class SeasonDetailFragment extends Fragment implements LoaderManager.Load
         return rootView;
     }
 
-    public void populateAdapters() {
+    private void populateAdapters() {
 
         Activity mActivity = getActivity();
         if (mActivity != null) {
@@ -159,7 +157,7 @@ public class SeasonDetailFragment extends Fragment implements LoaderManager.Load
 
             episodeListAdapter.setOnClickListener(new EpisodesTVArrayAdapter.SetOnClickListener() {
                 @Override
-                public void onItemClick(int position, View view) {
+                public void onItemClick(int position) {
                     Cursor cursor = episodeListAdapter.getCursor();
                     cursor.moveToPosition(position);
                     Activity mActivity = getActivity();
@@ -191,7 +189,8 @@ public class SeasonDetailFragment extends Fragment implements LoaderManager.Load
             });
         }
     }
-    public void loadData(final View rootView) {
+
+    private void loadData(final View rootView) {
 
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.detail_season_swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -269,7 +268,7 @@ public class SeasonDetailFragment extends Fragment implements LoaderManager.Load
         return null;
     }
 
-    public void defaultShow() {
+    private void defaultShow() {
         rootView.findViewById(R.id.season_img).setVisibility(View.VISIBLE);
         rootView.findViewById(R.id.overview_title).setVisibility(View.VISIBLE);
         rootView.findViewById(R.id.air_date_title).setVisibility(View.VISIBLE);
@@ -350,7 +349,7 @@ public class SeasonDetailFragment extends Fragment implements LoaderManager.Load
         populateAdapters();
     }
 
-    public void changeSystemToolbarColor(Palette palette) {
+    private void changeSystemToolbarColor(Palette palette) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Activity mActivity = getActivity();
             if (mActivity != null) {
@@ -362,7 +361,7 @@ public class SeasonDetailFragment extends Fragment implements LoaderManager.Load
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public void changeColor(Activity mActivity) {
+    private void changeColor(Activity mActivity) {
         mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         mActivity.getWindow().setStatusBarColor(dark_muted_color);
         collapsingToolbar.setContentScrimColor(muted_color);

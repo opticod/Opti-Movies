@@ -47,9 +47,9 @@ import work.technie.popularmovies.data.MovieContract.TVVideos;
 import work.technie.popularmovies.data.MovieContract.Videos;
 
 
-public class MovieDBHelper extends SQLiteOpenHelper {
+class MovieDBHelper extends SQLiteOpenHelper {
 
-    static final String DATABASE_NAME = "movie.db";
+    private static final String DATABASE_NAME = "movie.db";
     private static final int DATABASE_VERSION = 2;
 
     public MovieDBHelper(Context context) {

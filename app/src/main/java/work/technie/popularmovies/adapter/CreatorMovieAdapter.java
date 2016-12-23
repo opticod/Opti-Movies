@@ -35,7 +35,7 @@ public class CreatorMovieAdapter extends
         RecyclerView.Adapter<CreatorMovieAdapter.ViewHolder> {
     private static final String LOG_TAG = CreatorMovieAdapter.class.getSimpleName();
 
-    private Cursor cursor;
+    private final Cursor cursor;
     private ViewHolderUtil.SetOnClickListener listener;
 
     public CreatorMovieAdapter(Cursor cursor) {
@@ -79,7 +79,7 @@ public class CreatorMovieAdapter extends
     }
 
     public interface SetOnClickListener extends ViewHolderUtil.SetOnClickListener {
-        void onItemClick(int position, View itemView);
+        void onItemClick(int position);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -97,7 +97,7 @@ public class CreatorMovieAdapter extends
                 @Override
                 public void onClick(View v) {
                     if (listener != null) {
-                        listener.onItemClick(getAdapterPosition(), view);
+                        listener.onItemClick(getAdapterPosition());
                     }
                 }
             });

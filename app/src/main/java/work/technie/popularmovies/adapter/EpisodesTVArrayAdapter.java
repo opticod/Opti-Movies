@@ -41,7 +41,7 @@ public class EpisodesTVArrayAdapter extends
         RecyclerView.Adapter<EpisodesTVArrayAdapter.ViewHolder> {
     private static final String LOG_TAG = EpisodesTVArrayAdapter.class.getSimpleName();
 
-    private Cursor cursor;
+    private final Cursor cursor;
     private Context context;
     private ViewHolderUtil.SetOnClickListener listener;
 
@@ -119,7 +119,7 @@ public class EpisodesTVArrayAdapter extends
     }
 
     public interface SetOnClickListener extends ViewHolderUtil.SetOnClickListener {
-        void onItemClick(int position, View itemView);
+        void onItemClick(int position);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -139,7 +139,7 @@ public class EpisodesTVArrayAdapter extends
                 @Override
                 public void onClick(View v) {
                     if (listener != null) {
-                        listener.onItemClick(getAdapterPosition(), view);
+                        listener.onItemClick(getAdapterPosition());
                     }
                 }
             });

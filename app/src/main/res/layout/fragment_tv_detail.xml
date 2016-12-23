@@ -1,4 +1,5 @@
 <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/detail_swipe_refresh"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -9,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:transitionGroup="true"
-        tools:context="work.technie.popularmovies.fragment.DetailTVActivityFragment">
+        tools:context="work.technie.popularmovies.fragment.DetailTVActivityFragment"
+        tools:targetApi="lollipop">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,29 +28,33 @@
                     android:id="@+id/backdropImg"
                     android:layout_width="fill_parent"
                     android:layout_height="299dp"
-                    android:layout_marginBottom="@dimen/poster_height" />
+                    android:layout_marginBottom="@dimen/poster_height"
+                    android:contentDescription="Backdrop Image" />
 
                 <ImageView
-                    android:id="@+id/back"
                     android:layout_width="320dp"
                     android:layout_height="320dp"
                     android:layout_marginLeft="40dp"
+                    android:layout_marginStart="40dp"
                     android:layout_marginTop="245dp"
                     android:foreground="#fafafa"
                     android:rotation="20"
-                    android:src="@drawable/white" />
+                    android:src="@drawable/white"
+                    tools:ignore="ContentDescription" />
 
                 <ImageView
                     android:id="@+id/poster"
                     android:layout_width="155dp"
                     android:layout_height="200dp"
-                    android:layout_marginTop="150dp" />
+                    android:layout_marginTop="150dp"
+                    android:contentDescription="Poster" />
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/bookmark"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginLeft="160dp"
+                    android:layout_marginStart="160dp"
                     android:layout_marginTop="200dp"
                     android:clickable="true"
                     android:src="@drawable/ic_star_border_black_24dp"
@@ -60,9 +66,10 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginLeft="290dp"
+                    android:layout_marginStart="290dp"
                     android:layout_marginTop="250dp"
                     android:clickable="true"
-                    android:src="@drawable/share"
+                    android:src="@drawable/ic_share_black_24dp"
                     android:visibility="gone"
                     app:backgroundTint="@color/colorPrimary"
                     app:layout_anchorGravity="bottom|right|end" />
@@ -72,9 +79,10 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginLeft="227dp"
+                    android:layout_marginStart="227dp"
                     android:layout_marginTop="225dp"
                     android:clickable="true"
-                    android:src="@drawable/play1"
+                    android:src="@drawable/ic_play_arrow_black_24dp"
                     android:visibility="gone"
                     app:backgroundTint="@color/colorPrimary" />
 
@@ -83,6 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="190dp"
+                    android:layout_marginStart="190dp"
                     android:layout_marginTop="278dp"
                     android:textAllCaps="true"
                     android:textColor="#de000000"
@@ -94,26 +103,30 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="253dp"
+                    android:layout_marginStart="253dp"
                     android:layout_marginTop="278dp"
                     android:text="/"
                     android:textAllCaps="true"
                     android:textColor="#de000000"
                     android:textSize="56sp"
                     android:textStyle="bold"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/ten"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="268dp"
+                    android:layout_marginStart="268dp"
                     android:layout_marginTop="300dp"
                     android:text="10"
                     android:textAllCaps="true"
                     android:textColor="#de000000"
                     android:textSize="45sp"
                     android:textStyle="bold"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    tools:ignore="HardcodedText" />
 
             </FrameLayout>
 
@@ -121,8 +134,10 @@
                 android:id="@+id/orgTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/marginMedium"
                 android:textAllCaps="true"
                 android:textAppearance="?android:textAppearanceLarge" />
@@ -132,8 +147,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginMedium"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin"
                 android:text="@string/overview"
                 android:textAppearance="?android:subtitle"
                 android:textSize="16sp"
@@ -144,8 +161,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginMedium"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin"
                 android:textAppearance="?android:content"
                 android:textColor="@color/secondary_text"
                 android:textSize="15sp" />
@@ -155,8 +174,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginMedium"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin"
                 android:text="@string/featured_crew"
                 android:textAppearance="?android:subtitle"
                 android:textSize="16sp"
@@ -167,16 +188,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/marginMedium"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin" />
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin" />
 
             <TextView
                 android:id="@+id/empty_crew"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginMedium"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin"
                 android:text="@string/empty"
                 android:textAppearance="?android:content"
                 android:textColor="@color/secondary_text"
@@ -189,8 +214,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginMedium"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin"
                 android:text="@string/top_billed_cast"
                 android:textAppearance="?android:subtitle"
                 android:textSize="16sp"
@@ -202,16 +229,20 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/marginMedium"
                 android:orientation="horizontal"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin" />
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin" />
 
             <TextView
                 android:id="@+id/empty_cast"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginMedium"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin"
                 android:text="@string/empty"
                 android:textAppearance="?android:content"
                 android:textColor="@color/secondary_text"
@@ -221,6 +252,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:baselineAligned="false"
                 android:orientation="horizontal"
                 android:weightSum="2">
 
@@ -235,8 +267,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingEnd="@dimen/activity_horizontal_margin"
                         android:paddingLeft="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:paddingStart="@dimen/activity_horizontal_margin"
                         android:text="@string/status"
                         android:textAppearance="?android:subtitle"
                         android:textSize="16sp"
@@ -247,8 +281,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingEnd="@dimen/activity_horizontal_margin"
                         android:paddingLeft="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:paddingStart="@dimen/activity_horizontal_margin"
                         android:textAppearance="?android:content"
                         android:textColor="@color/secondary_text"
                         android:textSize="15sp" />
@@ -259,8 +295,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingEnd="@dimen/activity_horizontal_margin"
                         android:paddingLeft="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:paddingStart="@dimen/activity_horizontal_margin"
                         android:text="@string/network"
                         android:textAppearance="?android:subtitle"
                         android:textSize="16sp"
@@ -271,8 +309,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingEnd="@dimen/activity_horizontal_margin"
                         android:paddingLeft="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:paddingStart="@dimen/activity_horizontal_margin"
                         android:textAppearance="?android:content"
                         android:textColor="@color/secondary_text"
                         android:textSize="15sp" />
@@ -282,8 +322,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingEnd="@dimen/activity_horizontal_margin"
                         android:paddingLeft="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:paddingStart="@dimen/activity_horizontal_margin"
                         android:text="@string/original_language"
                         android:textAppearance="?android:subtitle"
                         android:textSize="16sp"
@@ -294,8 +336,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingEnd="@dimen/activity_horizontal_margin"
                         android:paddingLeft="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:paddingStart="@dimen/activity_horizontal_margin"
                         android:textAppearance="?android:content"
                         android:textColor="@color/secondary_text"
                         android:textSize="15sp" />
@@ -305,8 +349,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingEnd="@dimen/activity_horizontal_margin"
                         android:paddingLeft="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:paddingStart="@dimen/activity_horizontal_margin"
                         android:text="@string/runtime"
                         android:textAppearance="?android:subtitle"
                         android:textSize="16sp"
@@ -317,8 +363,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingEnd="@dimen/activity_horizontal_margin"
                         android:paddingLeft="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:paddingStart="@dimen/activity_horizontal_margin"
                         android:textAppearance="?android:content"
                         android:textColor="@color/secondary_text"
                         android:textSize="15sp" />
@@ -329,8 +377,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingEnd="@dimen/activity_horizontal_margin"
                         android:paddingLeft="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:paddingStart="@dimen/activity_horizontal_margin"
                         android:text="@string/homepage"
                         android:textAppearance="?android:subtitle"
                         android:textSize="16sp"
@@ -342,8 +392,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
                         android:autoLink="web"
+                        android:paddingEnd="@dimen/activity_horizontal_margin"
                         android:paddingLeft="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:paddingStart="@dimen/activity_horizontal_margin"
                         android:textAppearance="?android:content"
                         android:textColor="@color/secondary_text"
                         android:textSize="15sp" />
@@ -372,19 +424,23 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/marginMedium"
-                        android:paddingRight="@dimen/activity_horizontal_margin" />
+                        android:paddingEnd="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        tools:ignore="RtlSymmetry" />
 
                     <TextView
                         android:id="@+id/empty_genre"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingEnd="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
                         android:text="@string/empty"
                         android:textAppearance="?android:content"
                         android:textColor="@color/secondary_text"
                         android:textSize="15sp"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        tools:ignore="RtlSymmetry" />
 
 
                     <TextView
@@ -392,42 +448,50 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingEnd="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
                         android:text="@string/first_air_date"
                         android:textAppearance="?android:subtitle"
                         android:textSize="16sp"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        tools:ignore="RtlSymmetry" />
 
                     <TextView
                         android:id="@+id/first_air_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingEnd="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
                         android:textAppearance="?android:content"
                         android:textColor="@color/secondary_text"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        tools:ignore="RtlSymmetry" />
 
                     <TextView
                         android:id="@+id/last_air_date_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingEnd="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
                         android:text="@string/last_air_date"
                         android:textAppearance="?android:subtitle"
                         android:textSize="16sp"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        tools:ignore="RtlSymmetry" />
 
                     <TextView
                         android:id="@+id/last_air_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginMedium"
+                        android:paddingEnd="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
                         android:textAppearance="?android:content"
                         android:textColor="@color/secondary_text"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        tools:ignore="RtlSymmetry" />
 
                 </LinearLayout>
 
@@ -438,8 +502,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginMedium"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin"
                 android:text="@string/seasons"
                 android:textAppearance="?android:subtitle"
                 android:textSize="16sp"
@@ -451,8 +517,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/marginMedium"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin" />
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin" />
 
 
             <TextView
@@ -460,8 +528,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginMedium"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin"
                 android:text="@string/empty"
                 android:textAppearance="?android:content"
                 android:textColor="@color/secondary_text"
@@ -473,8 +543,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginMedium"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin"
                 android:text="@string/videos"
                 android:textAppearance="?android:subtitle"
                 android:textSize="16sp"
@@ -486,16 +558,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/marginMedium"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin" />
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin" />
 
             <TextView
                 android:id="@+id/empty_video"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginMedium"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin"
                 android:text="@string/empty"
                 android:textAppearance="?android:content"
                 android:textColor="@color/secondary_text"
@@ -507,8 +583,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginMedium"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin"
                 android:text="@string/similar_tv_shows"
                 android:textAppearance="?android:subtitle"
                 android:textSize="16sp"
@@ -520,16 +598,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/marginMedium"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin" />
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin" />
 
             <TextView
                 android:id="@+id/empty_similar_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginMedium"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin"
                 android:text="@string/empty"
                 android:textAppearance="?android:content"
                 android:textColor="@color/secondary_text"
@@ -537,7 +619,6 @@
                 android:visibility="gone" />
 
             <ImageView
-                android:id="@+id/tmdb"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="32dp"

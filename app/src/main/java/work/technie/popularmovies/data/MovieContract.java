@@ -24,9 +24,6 @@ import android.provider.BaseColumns;
 public class MovieContract {
 
     public static final String CONTENT_AUTHORITY = "work.technie.popularmovies";
-
-    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
-
     public static final String PATH_MOVIES = "movies";
     public static final String PATH_VIDEOS = "videos";
     public static final String PATH_SIMILAR_MOVIES = "similar_movies";
@@ -36,9 +33,7 @@ public class MovieContract {
     public static final String PATH_GENRES = "genres";
     public static final String PATH_MOVIE_DETAILS = "movie_details";
     public static final String PATH_FAVOURITES_MOVIES = "favourites_movies";
-
     public static final String PATH_PEOPLE = "people";
-
     public static final String PATH_TV = "tv";
     public static final String PATH_TV_DETAILS = "tv_details";
     public static final String PATH_FAVOURITES_TV = "favourites_tv";
@@ -50,12 +45,11 @@ public class MovieContract {
     public static final String PATH_TV_VIDEOS = "tv_videos";
     public static final String PATH_TV_CAST = "tv_cast";
     public static final String PATH_TV_SIMILAR = "tv_similar";
-
     public static final String PATH_TV_EPISODE_CREW = "tv_episode_crew";
     public static final String PATH_TV_EPISODE_GUEST_STAR = "tv_episode_guest_star";
     public static final String PATH_TV_EPISODE = "tv_episode";
     public static final String PATH_TV_SEASON_DETAILS = "tv_season_details";
-
+    private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     public static final class Movies implements BaseColumns {
 

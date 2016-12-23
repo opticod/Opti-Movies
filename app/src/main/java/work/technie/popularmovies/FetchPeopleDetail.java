@@ -110,14 +110,13 @@ public class FetchPeopleDetail extends AsyncTask<String, Void, Void> {
         BufferedReader reader = null;
 
         // Will contain the raw JSON response as a string.
-        String movieJsonStr = null;
+        String movieJsonStr;
 
         try {
             // Construct the URL for the movieAPI query
             // Possible parameters are avaiable at OWM's forecast API page, at
             final String MOVIE_BASE_URL = "http://api.themoviedb.org/3/person/";
             final String APPID_PARAM = "api_key";
-            final String DATA = "append_to_response";
 
             Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                     .appendPath(params[0])
@@ -132,7 +131,7 @@ public class FetchPeopleDetail extends AsyncTask<String, Void, Void> {
 
             // Read the input stream into a String
             InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             if (inputStream == null) {
                 // Nothing to do.
                 return null;
@@ -144,7 +143,7 @@ public class FetchPeopleDetail extends AsyncTask<String, Void, Void> {
                 // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
                 // But it does make debugging a *lot* easier if you print out the completed
                 // buffer for debugging.
-                buffer.append(line + "\n");
+                buffer.append(line).append("\n");
             }
 
             if (buffer.length() == 0) {

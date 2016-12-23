@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -45,13 +46,11 @@ public class BaseActivity extends AppCompatActivity
     public static final String FRAGMENT_TAG_TV_ON_THE_AIR = "TV On The Air";
     public static final String FRAGMENT_TAG_TV_POPULAR = "Popular TV Shows";
     public static final String FRAGMENT_TAG_TV_TOP_RATED = "Top Rated TV Shows";
-    public static final String FRAGMENT_ABOUT = "About";
-    public static final String FRAGMENT_SETTINGS = "Settings";
+    private static final String FRAGMENT_ABOUT = "About";
+    private static final String FRAGMENT_SETTINGS = "Settings";
 
     private final static String STATE_FRAGMENT = "stateFragment";
     private final String DETAIL_FRAGMENT_TAG = "DFTAG";
-    private final String LAST_FRAGMENT = "last_fragment";
-    NavigationView navigationView;
     private boolean mTwoPane;
     private int currentMenuItemId;
 
@@ -61,7 +60,7 @@ public class BaseActivity extends AppCompatActivity
         setContentView(R.layout.activity_base);
         Stetho.initializeWithDefaults(this);
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         if (savedInstanceState == null) {
@@ -121,7 +120,7 @@ public class BaseActivity extends AppCompatActivity
         }
     }
 
-    public void changeSystemToolbarColor(Palette palette) {
+    private void changeSystemToolbarColor(Palette palette) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Activity mActivity = this;
             int dark_muted_color = palette.getDarkMutedColor(ContextCompat.getColor(mActivity, R.color.colorPrimaryDark));
@@ -130,7 +129,7 @@ public class BaseActivity extends AppCompatActivity
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public void changeColor(Activity mActivity, int dark_muted_color) {
+    private void changeColor(Activity mActivity, int dark_muted_color) {
         mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         mActivity.getWindow().setStatusBarColor(dark_muted_color);
     }
@@ -227,7 +226,7 @@ public class BaseActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -245,7 +244,7 @@ public class BaseActivity extends AppCompatActivity
     }
 
     @Override
-    public void onItemSelected(String id, ImageView sharedView, Fragment current, boolean isMovieBookmark, boolean isTVBookmark, boolean isMovie) {
+    public void onItemSelected(String id, ImageView sharedView, Fragment current, boolean isMovie) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
@@ -270,6 +269,7 @@ public class BaseActivity extends AppCompatActivity
         } else {
 
             String imageTransitionName = "";
+            String LAST_FRAGMENT = "last_fragment";
             if (isMovie) {
                 DetailMovieActivityFragment fragment = new DetailMovieActivityFragment();
 

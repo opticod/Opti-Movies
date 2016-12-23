@@ -24,66 +24,67 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 public class MovieProvider extends ContentProvider {
 
-    static final int MOVIE = 100;
-    static final int MOVIE_WITH_ID = 101;
-    static final int VIDEOS = 200;
-    static final int VIDEOS_WITH_ID = 201;
-    static final int REVIEWS = 300;
-    static final int REVIEWS_WITH_ID = 301;
-    static final int GENRES = 400;
-    static final int GENRES_WITH_ID = 401;
-    static final int FAVOURITES_MOVIES = 500;
-    static final int FAVOURITES_MOVIES_WITH_ID = 501;
-    static final int SIMILAR_MOVIES = 700;
-    static final int SIMILAR_MOVIES_WITH_ID = 701;
-    static final int CASTS = 800;
-    static final int CASTS_WITH_ID = 801;
-    static final int PEOPLE = 900;
-    static final int PEOPLE_WITH_ID = 901;
-    static final int CREW = 1000;
-    static final int CREW_WITH_ID = 1001;
-    static final int MOVIE_DETAILS = 1100;
-    static final int MOVIE_DETAILS_WITH_ID = 1101;
+    private static final int MOVIE = 100;
+    private static final int MOVIE_WITH_ID = 101;
+    private static final int VIDEOS = 200;
+    private static final int VIDEOS_WITH_ID = 201;
+    private static final int REVIEWS = 300;
+    private static final int REVIEWS_WITH_ID = 301;
+    private static final int GENRES = 400;
+    private static final int GENRES_WITH_ID = 401;
+    private static final int FAVOURITES_MOVIES = 500;
+    private static final int FAVOURITES_MOVIES_WITH_ID = 501;
+    private static final int SIMILAR_MOVIES = 700;
+    private static final int SIMILAR_MOVIES_WITH_ID = 701;
+    private static final int CASTS = 800;
+    private static final int CASTS_WITH_ID = 801;
+    private static final int PEOPLE = 900;
+    private static final int PEOPLE_WITH_ID = 901;
+    private static final int CREW = 1000;
+    private static final int CREW_WITH_ID = 1001;
+    private static final int MOVIE_DETAILS = 1100;
+    private static final int MOVIE_DETAILS_WITH_ID = 1101;
 
 
-    static final int TV = 600;
-    static final int TV_WITH_ID = 601;
-    static final int FAVOURITES_TVS = 1200;
-    static final int FAVOURITES_TVS_WITH_ID = 1201;
-    static final int TV_DETAILS = 1300;
-    static final int TV_DETAILS_WITH_ID = 1301;
-    static final int TV_CREATOR = 1400;
-    static final int TV_CREATOR_WITH_ID = 1401;
-    static final int TV_EPISODE_RUNTIME = 1500;
-    static final int TV_EPISODE_RUNTIME_WITH_ID = 1501;
-    static final int TV_GENRE = 1600;
-    static final int TV_GENRE_WITH_ID = 1601;
-    static final int TV_NETWORKS = 1700;
-    static final int TV_NETWORKS_WITH_ID = 1701;
-    static final int TV_SEASONS = 1800;
-    static final int TV_SEASONS_WITH_ID = 1801;
-    static final int TV_VIDEOS = 1900;
-    static final int TV_VIDEOS_WITH_ID = 1901;
-    static final int TV_CAST = 2000;
-    static final int TV_CAST_WITH_ID = 2001;
-    static final int TV_SIMILAR = 2100;
-    static final int TV_SIMILAR_WITH_ID = 2101;
-    static final int TV_EPISODE_CREW = 2200;
-    static final int TV_EPISODE_CREW_WITH_ID = 2201;
-    static final int TV_EPISODE_GUEST_STAR = 2300;
-    static final int TV_EPISODE_GUEST_STAR_WITH_ID = 2301;
-    static final int TV_EPISODE = 2400;
-    static final int TV_EPISODE_WITH_ID = 2401;
-    static final int TV_SEASON_DETAILS = 2500;
-    static final int TV_SEASON_DETAILS_WITH_ID = 2501;
+    private static final int TV = 600;
+    private static final int TV_WITH_ID = 601;
+    private static final int FAVOURITES_TVS = 1200;
+    private static final int FAVOURITES_TVS_WITH_ID = 1201;
+    private static final int TV_DETAILS = 1300;
+    private static final int TV_DETAILS_WITH_ID = 1301;
+    private static final int TV_CREATOR = 1400;
+    private static final int TV_CREATOR_WITH_ID = 1401;
+    private static final int TV_EPISODE_RUNTIME = 1500;
+    private static final int TV_EPISODE_RUNTIME_WITH_ID = 1501;
+    private static final int TV_GENRE = 1600;
+    private static final int TV_GENRE_WITH_ID = 1601;
+    private static final int TV_NETWORKS = 1700;
+    private static final int TV_NETWORKS_WITH_ID = 1701;
+    private static final int TV_SEASONS = 1800;
+    private static final int TV_SEASONS_WITH_ID = 1801;
+    private static final int TV_VIDEOS = 1900;
+    private static final int TV_VIDEOS_WITH_ID = 1901;
+    private static final int TV_CAST = 2000;
+    private static final int TV_CAST_WITH_ID = 2001;
+    private static final int TV_SIMILAR = 2100;
+    private static final int TV_SIMILAR_WITH_ID = 2101;
+    private static final int TV_EPISODE_CREW = 2200;
+    private static final int TV_EPISODE_CREW_WITH_ID = 2201;
+    private static final int TV_EPISODE_GUEST_STAR = 2300;
+    private static final int TV_EPISODE_GUEST_STAR_WITH_ID = 2301;
+    private static final int TV_EPISODE = 2400;
+    private static final int TV_EPISODE_WITH_ID = 2401;
+    private static final int TV_SEASON_DETAILS = 2500;
+    private static final int TV_SEASON_DETAILS_WITH_ID = 2501;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private MovieDBHelper mOpenHelper;
 
-    static UriMatcher buildUriMatcher() {
+    private static UriMatcher buildUriMatcher() {
 
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = MovieContract.CONTENT_AUTHORITY;
@@ -153,7 +154,7 @@ public class MovieProvider extends ContentProvider {
     }
 
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
 
         // Use the Uri Matcher to determine what kind of URI this is.
         final int match = sUriMatcher.match(uri);
@@ -270,7 +271,7 @@ public class MovieProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
         // Here's the switch statement that, given a URI, will determine what kind of request it is,
         // and query the database accordingly.
@@ -877,7 +878,7 @@ public class MovieProvider extends ContentProvider {
     }
 
     @Override
-    public Uri insert(Uri uri, ContentValues values) {
+    public Uri insert(@NonNull Uri uri, ContentValues values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         Uri returnUri;
@@ -1094,7 +1095,7 @@ public class MovieProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
+    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         int rowsDeleted;
@@ -1340,7 +1341,7 @@ public class MovieProvider extends ContentProvider {
 
     @Override
     public int update(
-            Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+            @NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         int rowsUpdated;
@@ -1632,7 +1633,7 @@ public class MovieProvider extends ContentProvider {
     }
 
     @Override
-    public int bulkInsert(Uri uri, ContentValues[] values) {
+    public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         switch (match) {

@@ -2,19 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:divider="?android:attr/dividerHorizontal"
     android:fitsSystemWindows="true"
-    android:orientation="vertical">
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:baselineAligned="false"
-        android:divider="?android:attr/dividerHorizontal"
-        android:orientation="horizontal"
-        tools:context="work.technie.popularmovies.activity.BaseActivity">
-
-
+    android:orientation="horizontal"
+    tools:context="work.technie.popularmovies.activity.BaseActivity">
         <!--
         This layout is a two-pane layout for the Items master/detail flow.
         -->
@@ -31,7 +23,7 @@
             android:id="@+id/movie_detail_container"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="4" />
+            android:layout_weight="4"
+            tools:ignore="InconsistentLayout" />
 
-    </LinearLayout>
 </LinearLayout>

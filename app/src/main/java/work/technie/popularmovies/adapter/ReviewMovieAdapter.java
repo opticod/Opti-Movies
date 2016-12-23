@@ -38,9 +38,8 @@ import static work.technie.popularmovies.Constants.COL_REVIEW_URL;
  */
 public class ReviewMovieAdapter extends
         RecyclerView.Adapter<ReviewMovieAdapter.ViewHolder> {
-    private static final String LOG_TAG = ReviewMovieAdapter.class.getSimpleName();
 
-    private Cursor cursor;
+    private final Cursor cursor;
 
     public ReviewMovieAdapter(Cursor cursor) {
         this.cursor = cursor;

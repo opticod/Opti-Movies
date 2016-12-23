@@ -89,14 +89,12 @@ public class EpisodeDetailFragment extends Fragment implements LoaderManager.Loa
                              Bundle savedInstanceState) {
         Bundle arguments = getArguments();
 
-        Bitmap imageBitmap = null;
         String transitionName = "";
 
         if (arguments != null) {
             season_Id = arguments.getString(Intent.EXTRA_CC);
             episode_Id = arguments.getString(Intent.EXTRA_BCC);
             transitionName = arguments.getString("TRANS_NAME");
-            imageBitmap = arguments.getParcelable("POSTER_IMAGE");
         }
         rootView = inflater.inflate(R.layout.fragment_episodes, container, false);
 
@@ -117,11 +115,11 @@ public class EpisodeDetailFragment extends Fragment implements LoaderManager.Loa
         }
         current = this;
 
-        loadData(rootView);
+        loadData();
         return rootView;
     }
 
-    public void populateAdapters() {
+    private void populateAdapters() {
 
         Activity mActivity = getActivity();
         if (mActivity != null) {
@@ -171,7 +169,7 @@ public class EpisodeDetailFragment extends Fragment implements LoaderManager.Loa
 
             regularListAdapter.setOnClickListener(new CastMovieAdapter.SetOnClickListener() {
                 @Override
-                public void onItemClick(int position, View view) {
+                public void onItemClick(int position) {
                     Cursor cursor = regularListAdapter.getCursor();
                     cursor.moveToPosition(position);
                     Activity mActivity = getActivity();
@@ -204,7 +202,7 @@ public class EpisodeDetailFragment extends Fragment implements LoaderManager.Loa
 
             guestListAdapter.setOnClickListener(new CastMovieAdapter.SetOnClickListener() {
                 @Override
-                public void onItemClick(int position, View view) {
+                public void onItemClick(int position) {
                     Cursor cursor = guestListAdapter.getCursor();
                     cursor.moveToPosition(position);
                     Activity mActivity = getActivity();
@@ -237,7 +235,7 @@ public class EpisodeDetailFragment extends Fragment implements LoaderManager.Loa
         }
     }
 
-    public void loadData(final View rootView) {
+    private void loadData() {
         populateAdapters();
 
     }
@@ -275,7 +273,7 @@ public class EpisodeDetailFragment extends Fragment implements LoaderManager.Loa
         return null;
     }
 
-    public void defaultShow() {
+    private void defaultShow() {
         rootView.findViewById(R.id.episode_img).setVisibility(View.VISIBLE);
         rootView.findViewById(R.id.overview_title).setVisibility(View.VISIBLE);
         rootView.findViewById(R.id.air_date_title).setVisibility(View.VISIBLE);
@@ -361,7 +359,7 @@ public class EpisodeDetailFragment extends Fragment implements LoaderManager.Loa
         populateAdapters();
     }
 
-    public void changeSystemToolbarColor(Palette palette) {
+    private void changeSystemToolbarColor(Palette palette) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Activity mActivity = getActivity();
             if (mActivity != null) {
@@ -373,7 +371,7 @@ public class EpisodeDetailFragment extends Fragment implements LoaderManager.Loa
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public void changeColor(Activity mActivity) {
+    private void changeColor(Activity mActivity) {
         mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         mActivity.getWindow().setStatusBarColor(dark_muted_color);
         collapsingToolbar.setContentScrimColor(muted_color);

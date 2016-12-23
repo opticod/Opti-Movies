@@ -247,7 +247,6 @@ public class FetchTVMovieTask extends AsyncTask<String, Void, Integer> {
                 first_air_date = movieInfo.getString(FIRST_AIR_DATE);
                 popularity = movieInfo.getString(POPULARITY);
                 votAvg = movieInfo.getString(VOTAVG);
-                backdropURL = movieInfo.getString(BACKDROP_PATH);
                 vote_count = movieInfo.getString(VOTE_COUNT);
 
 
@@ -308,7 +307,7 @@ public class FetchTVMovieTask extends AsyncTask<String, Void, Integer> {
         BufferedReader reader = null;
 
         // Will contain the raw JSON response as a string.
-        String movieJsonStr = null;
+        String movieJsonStr;
         boolean isMovie = true;
 
         try {
@@ -392,7 +391,7 @@ public class FetchTVMovieTask extends AsyncTask<String, Void, Integer> {
 
             // Read the input stream into a String
             InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             if (inputStream == null) {
                 // Nothing to do.
                 return null;
@@ -404,7 +403,7 @@ public class FetchTVMovieTask extends AsyncTask<String, Void, Integer> {
                 // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
                 // But it does make debugging a *lot* easier if you print out the completed
                 // buffer for debugging.
-                buffer.append(line + "\n");
+                buffer.append(line).append("\n");
             }
 
             if (buffer.length() == 0) {

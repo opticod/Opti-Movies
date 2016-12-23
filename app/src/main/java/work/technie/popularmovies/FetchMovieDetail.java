@@ -71,9 +71,6 @@ public class FetchMovieDetail extends AsyncTask<String, Void, Void> {
 
         // These are the names of the JSON objects that need to be extracted.
         final String NAME = "name";
-        final String SIZE = "size";
-        final String SOURCE = "source";
-        final String TYPE = "type";
         final String REVIEW_ID = "id";
         final String GENRE_ID = "id";
         final String AUTHOR = "author";
@@ -89,7 +86,6 @@ public class FetchMovieDetail extends AsyncTask<String, Void, Void> {
         final String RESULT2 = "reviews";
         final String RESULT3 = "genres";
         final String RESULT4 = "similar";
-        final String YOUTUBE = "youtube";
         final String CREDITS = "credits";
         final String CAST = "cast";
         final String CREW = "crew";
@@ -148,12 +144,11 @@ public class FetchMovieDetail extends AsyncTask<String, Void, Void> {
                 movieValues.put(Videos.MOVIE_ID, movie_id);
                 cVVectorTrailer.add(movieValues);
             }
-            int inserted = 0;
             // add to database
             if (cVVectorTrailer.size() > 0) {
                 ContentValues[] cvArray = new ContentValues[cVVectorTrailer.size()];
                 cVVectorTrailer.toArray(cvArray);
-                inserted = mContext.getContentResolver().bulkInsert(Videos.CONTENT_URI, cvArray);
+                mContext.getContentResolver().bulkInsert(Videos.CONTENT_URI, cvArray);
             }
 
             String page = movieArrayReviews.getString(PAGE);
@@ -196,17 +191,14 @@ public class FetchMovieDetail extends AsyncTask<String, Void, Void> {
                 cVVectorReviews.add(movieValues);
 
             }
-            inserted = 0;
             // add to database
             if (cVVectorReviews.size() > 0) {
                 ContentValues[] cvArray = new ContentValues[cVVectorReviews.size()];
                 cVVectorReviews.toArray(cvArray);
-                inserted = mContext.getContentResolver().bulkInsert(Reviews.CONTENT_URI, cvArray);
+                mContext.getContentResolver().bulkInsert(Reviews.CONTENT_URI, cvArray);
             }
 
             page = movieArraySimilar.getString(PAGE);
-            total_page = movieArraySimilar.getString(TOTAL_PAGES_REVIEWS);
-            total_results = movieArraySimilar.getString(TOTAL_RESULTS_REVIEWS);
 
             JSONArray similar = movieArraySimilar.getJSONArray("results");
 
@@ -270,12 +262,11 @@ public class FetchMovieDetail extends AsyncTask<String, Void, Void> {
                 cVVectorSimilar.add(movieValues);
 
             }
-            inserted = 0;
             // add to database
             if (cVVectorSimilar.size() > 0) {
                 ContentValues[] cvArray = new ContentValues[cVVectorSimilar.size()];
                 cVVectorSimilar.toArray(cvArray);
-                inserted = mContext.getContentResolver().bulkInsert(SimilarMovies.CONTENT_URI, cvArray);
+                mContext.getContentResolver().bulkInsert(SimilarMovies.CONTENT_URI, cvArray);
             }
 
             Vector<ContentValues> cVVectorGenres = new Vector<ContentValues>(movieArrayGenres.length());
@@ -297,12 +288,11 @@ public class FetchMovieDetail extends AsyncTask<String, Void, Void> {
                 cVVectorGenres.add(movieValues);
 
             }
-            inserted = 0;
             // add to database
             if (cVVectorGenres.size() > 0) {
                 ContentValues[] cvArray = new ContentValues[cVVectorGenres.size()];
                 cVVectorGenres.toArray(cvArray);
-                inserted = mContext.getContentResolver().bulkInsert(Genres.CONTENT_URI, cvArray);
+                mContext.getContentResolver().bulkInsert(Genres.CONTENT_URI, cvArray);
             }
 
             Vector<ContentValues> cVVectorCrew = new Vector<ContentValues>(movieArrayCrew.length());
@@ -332,12 +322,11 @@ public class FetchMovieDetail extends AsyncTask<String, Void, Void> {
                 cVVectorCrew.add(movieValues);
 
             }
-            inserted = 0;
             // add to database
             if (cVVectorCrew.size() > 0) {
                 ContentValues[] cvArray = new ContentValues[cVVectorCrew.size()];
                 cVVectorCrew.toArray(cvArray);
-                inserted = mContext.getContentResolver().bulkInsert(Crew.CONTENT_URI, cvArray);
+                mContext.getContentResolver().bulkInsert(Crew.CONTENT_URI, cvArray);
             }
 
             Vector<ContentValues> cVVectorCast = new Vector<ContentValues>(movieArrayCast.length());
@@ -369,12 +358,11 @@ public class FetchMovieDetail extends AsyncTask<String, Void, Void> {
                 cVVectorCast.add(movieValues);
 
             }
-            inserted = 0;
             // add to database
             if (cVVectorCast.size() > 0) {
                 ContentValues[] cvArray = new ContentValues[cVVectorCast.size()];
                 cVVectorCast.toArray(cvArray);
-                inserted = mContext.getContentResolver().bulkInsert(Cast.CONTENT_URI, cvArray);
+                mContext.getContentResolver().bulkInsert(Cast.CONTENT_URI, cvArray);
             }
 
             ContentValues[] cvArray = new ContentValues[1];
@@ -445,7 +433,7 @@ public class FetchMovieDetail extends AsyncTask<String, Void, Void> {
             movieValues.put(MovieDetails.VOTE_COUNT, vote_count);
             movieValues.put(MovieDetails.VOTE_AVERAGE, votAvg);
             cvArray[0] = movieValues;
-            inserted = mContext.getContentResolver().bulkInsert(MovieContract.MovieDetails.CONTENT_URI, cvArray);
+            mContext.getContentResolver().bulkInsert(MovieContract.MovieDetails.CONTENT_URI, cvArray);
 
         } catch (JSONException e) {
             //Log.e(LOG_TAG, e.getMessage(), e);
@@ -466,7 +454,7 @@ public class FetchMovieDetail extends AsyncTask<String, Void, Void> {
         BufferedReader reader = null;
 
         // Will contain the raw JSON response as a string.
-        String movieJsonStr = null;
+        String movieJsonStr;
 
         try {
             // Construct the URL for the movieAPI query
@@ -490,7 +478,7 @@ public class FetchMovieDetail extends AsyncTask<String, Void, Void> {
 
             // Read the input stream into a String
             InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             if (inputStream == null) {
                 // Nothing to do.
                 return null;
@@ -502,7 +490,7 @@ public class FetchMovieDetail extends AsyncTask<String, Void, Void> {
                 // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
                 // But it does make debugging a *lot* easier if you print out the completed
                 // buffer for debugging.
-                buffer.append(line + "\n");
+                buffer.append(line).append("\n");
             }
 
             if (buffer.length() == 0) {

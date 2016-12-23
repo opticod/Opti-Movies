@@ -1,34 +1,19 @@
 <resources>
-    <string name="app_name">Popular Movies</string>
+    <string name="app_name">Opti Movies</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="action_settings">Settings</string>
-    <string name="pref_sort_key" translatable="false">sort_by</string>
-    <string name="pref_sort_default" translatable="false">popularity.desc</string>
-    <string name="title_activity_detail" translatable="false">Movie Detail</string>
-    <string name="title_activity_settings" translatable="false">Settings</string>
-    <string name="pref_units_label" translatable="false">SORT BY</string>
 
-    <string name="pref_sort_label_popular" translatable="false">Most Popular</string>
-    <string name="pref_sort_label_rated" translatable="false">Highest Rated</string>
-    <string name="pref_sort_popular" translatable="false">popularity.desc</string>
-    <string name="pref_sort_rated" translatable="false">vote_average.desc</string>
-    <string name="action_share" translatable="false">Share</string>
     <string name="loadingMSG">loading</string>
     <string name="share_links">Sharing Movie Details</string>
     <string name="about_text">Complete Source Code and Licences Available here:</string>
-    <string name="title_activity_about">About</string>
     <string name="app_logo">App Logo</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="back">back</string>
     <string name="pref_description_enable_child_mode">Hiding adult rated movies or TV shows from lists.</string>
     <string name="pref_title_enable_child_mode">Enable child mode</string>
     <string name="pref_region">Select Region</string>
     <string name="pref_language">Select Language</string>
-    <string name="pref_sort_favourite">s</string>
     <string name="no_data">NO DATA AVAILABLE</string>
     <string name="loading">Loading</string>
     <string name="tmdb_logo_attribution">TMDB Logo Attribution</string>
@@ -69,5 +54,20 @@
     <string name="dont_remind_me">DON\'T REMIND ME</string>
     <string name="rate_message">If you enjoy using OPTI MOVIES, please take a moment to rate it. Thanks for your support!</string>
     <string name="pref_description_review">Rate and review the app in Google play store.</string>
+    <string name="movies">Movies</string>
+    <string name="get_now_playing">Get Now Playing</string>
+    <string name="get_popular">Get Popular</string>
+    <string name="get_top_rated">Get Top Rated</string>
+    <string name="get_upcoming">Get Upcoming</string>
+    <string name="bookmarked_movies">Bookmarked Movies</string>
+    <string name="tv_shows">TV Shows</string>
+    <string name="get_tv_airing_today">Get TV Airing Today</string>
+    <string name="get_tv_on_the_air">Get TV On The Air</string>
+    <string name="bookmarked_tv_shows">Bookmarked TV Shows</string>
+    <string name="about">About</string>
+    <string name="settings">Settings</string>
+    <string name="by">by</string>
+    <string name="anupam_das">ANUPAM DAS</string>
+    <string name="opticod">(opticod)</string>
 
 </resources>

@@ -14,7 +14,8 @@
         <ImageView
             android:id="@+id/youtubeImg"
             android:layout_width="140dp"
-            android:layout_height="140dp" />
+            android:layout_height="140dp"
+            android:contentDescription="Youtube Thumbnail" />
 
         <TextView
             android:id="@+id/trailer_name"

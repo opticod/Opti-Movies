@@ -35,7 +35,7 @@ public class CrewMovieAdapter extends
         RecyclerView.Adapter<CrewMovieAdapter.ViewHolder> {
     private static final String LOG_TAG = CrewMovieAdapter.class.getSimpleName();
 
-    private Cursor cursor;
+    private final Cursor cursor;
     private ViewHolderUtil.SetOnClickListener listener;
 
     public CrewMovieAdapter(Cursor cursor) {
@@ -79,7 +79,7 @@ public class CrewMovieAdapter extends
     }
 
     public interface SetOnClickListener extends ViewHolderUtil.SetOnClickListener {
-        void onItemClick(int position, View itemView);
+        void onItemClick(int position);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -97,7 +97,7 @@ public class CrewMovieAdapter extends
                 @Override
                 public void onClick(View v) {
                     if (listener != null) {
-                        listener.onItemClick(getAdapterPosition(), view);
+                        listener.onItemClick(getAdapterPosition());
                     }
                 }
             });

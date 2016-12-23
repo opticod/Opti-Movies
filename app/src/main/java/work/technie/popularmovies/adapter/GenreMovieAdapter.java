@@ -34,7 +34,7 @@ import static work.technie.popularmovies.Constants.COL_GENRE_NAME;
 public class GenreMovieAdapter extends
         RecyclerView.Adapter<GenreMovieAdapter.ViewHolder> {
     private static final String LOG_TAG = GenreMovieAdapter.class.getSimpleName();
-    private Cursor cursor;
+    private final Cursor cursor;
 
     public GenreMovieAdapter(Cursor cursor) {
         this.cursor = cursor;

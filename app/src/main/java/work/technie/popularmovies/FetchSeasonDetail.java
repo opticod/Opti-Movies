@@ -60,7 +60,7 @@ public class FetchSeasonDetail extends AsyncTask<String, Void, Void> {
      * Fortunately parsing is easy:  constructor takes the JSON string and converts it
      * into an Object hierarchy for us.
      */
-    private void gettvDataFromJson(String tvJsonStr, String tv_id)
+    private void gettvDataFromJson(String tvJsonStr)
             throws JSONException {
 
         // These are the names of the JSON objects that need to be extracted.
@@ -115,12 +115,11 @@ public class FetchSeasonDetail extends AsyncTask<String, Void, Void> {
                     cVVectorEpisodeCrew.add(tvValues);
 
                 }
-                int inserted = 0;
                 // add to database
                 if (cVVectorEpisodeCrew.size() > 0) {
                     ContentValues[] cvArray = new ContentValues[cVVectorEpisodeCrew.size()];
                     cVVectorEpisodeCrew.toArray(cvArray);
-                    inserted = mContext.getContentResolver().bulkInsert(TVEpisodeCrew.CONTENT_URI, cvArray);
+                    mContext.getContentResolver().bulkInsert(TVEpisodeCrew.CONTENT_URI, cvArray);
                 }
 
                 Vector<ContentValues> cVVectorEpisodeGuestStars = new Vector<ContentValues>(tvArrayEpisodeGuestStars.length());
@@ -146,12 +145,11 @@ public class FetchSeasonDetail extends AsyncTask<String, Void, Void> {
                     cVVectorEpisodeGuestStars.add(tvValues);
 
                 }
-                inserted = 0;
                 // add to database
                 if (cVVectorEpisodeGuestStars.size() > 0) {
                     ContentValues[] cvArray = new ContentValues[cVVectorEpisodeGuestStars.size()];
                     cVVectorEpisodeGuestStars.toArray(cvArray);
-                    inserted = mContext.getContentResolver().bulkInsert(TVEpisodeGuestStar.CONTENT_URI, cvArray);
+                    mContext.getContentResolver().bulkInsert(TVEpisodeGuestStar.CONTENT_URI, cvArray);
                 }
 
                 ContentValues tvValues = new ContentValues();
@@ -173,12 +171,11 @@ public class FetchSeasonDetail extends AsyncTask<String, Void, Void> {
 
             }
 
-            int inserted = 0;
             // add to database
             if (cVVectorEpisode.size() > 0) {
                 ContentValues[] cvArray = new ContentValues[cVVectorEpisode.size()];
                 cVVectorEpisode.toArray(cvArray);
-                inserted = mContext.getContentResolver().bulkInsert(TVEpisode.CONTENT_URI, cvArray);
+                mContext.getContentResolver().bulkInsert(TVEpisode.CONTENT_URI, cvArray);
             }
 
             String _id = tvJson.getString("_id");
@@ -203,7 +200,7 @@ public class FetchSeasonDetail extends AsyncTask<String, Void, Void> {
             tvValues.put(TVSeasonDetails.POSTER_PATH, poster_path);
             tvValues.put(TVSeasonDetails.SEASON_NUMBER, season_number);
             cvArray[0] = tvValues;
-            inserted = mContext.getContentResolver().bulkInsert(TVSeasonDetails.CONTENT_URI, cvArray);
+            mContext.getContentResolver().bulkInsert(TVSeasonDetails.CONTENT_URI, cvArray);
 
 
         } catch (JSONException e) {
@@ -225,7 +222,7 @@ public class FetchSeasonDetail extends AsyncTask<String, Void, Void> {
         BufferedReader reader = null;
 
         // Will contain the raw JSON response as a string.
-        String tvJsonStr = null;
+        String tvJsonStr;
 
         try {
             // Construct the URL for the tvAPI query
@@ -250,7 +247,7 @@ public class FetchSeasonDetail extends AsyncTask<String, Void, Void> {
 
             // Read the input stream into a String
             InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             if (inputStream == null) {
                 // Nothing to do.
                 return null;
@@ -262,7 +259,7 @@ public class FetchSeasonDetail extends AsyncTask<String, Void, Void> {
                 // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
                 // But it does make debugging a *lot* easier if you print out the completed
                 // buffer for debugging.
-                buffer.append(line + "\n");
+                buffer.append(line).append("\n");
             }
 
             if (buffer.length() == 0) {
@@ -270,7 +267,7 @@ public class FetchSeasonDetail extends AsyncTask<String, Void, Void> {
                 return null;
             }
             tvJsonStr = buffer.toString();
-            gettvDataFromJson(tvJsonStr, params[0]);
+            gettvDataFromJson(tvJsonStr);
         } catch (IOException e) {
             //Log.e(LOG_TAG, "Error ", e);
             // If the code didn't successfully get the tv data, there's no point in attemping

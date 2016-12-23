@@ -2,8 +2,10 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingEnd="@dimen/marginMedium"
     android:paddingLeft="@dimen/marginMedium"
     android:paddingRight="@dimen/marginMedium"
+    android:paddingStart="@dimen/marginMedium"
     android:weightSum="1">
 
     <TextView

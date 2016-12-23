@@ -40,9 +40,8 @@ import static work.technie.popularmovies.Constants.COL_VIDEOS_NAME;
  * Created by anupam on 27/12/15.
  */
 public class VideoMovieAdapter extends RecyclerView.Adapter<VideoMovieAdapter.ViewHolder> {
-    private static final String LOG_TAG = VideoMovieAdapter.class.getSimpleName();
 
-    private Cursor cursor;
+    private final Cursor cursor;
     private Context context;
     private ViewHolderUtil.SetOnClickListener listener;
 
@@ -133,7 +132,7 @@ public class VideoMovieAdapter extends RecyclerView.Adapter<VideoMovieAdapter.Vi
     }
 
     public interface SetOnClickListener extends ViewHolderUtil.SetOnClickListener {
-        void onItemClick(int position, View itemView);
+        void onItemClick(int position);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -151,7 +150,7 @@ public class VideoMovieAdapter extends RecyclerView.Adapter<VideoMovieAdapter.Vi
                 @Override
                 public void onClick(View v) {
                     if (listener != null) {
-                        listener.onItemClick(getAdapterPosition(), view);
+                        listener.onItemClick(getAdapterPosition());
                     }
                 }
             });

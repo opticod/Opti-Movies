@@ -37,12 +37,11 @@ import work.technie.popularmovies.utils.ViewHolderUtil;
 
 public class SimilarMovieArrayAdapter extends
         RecyclerView.Adapter<SimilarMovieArrayAdapter.ViewHolder> {
-    private static final String LOG_TAG = SimilarMovieArrayAdapter.class.getSimpleName();
 
-    private Cursor cursor;
+    private final Cursor cursor;
+    private final boolean isTV;
     private Context context;
     private ViewHolderUtil.SetOnClickListener listener;
-    private boolean isTV;
 
     public SimilarMovieArrayAdapter(Cursor cursor) {
         this.cursor = cursor;
@@ -122,7 +121,7 @@ public class SimilarMovieArrayAdapter extends
     }
 
     public interface SetOnClickListener extends ViewHolderUtil.SetOnClickListener {
-        void onItemClick(int position, View itemView);
+        void onItemClick(int position);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -140,7 +139,7 @@ public class SimilarMovieArrayAdapter extends
                 @Override
                 public void onClick(View v) {
                     if (listener != null) {
-                        listener.onItemClick(getAdapterPosition(), view);
+                        listener.onItemClick(getAdapterPosition());
                     }
                 }
             });

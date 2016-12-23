@@ -25,7 +25,7 @@ import work.technie.popularmovies.data.MovieContract;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    protected static void setListPreferenceRegion(ListPreference lp) {
+    private static void setListPreferenceRegion(ListPreference lp) {
 
         Locale[] locales = Locale.getAvailableLocales();
 
@@ -62,7 +62,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         lp.setEntryValues(countryCode);
     }
 
-    protected static void setListPreferenceLanguage(ListPreference lp) {
+    private static void setListPreferenceLanguage(ListPreference lp) {
 
         Locale[] locales = Locale.getAvailableLocales();
 
@@ -99,7 +99,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         lp.setEntryValues(countryCode);
     }
 
-    public static boolean deleteDir(File dir) {
+    private static boolean deleteDir(File dir) {
         if (dir != null && dir.isDirectory()) {
             String[] children = dir.list();
             for (String mChildren : children) {
@@ -127,7 +127,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getActionBar() != null) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         addPreferencesFromResource(R.xml.pref_settings);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -215,7 +217,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         });
     }
 
-    public void deleteCache() {
+    private void deleteCache() {
         try {
             File dir = getCacheDir();
             deleteDir(dir);
@@ -250,8 +252,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     }
 
     static class Country implements Comparable<Country> {
-        CharSequence name;
-        CharSequence code;
+        final CharSequence name;
+        final CharSequence code;
 
         Country(CharSequence name, CharSequence code) {
             this.name = name;
@@ -265,8 +267,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     }
 
     static class Language implements Comparable<Language> {
-        CharSequence name;
-        CharSequence code;
+        final CharSequence name;
+        final CharSequence code;
 
         Language(CharSequence name, CharSequence code) {
             this.name = name;

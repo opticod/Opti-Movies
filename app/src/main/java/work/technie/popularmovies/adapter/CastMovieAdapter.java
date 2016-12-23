@@ -40,11 +40,11 @@ import work.technie.popularmovies.utils.ViewHolderUtil;
 public class CastMovieAdapter extends RecyclerView.Adapter<CastMovieAdapter.ViewHolder> {
     private static final String LOG_TAG = CastMovieAdapter.class.getSimpleName();
 
-    private Cursor cursor;
+    private final Cursor cursor;
+    private final boolean isTV;
+    private final boolean isRegularCrewEpisode;
     private Context context;
     private ViewHolderUtil.SetOnClickListener listener;
-    private boolean isTV;
-    private boolean isRegularCrewEpisode;
     private boolean isGuestStar;
 
     public CastMovieAdapter(Cursor cursor) {
@@ -146,7 +146,7 @@ public class CastMovieAdapter extends RecyclerView.Adapter<CastMovieAdapter.View
     }
 
     public interface SetOnClickListener extends ViewHolderUtil.SetOnClickListener {
-        void onItemClick(int position, View itemView);
+        void onItemClick(int position);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -165,7 +165,7 @@ public class CastMovieAdapter extends RecyclerView.Adapter<CastMovieAdapter.View
                 @Override
                 public void onClick(View v) {
                     if (listener != null) {
-                        listener.onItemClick(getAdapterPosition(), view);
+                        listener.onItemClick(getAdapterPosition());
                     }
                 }
             });

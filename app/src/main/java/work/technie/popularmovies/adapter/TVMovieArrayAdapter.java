@@ -38,11 +38,10 @@ import work.technie.popularmovies.utils.RoundedTransformation;
 
 
 public class TVMovieArrayAdapter extends CursorAdapter {
-    private static final String LOG_TAG = TVMovieArrayAdapter.class.getSimpleName();
 
-    private boolean isMovie;
-    private boolean isMovieBookmark;
-    private boolean isTVBookmark;
+    private final boolean isMovie;
+    private final boolean isMovieBookmark;
+    private final boolean isTVBookmark;
 
     public TVMovieArrayAdapter(Context context, boolean isMovie, boolean isMovieBookmark, boolean isTVBookmark, Cursor c, int flags) {
         super(context, c, flags);

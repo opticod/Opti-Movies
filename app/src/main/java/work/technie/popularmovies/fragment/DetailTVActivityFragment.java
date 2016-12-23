@@ -121,7 +121,6 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
     private CastMovieAdapter castListAdapter;
     private SimilarMovieArrayAdapter similarTVListAdapter;
     private VideoMovieAdapter videoListAdapter;
-    private GenreMovieAdapter genreListAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean reLoadPoster;
     private boolean isFlingerCastSet;
@@ -193,7 +192,7 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
         return rootView;
     }
 
-    public void populateAdapters() {
+    private void populateAdapters() {
 
         Activity mActivity = getActivity();
         if (mActivity != null) {
@@ -306,7 +305,7 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
             }
 
             GridLayoutManager genreLayoutManager = new GridLayoutManager(mActivity, 2);
-            genreListAdapter = new GenreMovieAdapter(mActivity.getContentResolver().query(
+            GenreMovieAdapter genreListAdapter = new GenreMovieAdapter(mActivity.getContentResolver().query(
                     MovieContract.TVGenres.buildGenresUriWithTVId(tv_id),
                     TV_GENRE_COLUMNS,
                     null,
@@ -329,7 +328,7 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
 
             similarTVListAdapter.setOnClickListener(new SimilarMovieArrayAdapter.SetOnClickListener() {
                 @Override
-                public void onItemClick(int position, View view) {
+                public void onItemClick(int position) {
                     Cursor cursor = similarTVListAdapter.getCursor();
                     cursor.moveToPosition(position);
                     Activity mActivity = getActivity();
@@ -361,10 +360,9 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
 
             videoListAdapter.setOnClickListener(new VideoMovieAdapter.SetOnClickListener() {
                 @Override
-                public void onItemClick(int position, View view) {
+                public void onItemClick(int position) {
                     Cursor cursor = videoListAdapter.getCursor();
                     cursor.moveToPosition(position);
-                    Activity mActivity = getActivity();
                     final String source = cursor.getString(COL_VIDEOS_TV_KEY);
                     Utility.playVideo(getActivity(), source);
                 }
@@ -409,7 +407,7 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
 
             castListAdapter.setOnClickListener(new CastMovieAdapter.SetOnClickListener() {
                 @Override
-                public void onItemClick(int position, View view) {
+                public void onItemClick(int position) {
                     Cursor cursor = castListAdapter.getCursor();
                     cursor.moveToPosition(position);
                     Activity mActivity = getActivity();
@@ -442,7 +440,7 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
 
             creatorListAdapter.setOnClickListener(new CreatorMovieAdapter.SetOnClickListener() {
                 @Override
-                public void onItemClick(int position, View view) {
+                public void onItemClick(int position) {
                     Cursor cursor = creatorListAdapter.getCursor();
                     cursor.moveToPosition(position);
                     Activity mActivity = getActivity();
@@ -475,7 +473,7 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
 
             seasonsTVArrayAdapter.setOnClickListener(new SeasonsTVArrayAdapter.SetOnClickListener() {
                 @Override
-                public void onItemClick(int position, View view) {
+                public void onItemClick(int position) {
                     Cursor cursor = seasonsTVArrayAdapter.getCursor();
                     cursor.moveToPosition(position);
                     Activity mActivity = getActivity();
@@ -510,7 +508,7 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
         }
     }
 
-    public void loadData(final View rootView) {
+    private void loadData(final View rootView) {
 
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.detail_swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -542,8 +540,10 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
                 MovieContract.TVDetails.TV_ID + " = ? ",
                 new String[]{tv_id},
                 null);
-        if (cursor != null)
+        if (cursor != null) {
             count = cursor.getCount();
+            cursor.close();
+        }
 
         if (count == 0) {
             if (!Utility.hasNetworkConnection(getActivity())) {
@@ -839,7 +839,7 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
                         int runtime = data.getInt(TV_RUNTIME_EPISODE_COL_TIME);
                         if (runtime >= 60) {
                             int min = (int) Math.floor(runtime / 60);
-                            int sec = (int) (runtime - min * 60);
+                            int sec = runtime - min * 60;
                             if (sec != 0) {
                                 runtimeT += String.format(Locale.US, "%d" + "hr" + " %d" + "m", min, sec) + ", ";
                             } else {
@@ -870,7 +870,7 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
         populateAdapters();
     }
 
-    public void changeSystemToolbarColor(Palette palette) {
+    private void changeSystemToolbarColor(Palette palette) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Activity mActivity = getActivity();
             if (mActivity != null) {
@@ -881,7 +881,7 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public void changeColor(Activity mActivity) {
+    private void changeColor(Activity mActivity) {
         mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         mActivity.getWindow().setStatusBarColor(dark_muted_color);
     }

@@ -20,7 +20,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class MovieInfo implements Parcelable {
-    public final Parcelable.Creator<MovieInfo> CREATOR = new Parcelable.Creator<MovieInfo>() {
+    public final static Parcelable.Creator<MovieInfo> CREATOR = new Parcelable.Creator<MovieInfo>() {
         @Override
         public MovieInfo createFromParcel(Parcel parcel) {
             return new MovieInfo(parcel);
@@ -31,14 +31,14 @@ public class MovieInfo implements Parcelable {
             return new MovieInfo[size];
         }
     };
-    String id;
-    String orgLang;
-    String orgTitle;
-    String overview;
-    String relDate;
-    String postURL;
-    String popularity;
-    String votAvg;
+    private final String id;
+    private final String orgLang;
+    private final String orgTitle;
+    private final String overview;
+    private final String relDate;
+    private final String postURL;
+    private final String popularity;
+    private final String votAvg;
 
     public MovieInfo(String id, String orgLang, String orgTitle, String overview,
                      String relDate, String popularity, String votAvg, String postURL) {

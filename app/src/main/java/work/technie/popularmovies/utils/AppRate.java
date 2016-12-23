@@ -18,12 +18,12 @@ public class AppRate {
 
     private final static int DAYS_UNTIL_PROMPT = 3;
     private final static int LAUNCHES_UNTIL_PROMPT = 3;
-    private static String APP_RATING = "APP_RATING";
-    private static String DONT_SHOW_AGAIN = "DONT_SHOW_AGAIN";
-    private static String LAUNCH_COUNT = "LAUNCH_COUNT";
-    private static String DEBUT_LAUNCH = "DEBUT_LAUNCH";
+    private static final String DONT_SHOW_AGAIN = "DONT_SHOW_AGAIN";
+    private static final String LAUNCH_COUNT = "LAUNCH_COUNT";
+    private static final String DEBUT_LAUNCH = "DEBUT_LAUNCH";
 
     public static void initializeRater(final Context mContext) {
+        String APP_RATING = "APP_RATING";
         SharedPreferences prefs = mContext.getSharedPreferences(APP_RATING, 0);
         if (prefs.getBoolean(DONT_SHOW_AGAIN, false)) {
             return;

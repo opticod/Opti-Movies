@@ -116,12 +116,14 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
     private CastMovieAdapter castListAdapter;
     private SimilarMovieArrayAdapter similarMovieListAdapter;
     private VideoMovieAdapter videoListAdapter;
-    private ReviewMovieAdapter reviewListAdapter;
-    private GenreMovieAdapter genreListAdapter;
     private int dark_muted_color;
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean reLoadPoster;
     private boolean isFlingerCastSet;
+
+    public DetailMovieActivityFragment() {
+        isFlingerCastSet = false;
+    }
 
     private void updateDetailList() {
         FetchMovieDetail fetchTask = new FetchMovieDetail(getActivity());
@@ -140,7 +142,6 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
         }
     }
 
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putInt(DARK_MUTED_COLOR, dark_muted_color);
@@ -155,7 +156,6 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
         Bitmap imageBitmap = null;
         String transitionName = "";
         reLoadPoster = false;
-        isFlingerCastSet = false;
 
         if (arguments != null) {
             movie_Id = arguments.getString(Intent.EXTRA_TEXT);
@@ -182,7 +182,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
         return rootView;
     }
 
-    public void populateAdapters() {
+    private void populateAdapters() {
 
         Activity mActivity = getActivity();
         if (mActivity != null) {
@@ -221,6 +221,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
             recyclerViewCast.setLayoutManager(castLayoutManager);
             if (!isFlingerCastSet) {
                 castSnapHelper.attachToRecyclerView(recyclerViewCast);
+                isFlingerCastSet = true;
             }
 
             if (castListAdapter.getItemCount() == 0) {
@@ -273,7 +274,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
             }
 
             LinearLayoutManager reviewLayoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
-            reviewListAdapter = new ReviewMovieAdapter(mActivity.getContentResolver().query(
+            ReviewMovieAdapter reviewListAdapter = new ReviewMovieAdapter(mActivity.getContentResolver().query(
                     MovieContract.Reviews.buildReviewsUriWithMovieId(movie_Id),
                     REVIEW_COLUMNS,
                     null,
@@ -295,7 +296,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
 
 
             GridLayoutManager genreLayoutManager = new GridLayoutManager(mActivity, 2);
-            genreListAdapter = new GenreMovieAdapter(mActivity.getContentResolver().query(
+            GenreMovieAdapter genreListAdapter = new GenreMovieAdapter(mActivity.getContentResolver().query(
                     MovieContract.Genres.buildGenresUriWithMovieId(movie_Id),
                     GENRE_COLUMNS,
                     null,
@@ -317,7 +318,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
 
             similarMovieListAdapter.setOnClickListener(new SimilarMovieArrayAdapter.SetOnClickListener() {
                 @Override
-                public void onItemClick(int position, View view) {
+                public void onItemClick(int position) {
                     Cursor cursor = similarMovieListAdapter.getCursor();
                     cursor.moveToPosition(position);
                     Activity mActivity = getActivity();
@@ -349,7 +350,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
 
             videoListAdapter.setOnClickListener(new VideoMovieAdapter.SetOnClickListener() {
                 @Override
-                public void onItemClick(int position, View view) {
+                public void onItemClick(int position) {
                     Cursor cursor = videoListAdapter.getCursor();
                     cursor.moveToPosition(position);
                     final String source = cursor.getString(COL_VIDEOS_KEY);
@@ -396,7 +397,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
 
             castListAdapter.setOnClickListener(new CastMovieAdapter.SetOnClickListener() {
                 @Override
-                public void onItemClick(int position, View view) {
+                public void onItemClick(int position) {
                     Cursor cursor = castListAdapter.getCursor();
                     cursor.moveToPosition(position);
                     Activity mActivity = getActivity();
@@ -429,7 +430,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
 
             crewListAdapter.setOnClickListener(new CrewMovieAdapter.SetOnClickListener() {
                 @Override
-                public void onItemClick(int position, View view) {
+                public void onItemClick(int position) {
                     Cursor cursor = crewListAdapter.getCursor();
                     cursor.moveToPosition(position);
                     Activity mActivity = getActivity();
@@ -463,7 +464,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
         }
     }
 
-    public void loadData(final View rootView) {
+    private void loadData(final View rootView) {
 
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.detail_swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -492,8 +493,10 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
                 MovieContract.MovieDetails.MOVIE_ID + " = ? ",
                 new String[]{movie_Id},
                 null);
-        if (cursor != null)
+        if (cursor != null) {
             count = cursor.getCount();
+            cursor.close();
+        }
 
         if (count == 0) {
             if (!Utility.hasNetworkConnection(getActivity())) {
@@ -626,7 +629,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
                 int runtime = data.getInt(MOV_DETAILS_COL_RUNTIME);
                 if (runtime >= 60) {
                     int min = (int) Math.floor(runtime / 60);
-                    int sec = (int) (runtime - min * 60);
+                    int sec = runtime - min * 60;
                     if (sec != 0) {
                         runtimeText.setText(String.format(Locale.US, "%d" + "hr" + " %d" + "m", min, sec));
                     } else {
@@ -769,7 +772,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
         populateAdapters();
     }
 
-    public void changeSystemToolbarColor(Palette palette) {
+    private void changeSystemToolbarColor(Palette palette) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Activity mActivity = getActivity();
             if (mActivity != null) {
@@ -780,7 +783,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public void changeColor(Activity mActivity) {
+    private void changeColor(Activity mActivity) {
         mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         mActivity.getWindow().setStatusBarColor(dark_muted_color);
     }

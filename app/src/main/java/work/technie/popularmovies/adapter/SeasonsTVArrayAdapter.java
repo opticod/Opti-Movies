@@ -39,9 +39,8 @@ import work.technie.popularmovies.utils.ViewHolderUtil;
 
 public class SeasonsTVArrayAdapter extends
         RecyclerView.Adapter<SeasonsTVArrayAdapter.ViewHolder> {
-    private static final String LOG_TAG = SeasonsTVArrayAdapter.class.getSimpleName();
 
-    private Cursor cursor;
+    private final Cursor cursor;
     private Context context;
     private ViewHolderUtil.SetOnClickListener listener;
 
@@ -119,7 +118,7 @@ public class SeasonsTVArrayAdapter extends
     }
 
     public interface SetOnClickListener extends ViewHolderUtil.SetOnClickListener {
-        void onItemClick(int position, View itemView);
+        void onItemClick(int position);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -139,7 +138,7 @@ public class SeasonsTVArrayAdapter extends
                 @Override
                 public void onClick(View v) {
                     if (listener != null) {
-                        listener.onItemClick(getAdapterPosition(), view);
+                        listener.onItemClick(getAdapterPosition());
                     }
                 }
             });

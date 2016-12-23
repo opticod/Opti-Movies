@@ -119,12 +119,11 @@ public class FetchTVDetail extends AsyncTask<String, Void, Void> {
                 cVVectorEpisodeRuntime.add(tvValues);
 
             }
-            int inserted = 0;
             // add to database
             if (cVVectorEpisodeRuntime.size() > 0) {
                 ContentValues[] cvArray = new ContentValues[cVVectorEpisodeRuntime.size()];
                 cVVectorEpisodeRuntime.toArray(cvArray);
-                inserted = mContext.getContentResolver().bulkInsert(TVEpisodeRuntime.CONTENT_URI, cvArray);
+                mContext.getContentResolver().bulkInsert(TVEpisodeRuntime.CONTENT_URI, cvArray);
             }
 
             Vector<ContentValues> cVVectorTrailer = new Vector<ContentValues>(tvArrayVideos.length());
@@ -166,12 +165,11 @@ public class FetchTVDetail extends AsyncTask<String, Void, Void> {
                 tvValues.put(TVVideos.TV_ID, tv_id);
                 cVVectorTrailer.add(tvValues);
             }
-            inserted = 0;
             // add to database
             if (cVVectorTrailer.size() > 0) {
                 ContentValues[] cvArray = new ContentValues[cVVectorTrailer.size()];
                 cVVectorTrailer.toArray(cvArray);
-                inserted = mContext.getContentResolver().bulkInsert(TVVideos.CONTENT_URI, cvArray);
+                mContext.getContentResolver().bulkInsert(TVVideos.CONTENT_URI, cvArray);
             }
 
             Vector<ContentValues> cVVectorSeasons = new Vector<ContentValues>(tvArraySeasons.length());
@@ -197,12 +195,11 @@ public class FetchTVDetail extends AsyncTask<String, Void, Void> {
                 cVVectorSeasons.add(tvValues);
 
             }
-            inserted = 0;
             // add to database
             if (cVVectorSeasons.size() > 0) {
                 ContentValues[] cvArray = new ContentValues[cVVectorSeasons.size()];
                 cVVectorSeasons.toArray(cvArray);
-                inserted = mContext.getContentResolver().bulkInsert(TVSeasons.CONTENT_URI, cvArray);
+                mContext.getContentResolver().bulkInsert(TVSeasons.CONTENT_URI, cvArray);
             }
 
 
@@ -224,17 +221,14 @@ public class FetchTVDetail extends AsyncTask<String, Void, Void> {
                 cVVectorNetworks.add(tvValues);
 
             }
-            inserted = 0;
             // add to database
             if (cVVectorNetworks.size() > 0) {
                 ContentValues[] cvArray = new ContentValues[cVVectorNetworks.size()];
                 cVVectorNetworks.toArray(cvArray);
-                inserted = mContext.getContentResolver().bulkInsert(TVNetworks.CONTENT_URI, cvArray);
+                mContext.getContentResolver().bulkInsert(TVNetworks.CONTENT_URI, cvArray);
             }
 
             String page = tvArraySimilar.getString(PAGE);
-            String total_page = tvArraySimilar.getString(TOTAL_PAGES_REVIEWS);
-            String total_results = tvArraySimilar.getString(TOTAL_RESULTS_REVIEWS);
 
             JSONArray similar = tvArraySimilar.getJSONArray("results");
 
@@ -264,7 +258,6 @@ public class FetchTVDetail extends AsyncTask<String, Void, Void> {
                 popularity = tvInfo.getString(TVSimilar.POPULARITY);
                 votAvg = tvInfo.getString(TVSimilar.VOTE_AVERAGE);
                 vote_count = tvInfo.getString(TVSimilar.VOTE_COUNT);
-                backdropURL = tvInfo.getString(TVSimilar.BACKDROP_PATH);
                 name = tvInfo.getString(TVSimilar.NAME);
 
                 postURL = Uri.parse(POSTER_BASE_URL).buildUpon().
@@ -295,12 +288,11 @@ public class FetchTVDetail extends AsyncTask<String, Void, Void> {
                 cVVectorSimilar.add(tvValues);
 
             }
-            inserted = 0;
             // add to database
             if (cVVectorSimilar.size() > 0) {
                 ContentValues[] cvArray = new ContentValues[cVVectorSimilar.size()];
                 cVVectorSimilar.toArray(cvArray);
-                inserted = mContext.getContentResolver().bulkInsert(TVSimilar.CONTENT_URI, cvArray);
+                mContext.getContentResolver().bulkInsert(TVSimilar.CONTENT_URI, cvArray);
             }
 
             Vector<ContentValues> cVVectorGenres = new Vector<ContentValues>(tvArrayGenres.length());
@@ -322,12 +314,11 @@ public class FetchTVDetail extends AsyncTask<String, Void, Void> {
                 cVVectorGenres.add(tvValues);
 
             }
-            inserted = 0;
             // add to database
             if (cVVectorGenres.size() > 0) {
                 ContentValues[] cvArray = new ContentValues[cVVectorGenres.size()];
                 cVVectorGenres.toArray(cvArray);
-                inserted = mContext.getContentResolver().bulkInsert(TVGenres.CONTENT_URI, cvArray);
+                mContext.getContentResolver().bulkInsert(TVGenres.CONTENT_URI, cvArray);
             }
 
             Vector<ContentValues> cVVectorCreator = new Vector<ContentValues>(tvArrayCreator.length());
@@ -351,12 +342,11 @@ public class FetchTVDetail extends AsyncTask<String, Void, Void> {
                 cVVectorCreator.add(tvValues);
 
             }
-            inserted = 0;
             // add to database
             if (cVVectorCreator.size() > 0) {
                 ContentValues[] cvArray = new ContentValues[cVVectorCreator.size()];
                 cVVectorCreator.toArray(cvArray);
-                inserted = mContext.getContentResolver().bulkInsert(TVCreator.CONTENT_URI, cvArray);
+                mContext.getContentResolver().bulkInsert(TVCreator.CONTENT_URI, cvArray);
             }
 
             Vector<ContentValues> cVVectorCast = new Vector<ContentValues>(tvArrayCast.length());
@@ -386,17 +376,15 @@ public class FetchTVDetail extends AsyncTask<String, Void, Void> {
                 cVVectorCast.add(tvValues);
 
             }
-            inserted = 0;
             // add to database
             if (cVVectorCast.size() > 0) {
                 ContentValues[] cvArray = new ContentValues[cVVectorCast.size()];
                 cVVectorCast.toArray(cvArray);
-                inserted = mContext.getContentResolver().bulkInsert(TVCast.CONTENT_URI, cvArray);
+                mContext.getContentResolver().bulkInsert(TVCast.CONTENT_URI, cvArray);
             }
 
             ContentValues[] cvArray = new ContentValues[1];
 
-            String firstAirDate;
             String orgLang;
             String orgName;
             String overview;
@@ -462,7 +450,7 @@ public class FetchTVDetail extends AsyncTask<String, Void, Void> {
             tvValues.put(TVDetails.NUMBER_OF_SEASONS, number_of_seasons);
             tvValues.put(TVDetails.TYPE, type);
             cvArray[0] = tvValues;
-            inserted = mContext.getContentResolver().bulkInsert(TVDetails.CONTENT_URI, cvArray);
+            mContext.getContentResolver().bulkInsert(TVDetails.CONTENT_URI, cvArray);
 
         } catch (JSONException e) {
             //Log.e(LOG_TAG, e.getMessage(), e);
@@ -483,7 +471,7 @@ public class FetchTVDetail extends AsyncTask<String, Void, Void> {
         BufferedReader reader = null;
 
         // Will contain the raw JSON response as a string.
-        String tvJsonStr = null;
+        String tvJsonStr;
 
         try {
             // Construct the URL for the tvAPI query
@@ -507,7 +495,7 @@ public class FetchTVDetail extends AsyncTask<String, Void, Void> {
 
             // Read the input stream into a String
             InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             if (inputStream == null) {
                 // Nothing to do.
                 return null;
@@ -519,7 +507,7 @@ public class FetchTVDetail extends AsyncTask<String, Void, Void> {
                 // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
                 // But it does make debugging a *lot* easier if you print out the completed
                 // buffer for debugging.
-                buffer.append(line + "\n");
+                buffer.append(line).append("\n");
             }
 
             if (buffer.length() == 0) {

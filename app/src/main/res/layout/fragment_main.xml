@@ -24,9 +24,6 @@
         style="@style/TextAppearance.AppCompat.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="false"
         android:alpha="0.4"
         android:background="@color/light_primary_color"
         android:enabled="true"
@@ -50,7 +47,6 @@
             android:gravity="center" />
 
         <TextView
-            android:id="@+id/loading"
             style="@style/TextAppearance.AppCompat.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
