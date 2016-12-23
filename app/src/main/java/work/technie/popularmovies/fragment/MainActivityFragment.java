@@ -108,6 +108,11 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onResume() {
         super.onResume();
+
+        if (!isMovieBookmark && !isTVBookmark) {
+            reLoadData();
+            getLoaderManager().restartLoader(MOVIE_LOADER, null, this);
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getActivity().getWindow().setStatusBarColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark));
@@ -374,6 +379,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onFinish(boolean isData) {
         swipeRefreshLayout.setRefreshing(false);
+        listAdapter.notifyDataSetChanged();
         if (!isData) {
             TextView info = (TextView) rootView.findViewById(R.id.empty);
             if (listAdapter.getCount() == 0) {
