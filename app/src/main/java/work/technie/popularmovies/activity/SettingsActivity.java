@@ -182,7 +182,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 getContentResolver().delete(MovieContract.FavouritesTVs.buildTVUri(), null, null);
                 getContentResolver().delete(MovieContract.FavouritesMovies.buildMovieUri(), null, null);
 
-                getContentResolver().delete(MovieContract.TV.buildTVUri(), null, null);
                 getContentResolver().delete(MovieContract.TVDetails.buildTVDetailsUri(), null, null);
                 getContentResolver().delete(MovieContract.TVCast.buildCastUri(), null, null);
                 getContentResolver().delete(MovieContract.TVCreator.buildTVCreatorUri(), null, null);
@@ -191,8 +190,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 getContentResolver().delete(MovieContract.TVNetworks.buildGenreUri(), null, null);
                 getContentResolver().delete(MovieContract.TVSeasons.buildGenreUri(), null, null);
                 getContentResolver().delete(MovieContract.TVSimilar.buildSimilarTVUri(), null, null);
-                getContentResolver().delete(MovieContract.TVEpisodeRuntime.buildTVEpisodeRuntimeUri(), null, null);
                 getContentResolver().delete(MovieContract.TVVideos.buildTVVideosUri(), null, null);
+                getContentResolver().delete(MovieContract.TVEpisodeCrew.buildEpisodeCrewUri(), null, null);
+                getContentResolver().delete(MovieContract.TVEpisodeGuestStar.buildEpisodeGuestStarUri(), null, null);
+                getContentResolver().delete(MovieContract.TVEpisode.buildEpisodeUri(), null, null);
+                getContentResolver().delete(MovieContract.TVSeasonDetails.buildSeasonDetailsUri(), null, null);
 
                 Toast.makeText(getApplicationContext(), "Successfully Deleted", Toast.LENGTH_SHORT).show();
 
