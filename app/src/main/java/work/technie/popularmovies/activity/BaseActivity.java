@@ -1,17 +1,23 @@
 package work.technie.popularmovies.activity;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
 import android.transition.TransitionInflater;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.facebook.stetho.Stetho;
@@ -20,6 +26,7 @@ import work.technie.popularmovies.R;
 import work.technie.popularmovies.fragment.DetailMovieActivityFragment;
 import work.technie.popularmovies.fragment.DetailTVActivityFragment;
 import work.technie.popularmovies.fragment.MainActivityFragment;
+import work.technie.popularmovies.utils.PaletteTransformation;
 
 /**
  * Created by anupam on 9/12/16.
@@ -89,8 +96,45 @@ public class BaseActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            ImageView backdrop = (ImageView) findViewById(R.id.backdropImg);
+            ImageView season_backdrop = (ImageView) findViewById(R.id.season_img);
+            if (season_backdrop != null) {
+                BitmapDrawable bitmapSeasonDrawable = (BitmapDrawable) season_backdrop.getDrawable();
+                if (bitmapSeasonDrawable != null) {
+                    Bitmap bitmap = bitmapSeasonDrawable.getBitmap();
+                    if (bitmap != null) {
+                        Palette palette = PaletteTransformation.getPalette(bitmap);
+                        changeSystemToolbarColor(palette);
+                    }
+                }
+            } else if (backdrop != null) {
+                BitmapDrawable bitmapDrawable = (BitmapDrawable) backdrop.getDrawable();
+                if (bitmapDrawable != null) {
+                    Bitmap bitmap = bitmapDrawable.getBitmap();
+                    if (bitmap != null) {
+                        Palette palette = PaletteTransformation.getPalette(bitmap);
+                        changeSystemToolbarColor(palette);
+                    }
+                }
+            }
+
         }
     }
+
+    public void changeSystemToolbarColor(Palette palette) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Activity mActivity = this;
+            int dark_muted_color = palette.getDarkMutedColor(ContextCompat.getColor(mActivity, R.color.colorPrimaryDark));
+            changeColor(mActivity, dark_muted_color);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public void changeColor(Activity mActivity, int dark_muted_color) {
+        mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        mActivity.getWindow().setStatusBarColor(dark_muted_color);
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -184,7 +184,7 @@ public class SeasonDetailFragment extends Fragment implements LoaderManager.Load
                     fragment.setArguments(arguments);
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
                     fragmentManager.beginTransaction()
-                            .replace(R.id.frag_container, fragment, SEASON_DETAIL_FRAGMENT_TAG)
+                            .add(R.id.frag_container, fragment, SEASON_DETAIL_FRAGMENT_TAG)
                             .addToBackStack(null)
                             .commit();
                 }

@@ -140,13 +140,6 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (dark_muted_color != 0) {
-            changeColor(getActivity());
-        }
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -348,7 +341,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
                     fragment.setArguments(arguments);
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
                     fragmentManager.beginTransaction()
-                            .replace(R.id.frag_container, fragment, DETAIL_FRAGMENT_TAG)
+                            .add(R.id.frag_container, fragment, DETAIL_FRAGMENT_TAG)
                             .addToBackStack(null)
                             .commit();
                 }
@@ -432,7 +425,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
                     fragment.setArguments(arguments);
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
                     fragmentManager.beginTransaction()
-                            .replace(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                            .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
                             .addToBackStack(null)
                             .commit();
 
@@ -465,7 +458,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
                     fragment.setArguments(arguments);
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
                     fragmentManager.beginTransaction()
-                            .replace(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                            .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
                             .addToBackStack(null)
                             .commit();
 

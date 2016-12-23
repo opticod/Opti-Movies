@@ -195,7 +195,7 @@ public class EpisodeDetailFragment extends Fragment implements LoaderManager.Loa
                     fragment.setArguments(arguments);
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
                     fragmentManager.beginTransaction()
-                            .replace(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                            .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
                             .addToBackStack(null)
                             .commit();
 
@@ -228,7 +228,7 @@ public class EpisodeDetailFragment extends Fragment implements LoaderManager.Loa
                     fragment.setArguments(arguments);
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
                     fragmentManager.beginTransaction()
-                            .replace(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                            .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
                             .addToBackStack(null)
                             .commit();
 

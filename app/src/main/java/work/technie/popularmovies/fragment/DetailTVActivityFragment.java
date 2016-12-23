@@ -353,7 +353,7 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
                     fragment.setArguments(arguments);
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
                     fragmentManager.beginTransaction()
-                            .replace(R.id.frag_container, fragment, DETAIL_FRAGMENT_TAG)
+                            .add(R.id.frag_container, fragment, DETAIL_FRAGMENT_TAG)
                             .addToBackStack(null)
                             .commit();
                 }
@@ -437,7 +437,7 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
                     fragment.setArguments(arguments);
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
                     fragmentManager.beginTransaction()
-                            .replace(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                            .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
                             .addToBackStack(null)
                             .commit();
 
@@ -470,7 +470,7 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
                     fragment.setArguments(arguments);
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
                     fragmentManager.beginTransaction()
-                            .replace(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                            .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
                             .addToBackStack(null)
                             .commit();
 
@@ -505,7 +505,7 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
                     fragment.setArguments(arguments);
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
                     fragmentManager.beginTransaction()
-                            .replace(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                            .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
                             .addToBackStack(null)
                             .commit();
 
