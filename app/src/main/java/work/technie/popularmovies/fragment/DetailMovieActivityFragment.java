@@ -120,6 +120,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean reLoadPoster;
     private boolean isFlingerCastSet;
+    private boolean mTwoPane;
 
     public DetailMovieActivityFragment() {
         isFlingerCastSet = false;
@@ -136,7 +137,9 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null && savedInstanceState.containsKey(DARK_MUTED_COLOR)) {
             dark_muted_color = savedInstanceState.getInt(DARK_MUTED_COLOR);
-            changeColor(getActivity());
+            if (!mTwoPane) {
+                changeColor(getActivity());
+            }
         } else {
             dark_muted_color = 0;
         }
@@ -161,6 +164,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
             movie_Id = arguments.getString(Intent.EXTRA_TEXT);
             transitionName = arguments.getString("TRANS_NAME");
             imageBitmap = arguments.getParcelable("POSTER_IMAGE");
+            mTwoPane = arguments.getBoolean(Intent.ACTION_SCREEN_ON);
         }
         rootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
 
@@ -325,7 +329,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
 
                     DetailMovieActivityFragment fragment = new DetailMovieActivityFragment();
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !mTwoPane) {
                         current.setSharedElementReturnTransition(TransitionInflater.from(
                                 mActivity).inflateTransition(R.transition.change_image_trans));
                         current.setExitTransition(TransitionInflater.from(
@@ -340,11 +344,19 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
                     Bundle arguments = new Bundle();
                     arguments.putString(Intent.EXTRA_TEXT, cursor.getString(Constants.SIMILAR_MOV_COL_MOVIE_ID));
                     fragment.setArguments(arguments);
+                    arguments.putBoolean(Intent.ACTION_SCREEN_ON, mTwoPane);
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .add(R.id.frag_container, fragment, DETAIL_FRAGMENT_TAG)
-                            .addToBackStack(null)
-                            .commit();
+                    if (mTwoPane) {
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.movie_detail_container, fragment, DETAIL_FRAGMENT_TAG)
+                                .addToBackStack(null)
+                                .commit();
+                    } else {
+                        fragmentManager.beginTransaction()
+                                .add(R.id.frag_container, fragment, DETAIL_FRAGMENT_TAG)
+                                .addToBackStack(null)
+                                .commit();
+                    }
                 }
             });
 
@@ -404,7 +416,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
 
                     PeopleDetailFragment fragment = new PeopleDetailFragment();
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !mTwoPane) {
                         current.setSharedElementReturnTransition(TransitionInflater.from(
                                 mActivity).inflateTransition(R.transition.change_image_trans));
                         current.setExitTransition(TransitionInflater.from(
@@ -419,11 +431,19 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
                     Bundle arguments = new Bundle();
                     arguments.putString(Intent.EXTRA_TEXT, cursor.getString(Constants.CAST_COL_ID));
                     fragment.setArguments(arguments);
+                    arguments.putBoolean(Intent.ACTION_SCREEN_ON, mTwoPane);
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
-                            .addToBackStack(null)
-                            .commit();
+                    if (mTwoPane) {
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.movie_detail_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                                .addToBackStack(null)
+                                .commit();
+                    } else {
+                        fragmentManager.beginTransaction()
+                                .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                                .addToBackStack(null)
+                                .commit();
+                    }
 
                 }
             });
@@ -437,7 +457,7 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
 
                     PeopleDetailFragment fragment = new PeopleDetailFragment();
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !mTwoPane) {
                         current.setSharedElementReturnTransition(TransitionInflater.from(
                                 mActivity).inflateTransition(R.transition.change_image_trans));
                         current.setExitTransition(TransitionInflater.from(
@@ -452,11 +472,19 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
                     Bundle arguments = new Bundle();
                     arguments.putString(Intent.EXTRA_TEXT, cursor.getString(Constants.CREW_COL_ID));
                     fragment.setArguments(arguments);
+                    arguments.putBoolean(Intent.ACTION_SCREEN_ON, mTwoPane);
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
-                            .addToBackStack(null)
-                            .commit();
+                    if (mTwoPane) {
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.movie_detail_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                                .addToBackStack(null)
+                                .commit();
+                    } else {
+                        fragmentManager.beginTransaction()
+                                .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                                .addToBackStack(null)
+                                .commit();
+                    }
 
                 }
             });
@@ -599,9 +627,11 @@ public class DetailMovieActivityFragment extends Fragment implements LoaderCallb
                         .into(backdrop, new Callback.EmptyCallback() {
                             @Override
                             public void onSuccess() {
-                                Bitmap bitmap = ((BitmapDrawable) backdrop.getDrawable()).getBitmap();
-                                Palette palette = PaletteTransformation.getPalette(bitmap);
-                                changeSystemToolbarColor(palette);
+                                if (!mTwoPane) {
+                                    Bitmap bitmap = ((BitmapDrawable) backdrop.getDrawable()).getBitmap();
+                                    Palette palette = PaletteTransformation.getPalette(bitmap);
+                                    changeSystemToolbarColor(palette);
+                                }
                             }
                         });
 

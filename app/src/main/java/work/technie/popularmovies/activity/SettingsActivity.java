@@ -1,5 +1,6 @@
 package work.technie.popularmovies.activity;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -211,7 +212,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         reviewPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName())));
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName())));
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(SettingsActivity.this, getString(R.string.google_play_store_error), Toast.LENGTH_SHORT).show();
+                }
                 return false;
             }
         });

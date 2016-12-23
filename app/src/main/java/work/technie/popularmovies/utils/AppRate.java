@@ -1,5 +1,6 @@
 package work.technie.popularmovies.utils;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.Toast;
 
 import work.technie.popularmovies.R;
 
@@ -56,7 +58,13 @@ public class AppRate {
                 dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + mContext.getPackageName())));
+                        try {
+                            mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + mContext.getPackageName())));
+                        } catch (ActivityNotFoundException e) {
+                            Toast.makeText(mContext, mContext.getString(R.string.google_play_store_error), Toast.LENGTH_SHORT).show();
+                        }
+                        editor.putBoolean(DONT_SHOW_AGAIN, true);
+                        editor.apply();
                         dialog.dismiss();
                     }
                 });

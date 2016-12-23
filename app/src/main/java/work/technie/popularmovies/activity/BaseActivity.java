@@ -67,16 +67,7 @@ public class BaseActivity extends AppCompatActivity
             currentMenuItemId = savedInstanceState.getInt(STATE_FRAGMENT);
         }
 
-        if (findViewById(R.id.movie_detail_container) != null) {
-            mTwoPane = true;
-            if (savedInstanceState == null) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.movie_detail_container, new DetailMovieActivityFragment(), DETAIL_FRAGMENT_TAG)
-                        .commit();
-            }
-        } else {
-            mTwoPane = false;
-        }
+        mTwoPane = findViewById(R.id.movie_detail_container) != null;
 
         if (getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_MOV_NOW_PLAYING) == null && getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG) == null) {
             doMenuAction(currentMenuItemId);
@@ -92,24 +83,26 @@ public class BaseActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
-            ImageView backdrop = (ImageView) findViewById(R.id.backdropImg);
-            ImageView season_backdrop = (ImageView) findViewById(R.id.season_img);
-            if (season_backdrop != null) {
-                BitmapDrawable bitmapSeasonDrawable = (BitmapDrawable) season_backdrop.getDrawable();
-                if (bitmapSeasonDrawable != null) {
-                    Bitmap bitmap = bitmapSeasonDrawable.getBitmap();
-                    if (bitmap != null) {
-                        Palette palette = PaletteTransformation.getPalette(bitmap);
-                        changeSystemToolbarColor(palette);
+            if (!mTwoPane) {
+                ImageView backdrop = (ImageView) findViewById(R.id.backdropImg);
+                ImageView season_backdrop = (ImageView) findViewById(R.id.season_img);
+                if (season_backdrop != null) {
+                    BitmapDrawable bitmapSeasonDrawable = (BitmapDrawable) season_backdrop.getDrawable();
+                    if (bitmapSeasonDrawable != null) {
+                        Bitmap bitmap = bitmapSeasonDrawable.getBitmap();
+                        if (bitmap != null) {
+                            Palette palette = PaletteTransformation.getPalette(bitmap);
+                            changeSystemToolbarColor(palette);
+                        }
                     }
-                }
-            } else if (backdrop != null) {
-                BitmapDrawable bitmapDrawable = (BitmapDrawable) backdrop.getDrawable();
-                if (bitmapDrawable != null) {
-                    Bitmap bitmap = bitmapDrawable.getBitmap();
-                    if (bitmap != null) {
-                        Palette palette = PaletteTransformation.getPalette(bitmap);
-                        changeSystemToolbarColor(palette);
+                } else if (backdrop != null) {
+                    BitmapDrawable bitmapDrawable = (BitmapDrawable) backdrop.getDrawable();
+                    if (bitmapDrawable != null) {
+                        Bitmap bitmap = bitmapDrawable.getBitmap();
+                        if (bitmap != null) {
+                            Palette palette = PaletteTransformation.getPalette(bitmap);
+                            changeSystemToolbarColor(palette);
+                        }
                     }
                 }
             }
@@ -242,36 +235,13 @@ public class BaseActivity extends AppCompatActivity
 
     @Override
     public void onItemSelected(String id, ImageView sharedView, Fragment current, boolean isMovie) {
-        if (mTwoPane) {
-            // In two-pane mode, show the detail view in this activity by
-            // adding or replacing the detail fragment using a
-            // fragment transaction.
-            Bundle args = new Bundle();
-            args.putString(Intent.EXTRA_TEXT, id);
-            if (isMovie) {
-                DetailMovieActivityFragment fragment = new DetailMovieActivityFragment();
-                fragment.setArguments(args);
-
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.movie_detail_container, fragment, DETAIL_FRAGMENT_TAG)
-                        .commit();
-            } else {
-                DetailTVActivityFragment fragment = new DetailTVActivityFragment();
-                fragment.setArguments(args);
-
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.movie_detail_container, fragment, DETAIL_FRAGMENT_TAG)
-                        .commit();
-            }
-        } else {
-
             String imageTransitionName = "";
             String LAST_FRAGMENT = "last_fragment";
             if (isMovie) {
                 DetailMovieActivityFragment fragment = new DetailMovieActivityFragment();
 
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !mTwoPane) {
                     current.setSharedElementReturnTransition(TransitionInflater.from(
                             this).inflateTransition(R.transition.change_image_trans));
                     current.setExitTransition(TransitionInflater.from(
@@ -288,24 +258,33 @@ public class BaseActivity extends AppCompatActivity
                 Bundle arguments = new Bundle();
                 arguments.putString(Intent.EXTRA_TEXT, id);
                 arguments.putString("TRANS_NAME", imageTransitionName);
+                arguments.putBoolean(Intent.ACTION_SCREEN_ON, mTwoPane);
                 BitmapDrawable sharedDrawable = (BitmapDrawable) sharedView.getDrawable();
-                if (sharedDrawable != null) {
+                if (sharedDrawable != null && !mTwoPane) {
                     arguments.putParcelable("POSTER_IMAGE", sharedDrawable.getBitmap());
                 } else {
                     arguments.putParcelable("POSTER_IMAGE", null);
                 }
                 fragment.setArguments(arguments);
                 FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.frag_container, fragment, DETAIL_FRAGMENT_TAG)
-                        .addToBackStack(LAST_FRAGMENT)
-                        .addSharedElement(sharedView, imageTransitionName)
-                        .commit();
+                if (mTwoPane) {
+                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.movie_detail_container, fragment, DETAIL_FRAGMENT_TAG)
+                            .addSharedElement(sharedView, imageTransitionName)
+                            .commit();
+                } else {
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.frag_container, fragment, DETAIL_FRAGMENT_TAG)
+                            .addToBackStack(LAST_FRAGMENT)
+                            .addSharedElement(sharedView, imageTransitionName)
+                            .commit();
+                }
             } else {
                 DetailTVActivityFragment fragment = new DetailTVActivityFragment();
 
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !mTwoPane) {
                     current.setSharedElementReturnTransition(TransitionInflater.from(
                             this).inflateTransition(R.transition.change_image_trans));
                     current.setExitTransition(TransitionInflater.from(
@@ -322,20 +301,28 @@ public class BaseActivity extends AppCompatActivity
                 Bundle arguments = new Bundle();
                 arguments.putString(Intent.EXTRA_TEXT, id);
                 arguments.putString("TRANS_NAME", imageTransitionName);
+                arguments.putBoolean(Intent.ACTION_SCREEN_ON, mTwoPane);
                 BitmapDrawable sharedDrawable = (BitmapDrawable) sharedView.getDrawable();
-                if (sharedDrawable != null) {
+                if (sharedDrawable != null && !mTwoPane) {
                     arguments.putParcelable("POSTER_IMAGE", sharedDrawable.getBitmap());
                 } else {
                     arguments.putParcelable("POSTER_IMAGE", null);
                 }
                 fragment.setArguments(arguments);
                 FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.frag_container, fragment, DETAIL_FRAGMENT_TAG)
-                        .addToBackStack(LAST_FRAGMENT)
-                        .addSharedElement(sharedView, imageTransitionName)
-                        .commit();
+                if (mTwoPane) {
+                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.movie_detail_container, fragment, DETAIL_FRAGMENT_TAG)
+                            .addSharedElement(sharedView, imageTransitionName)
+                            .commit();
+                } else {
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.frag_container, fragment, DETAIL_FRAGMENT_TAG)
+                            .addToBackStack(LAST_FRAGMENT)
+                            .addSharedElement(sharedView, imageTransitionName)
+                            .commit();
+                }
             }
         }
-    }
 }

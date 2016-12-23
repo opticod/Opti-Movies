@@ -73,7 +73,7 @@ public class SeasonDetailFragment extends Fragment implements LoaderManager.Load
     private int dark_muted_color;
     private int muted_color;
     private Fragment current;
-
+    private boolean mTwoPane;
 
     private void updateDetailList() {
         FetchSeasonDetail fetchTask = new FetchSeasonDetail(getActivity());
@@ -105,6 +105,7 @@ public class SeasonDetailFragment extends Fragment implements LoaderManager.Load
             season_number = arguments.getString(Intent.EXTRA_CC);
             season_Id = arguments.getString(Intent.EXTRA_BCC);
             transitionName = arguments.getString("TRANS_NAME");
+            mTwoPane = arguments.getBoolean(Intent.ACTION_SCREEN_ON);
         }
         rootView = inflater.inflate(R.layout.fragment_seasons, container, false);
 
@@ -164,7 +165,7 @@ public class SeasonDetailFragment extends Fragment implements LoaderManager.Load
 
                     EpisodeDetailFragment fragment = new EpisodeDetailFragment();
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !mTwoPane) {
                         current.setSharedElementReturnTransition(TransitionInflater.from(
                                 mActivity).inflateTransition(R.transition.change_image_trans));
                         current.setExitTransition(TransitionInflater.from(
@@ -179,12 +180,21 @@ public class SeasonDetailFragment extends Fragment implements LoaderManager.Load
                     Bundle arguments = new Bundle();
                     arguments.putString(Intent.EXTRA_CC, season_Id);
                     arguments.putString(Intent.EXTRA_BCC, cursor.getString(Constants.TV_EPISODE_COL_ID));
+                    arguments.putBoolean(Intent.ACTION_SCREEN_ON, mTwoPane);
+
                     fragment.setArguments(arguments);
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .add(R.id.frag_container, fragment, SEASON_DETAIL_FRAGMENT_TAG)
-                            .addToBackStack(null)
-                            .commit();
+                    if (mTwoPane) {
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.movie_detail_container, fragment, SEASON_DETAIL_FRAGMENT_TAG)
+                                .addToBackStack(null)
+                                .commit();
+                    } else {
+                        fragmentManager.beginTransaction()
+                                .add(R.id.frag_container, fragment, SEASON_DETAIL_FRAGMENT_TAG)
+                                .addToBackStack(null)
+                                .commit();
+                    }
                 }
             });
         }
@@ -324,9 +334,11 @@ public class SeasonDetailFragment extends Fragment implements LoaderManager.Load
                             .into(profile_img, new Callback.EmptyCallback() {
                                 @Override
                                 public void onSuccess() {
-                                    Bitmap bitmap = ((BitmapDrawable) profile_img.getDrawable()).getBitmap();
-                                    Palette palette = PaletteTransformation.getPalette(bitmap);
-                                    changeSystemToolbarColor(palette);
+                                    if (!mTwoPane) {
+                                        Bitmap bitmap = ((BitmapDrawable) profile_img.getDrawable()).getBitmap();
+                                        Palette palette = PaletteTransformation.getPalette(bitmap);
+                                        changeSystemToolbarColor(palette);
+                                    }
                                 }
                             });
 

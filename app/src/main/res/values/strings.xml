@@ -69,5 +69,6 @@
     <string name="by">by</string>
     <string name="anupam_das">ANUPAM DAS</string>
     <string name="opticod">(opticod)</string>
+    <string name="google_play_store_error">Google Play Store is not installed.</string>
 
 </resources>

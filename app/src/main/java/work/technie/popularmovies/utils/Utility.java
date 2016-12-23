@@ -40,9 +40,10 @@ public class Utility {
             String version = YouTubeIntents.getInstalledYouTubeVersionName(mActivity);
             if (version == null) {
                 Toast.makeText(mActivity, R.string.youtube_not_installed, Toast.LENGTH_SHORT).show();
+            } else {
+                Intent intent = YouTubeIntents.createPlayVideoIntentWithOptions(mActivity, source, true, false);
+                mActivity.startActivity(intent);
             }
-            Intent intent = YouTubeIntents.createPlayVideoIntentWithOptions(mActivity, source, true, false);
-            mActivity.startActivity(intent);
         }
     }
 }

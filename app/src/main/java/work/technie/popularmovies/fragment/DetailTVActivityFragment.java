@@ -125,6 +125,8 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
     private boolean reLoadPoster;
     private boolean isFlingerCastSet;
     private int dark_muted_color;
+    private boolean mTwoPane;
+
 
     private void updateDetailList() {
         FetchTVDetail fetchTask = new FetchTVDetail(getActivity());
@@ -137,7 +139,9 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null && savedInstanceState.containsKey(DARK_MUTED_COLOR)) {
             dark_muted_color = savedInstanceState.getInt(DARK_MUTED_COLOR);
-            changeColor(getActivity());
+            if (!mTwoPane) {
+                changeColor(getActivity());
+            }
         } else {
             dark_muted_color = 0;
         }
@@ -147,7 +151,9 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
     public void onResume() {
         super.onResume();
         if (dark_muted_color != 0) {
-            changeColor(getActivity());
+            if (!mTwoPane) {
+                changeColor(getActivity());
+            }
         }
     }
 
@@ -171,6 +177,7 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
             tv_id = arguments.getString(Intent.EXTRA_TEXT);
             transitionName = arguments.getString("TRANS_NAME");
             imageBitmap = arguments.getParcelable("POSTER_IMAGE");
+            mTwoPane = arguments.getBoolean(Intent.ACTION_SCREEN_ON);
         }
         rootView = inflater.inflate(R.layout.fragment_tv_detail, container, false);
 
@@ -277,7 +284,7 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
 
             if (similarTVListAdapter.getItemCount() == 0) {
                 recyclerViewSimilarTvs.setVisibility(View.GONE);
-                rootView.findViewById(R.id.empty_similar_movies).setVisibility(View.VISIBLE);
+                rootView.findViewById(R.id.empty_similar_tv).setVisibility(View.VISIBLE);
             } else {
                 recyclerViewSimilarTvs.setVisibility(View.VISIBLE);
                 rootView.findViewById(R.id.empty_similar_tv).setVisibility(View.GONE);
@@ -335,7 +342,7 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
 
                     DetailTVActivityFragment fragment = new DetailTVActivityFragment();
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !mTwoPane) {
                         current.setSharedElementReturnTransition(TransitionInflater.from(
                                 mActivity).inflateTransition(R.transition.change_image_trans));
                         current.setExitTransition(TransitionInflater.from(
@@ -350,11 +357,20 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
                     Bundle arguments = new Bundle();
                     arguments.putString(Intent.EXTRA_TEXT, cursor.getString(Constants.TV_SIMILAR_COL_TV_ID));
                     fragment.setArguments(arguments);
+                    arguments.putBoolean(Intent.ACTION_SCREEN_ON, mTwoPane);
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .add(R.id.frag_container, fragment, DETAIL_FRAGMENT_TAG)
-                            .addToBackStack(null)
-                            .commit();
+
+                    if (mTwoPane) {
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.movie_detail_container, fragment, DETAIL_FRAGMENT_TAG)
+                                .addToBackStack(null)
+                                .commit();
+                    } else {
+                        fragmentManager.beginTransaction()
+                                .add(R.id.frag_container, fragment, DETAIL_FRAGMENT_TAG)
+                                .addToBackStack(null)
+                                .commit();
+                    }
                 }
             });
 
@@ -414,7 +430,7 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
 
                     PeopleDetailFragment fragment = new PeopleDetailFragment();
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !mTwoPane) {
                         current.setSharedElementReturnTransition(TransitionInflater.from(
                                 mActivity).inflateTransition(R.transition.change_image_trans));
                         current.setExitTransition(TransitionInflater.from(
@@ -429,11 +445,20 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
                     Bundle arguments = new Bundle();
                     arguments.putString(Intent.EXTRA_TEXT, cursor.getString(Constants.TV_CAST_COL_ID));
                     fragment.setArguments(arguments);
+                    arguments.putBoolean(Intent.ACTION_SCREEN_ON, mTwoPane);
+
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
-                            .addToBackStack(null)
-                            .commit();
+                    if (mTwoPane) {
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.movie_detail_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                                .addToBackStack(null)
+                                .commit();
+                    } else {
+                        fragmentManager.beginTransaction()
+                                .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                                .addToBackStack(null)
+                                .commit();
+                    }
 
                 }
             });
@@ -447,7 +472,7 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
 
                     PeopleDetailFragment fragment = new PeopleDetailFragment();
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !mTwoPane) {
                         current.setSharedElementReturnTransition(TransitionInflater.from(
                                 mActivity).inflateTransition(R.transition.change_image_trans));
                         current.setExitTransition(TransitionInflater.from(
@@ -462,11 +487,20 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
                     Bundle arguments = new Bundle();
                     arguments.putString(Intent.EXTRA_TEXT, cursor.getString(Constants.CREATOR_COL_ID));
                     fragment.setArguments(arguments);
+                    arguments.putBoolean(Intent.ACTION_SCREEN_ON, mTwoPane);
+
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
-                            .addToBackStack(null)
-                            .commit();
+                    if (mTwoPane) {
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.movie_detail_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                                .addToBackStack(null)
+                                .commit();
+                    } else {
+                        fragmentManager.beginTransaction()
+                                .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                                .addToBackStack(null)
+                                .commit();
+                    }
 
                 }
             });
@@ -480,7 +514,7 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
 
                     SeasonDetailFragment fragment = new SeasonDetailFragment();
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !mTwoPane) {
                         current.setSharedElementReturnTransition(TransitionInflater.from(
                                 mActivity).inflateTransition(R.transition.change_image_trans));
                         current.setExitTransition(TransitionInflater.from(
@@ -496,12 +530,21 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
                     arguments.putString(Intent.EXTRA_TEXT, cursor.getString(Constants.TV_SEASON_COL_TV_ID));
                     arguments.putString(Intent.EXTRA_CC, cursor.getString(Constants.TV_SEASON_COL_SEASON_NUMBER));
                     arguments.putString(Intent.EXTRA_BCC, cursor.getString(Constants.TV_SEASON_COL_ID));
+                    arguments.putBoolean(Intent.ACTION_SCREEN_ON, mTwoPane);
+
                     fragment.setArguments(arguments);
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
-                            .addToBackStack(null)
-                            .commit();
+                    if (mTwoPane) {
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.movie_detail_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                                .addToBackStack(null)
+                                .commit();
+                    } else {
+                        fragmentManager.beginTransaction()
+                                .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                                .addToBackStack(null)
+                                .commit();
+                    }
 
                 }
             });
@@ -666,9 +709,11 @@ public class DetailTVActivityFragment extends Fragment implements LoaderCallback
                         .into(backdrop, new Callback.EmptyCallback() {
                             @Override
                             public void onSuccess() {
-                                Bitmap bitmap = ((BitmapDrawable) backdrop.getDrawable()).getBitmap();
-                                Palette palette = PaletteTransformation.getPalette(bitmap);
-                                changeSystemToolbarColor(palette);
+                                if (!mTwoPane) {
+                                    Bitmap bitmap = ((BitmapDrawable) backdrop.getDrawable()).getBitmap();
+                                    Palette palette = PaletteTransformation.getPalette(bitmap);
+                                    changeSystemToolbarColor(palette);
+                                }
                             }
                         });
 

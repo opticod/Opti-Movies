@@ -65,6 +65,7 @@ public class PeopleDetailFragment extends Fragment implements LoaderManager.Load
     private CollapsingToolbarLayout collapsingToolbar;
     private int dark_muted_color;
     private int muted_color;
+    private boolean mTwoPane;
 
 
     private void updateDetailList() {
@@ -95,6 +96,7 @@ public class PeopleDetailFragment extends Fragment implements LoaderManager.Load
         if (arguments != null) {
             people_Id = arguments.getString(Intent.EXTRA_TEXT);
             transitionName = arguments.getString("TRANS_NAME");
+            mTwoPane = arguments.getBoolean(Intent.ACTION_SCREEN_ON);
         }
         rootView = inflater.inflate(R.layout.fragment_people, container, false);
 
@@ -110,7 +112,7 @@ public class PeopleDetailFragment extends Fragment implements LoaderManager.Load
             rootView.findViewById(R.id.profile_img).setTransitionName(transitionName);
         }
 
-        if (dark_muted_color != 0 && muted_color != 0) {
+        if (dark_muted_color != 0 && muted_color != 0 && !mTwoPane) {
             changeColor(getActivity());
         }
 
@@ -259,9 +261,11 @@ public class PeopleDetailFragment extends Fragment implements LoaderManager.Load
                             .into(profile_img, new Callback.EmptyCallback() {
                                 @Override
                                 public void onSuccess() {
-                                    Bitmap bitmap = ((BitmapDrawable) profile_img.getDrawable()).getBitmap();
-                                    Palette palette = PaletteTransformation.getPalette(bitmap);
-                                    changeSystemToolbarColor(palette);
+                                    if (!mTwoPane) {
+                                        Bitmap bitmap = ((BitmapDrawable) profile_img.getDrawable()).getBitmap();
+                                        Palette palette = PaletteTransformation.getPalette(bitmap);
+                                        changeSystemToolbarColor(palette);
+                                    }
                                 }
                             });
 

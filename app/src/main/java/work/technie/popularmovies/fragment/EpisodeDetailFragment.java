@@ -71,6 +71,7 @@ public class EpisodeDetailFragment extends Fragment implements LoaderManager.Loa
     private int dark_muted_color;
     private int muted_color;
     private Fragment current;
+    private boolean mTwoPane;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,6 +95,8 @@ public class EpisodeDetailFragment extends Fragment implements LoaderManager.Loa
         if (arguments != null) {
             season_Id = arguments.getString(Intent.EXTRA_CC);
             episode_Id = arguments.getString(Intent.EXTRA_BCC);
+            mTwoPane = arguments.getBoolean(Intent.ACTION_SCREEN_ON);
+
             transitionName = arguments.getString("TRANS_NAME");
         }
         rootView = inflater.inflate(R.layout.fragment_episodes, container, false);
@@ -110,7 +113,7 @@ public class EpisodeDetailFragment extends Fragment implements LoaderManager.Loa
             rootView.findViewById(R.id.episode_img).setTransitionName(transitionName);
         }
 
-        if (dark_muted_color != 0 && muted_color != 0) {
+        if (dark_muted_color != 0 && muted_color != 0 && !mTwoPane) {
             changeColor(getActivity());
         }
         current = this;
@@ -176,7 +179,7 @@ public class EpisodeDetailFragment extends Fragment implements LoaderManager.Loa
 
                     PeopleDetailFragment fragment = new PeopleDetailFragment();
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !mTwoPane) {
                         current.setSharedElementReturnTransition(TransitionInflater.from(
                                 mActivity).inflateTransition(R.transition.change_image_trans));
                         current.setExitTransition(TransitionInflater.from(
@@ -191,11 +194,20 @@ public class EpisodeDetailFragment extends Fragment implements LoaderManager.Loa
                     Bundle arguments = new Bundle();
                     arguments.putString(Intent.EXTRA_TEXT, cursor.getString(Constants.TV_EPISODE_CREW_COL_ID));
                     fragment.setArguments(arguments);
+                    arguments.putBoolean(Intent.ACTION_SCREEN_ON, mTwoPane);
+
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
-                            .addToBackStack(null)
-                            .commit();
+                    if (mTwoPane) {
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.movie_detail_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                                .addToBackStack(null)
+                                .commit();
+                    } else {
+                        fragmentManager.beginTransaction()
+                                .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                                .addToBackStack(null)
+                                .commit();
+                    }
 
                 }
             });
@@ -209,7 +221,7 @@ public class EpisodeDetailFragment extends Fragment implements LoaderManager.Loa
 
                     PeopleDetailFragment fragment = new PeopleDetailFragment();
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !mTwoPane) {
                         current.setSharedElementReturnTransition(TransitionInflater.from(
                                 mActivity).inflateTransition(R.transition.change_image_trans));
                         current.setExitTransition(TransitionInflater.from(
@@ -224,11 +236,20 @@ public class EpisodeDetailFragment extends Fragment implements LoaderManager.Loa
                     Bundle arguments = new Bundle();
                     arguments.putString(Intent.EXTRA_TEXT, cursor.getString(Constants.TV_EPISODE_GUEST_COL_ID));
                     fragment.setArguments(arguments);
+                    arguments.putBoolean(Intent.ACTION_SCREEN_ON, mTwoPane);
+
                     FragmentManager fragmentManager = ((AppCompatActivity) mActivity).getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
-                            .addToBackStack(null)
-                            .commit();
+                    if (mTwoPane) {
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.movie_detail_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                                .addToBackStack(null)
+                                .commit();
+                    } else {
+                        fragmentManager.beginTransaction()
+                                .add(R.id.frag_container, fragment, PROFILE_DETAIL_FRAGMENT_TAG)
+                                .addToBackStack(null)
+                                .commit();
+                    }
 
                 }
             });
@@ -335,9 +356,11 @@ public class EpisodeDetailFragment extends Fragment implements LoaderManager.Loa
                             .into(profile_img, new Callback.EmptyCallback() {
                                 @Override
                                 public void onSuccess() {
-                                    Bitmap bitmap = ((BitmapDrawable) profile_img.getDrawable()).getBitmap();
-                                    Palette palette = PaletteTransformation.getPalette(bitmap);
-                                    changeSystemToolbarColor(palette);
+                                    if (!mTwoPane) {
+                                        Bitmap bitmap = ((BitmapDrawable) profile_img.getDrawable()).getBitmap();
+                                        Palette palette = PaletteTransformation.getPalette(bitmap);
+                                        changeSystemToolbarColor(palette);
+                                    }
                                 }
                             });
 
