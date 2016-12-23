@@ -16,6 +16,11 @@
         android:title="@string/pref_language" />
 
     <Preference
+        android:key="review"
+        android:summary="@string/pref_description_review"
+        android:title="Rate &amp; Review" />
+
+    <Preference
         android:key="delete"
         android:summary="@string/pref_description_delete"
         android:title="Delete Database" />

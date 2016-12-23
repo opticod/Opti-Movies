@@ -1,6 +1,8 @@
 package work.technie.popularmovies.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -133,6 +135,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         String KEY_REGION = "region";
         String KEY_LANGUAGE = "language";
         String KEY_DELETE = "delete";
+        String KEY_REVIEW = "review";
 
         final ListPreference listPreferenceRegion = (ListPreference) findPreference(KEY_REGION);
         final ListPreference listPreferenceLanguage = (ListPreference) findPreference(KEY_LANGUAGE);
@@ -198,6 +201,15 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
                 Toast.makeText(getApplicationContext(), "Successfully Deleted", Toast.LENGTH_SHORT).show();
 
+                return false;
+            }
+        });
+
+        Preference reviewPreference = findPreference(KEY_REVIEW);
+        reviewPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName())));
                 return false;
             }
         });

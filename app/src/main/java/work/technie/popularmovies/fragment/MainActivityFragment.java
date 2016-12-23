@@ -54,6 +54,7 @@ import work.technie.popularmovies.activity.BaseActivity;
 import work.technie.popularmovies.adapter.TVMovieArrayAdapter;
 import work.technie.popularmovies.data.MovieContract;
 import work.technie.popularmovies.model.MovieInfo;
+import work.technie.popularmovies.utils.AppRate;
 import work.technie.popularmovies.utils.AsyncResponse;
 import work.technie.popularmovies.utils.Utility;
 
@@ -123,6 +124,8 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final Activity mActivity = getActivity();
+        AppRate.initializeRater(mActivity);
+
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.main_swipe_refresh);
 
