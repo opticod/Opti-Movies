@@ -37,8 +37,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import work.technie.popularmovies.Constants;
-import work.technie.popularmovies.FetchPeopleDetail;
 import work.technie.popularmovies.R;
+import work.technie.popularmovies.asyntask.FetchPeopleDetail;
 import work.technie.popularmovies.data.MovieContract;
 import work.technie.popularmovies.utils.AsyncResponse;
 import work.technie.popularmovies.utils.PaletteTransformation;

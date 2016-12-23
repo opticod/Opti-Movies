@@ -21,8 +21,6 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-import com.facebook.stetho.Stetho;
-
 import work.technie.popularmovies.R;
 import work.technie.popularmovies.fragment.DetailMovieActivityFragment;
 import work.technie.popularmovies.fragment.DetailTVActivityFragment;
@@ -58,7 +56,6 @@ public class BaseActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
-        Stetho.initializeWithDefaults(this);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);

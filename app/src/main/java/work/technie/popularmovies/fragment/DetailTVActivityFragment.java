@@ -62,7 +62,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import work.technie.popularmovies.Constants;
-import work.technie.popularmovies.FetchTVDetail;
 import work.technie.popularmovies.R;
 import work.technie.popularmovies.adapter.CastMovieAdapter;
 import work.technie.popularmovies.adapter.CreatorMovieAdapter;
@@ -70,6 +69,7 @@ import work.technie.popularmovies.adapter.GenreMovieAdapter;
 import work.technie.popularmovies.adapter.SeasonsTVArrayAdapter;
 import work.technie.popularmovies.adapter.SimilarMovieArrayAdapter;
 import work.technie.popularmovies.adapter.VideoMovieAdapter;
+import work.technie.popularmovies.asyntask.FetchTVDetail;
 import work.technie.popularmovies.data.MovieContract;
 import work.technie.popularmovies.utils.AsyncResponse;
 import work.technie.popularmovies.utils.PaletteTransformation;

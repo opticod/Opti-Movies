@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package work.technie.popularmovies;
+package work.technie.popularmovies.asyntask;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -33,6 +33,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Vector;
 
+import work.technie.popularmovies.BuildConfig;
 import work.technie.popularmovies.data.MovieContract.TVEpisode;
 import work.technie.popularmovies.data.MovieContract.TVEpisodeCrew;
 import work.technie.popularmovies.data.MovieContract.TVEpisodeGuestStar;

@@ -48,10 +48,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import work.technie.popularmovies.Constants;
-import work.technie.popularmovies.FetchTVMovieTask;
 import work.technie.popularmovies.R;
 import work.technie.popularmovies.activity.BaseActivity;
 import work.technie.popularmovies.adapter.TVMovieArrayAdapter;
+import work.technie.popularmovies.asyntask.FetchTVMovieTask;
 import work.technie.popularmovies.data.MovieContract;
 import work.technie.popularmovies.model.MovieInfo;
 import work.technie.popularmovies.utils.AppRate;
@@ -110,9 +110,12 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     public void onResume() {
         super.onResume();
 
+        loadArguments();
         if (!isMovieBookmark && !isTVBookmark) {
             reLoadData();
             getLoaderManager().restartLoader(MOVIE_LOADER, null, this);
+        } else if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setEnabled(false);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -120,31 +123,10 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        final Activity mActivity = getActivity();
-        AppRate.initializeRater(mActivity);
-
-        rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.main_swipe_refresh);
-
-        Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
-
-        DrawerLayout drawer = (DrawerLayout) mActivity.findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                mActivity, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        // The ArrayAdapter will take data from a source and
-        // use it to populate the ListView it's attached to.
-
-
+    public void loadArguments() {
         Bundle arguments = getArguments();
         if (arguments != null) {
             MODE = arguments.getString(Intent.EXTRA_TEXT);
-            toolbar.setTitle(MODE);
         }
 
         if (MODE != null) {
@@ -174,10 +156,35 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                     break;
             }
         }
+    }
 
-        if (!isMovieBookmark && !isTVBookmark) {
-            reLoadData();
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        final Activity mActivity = getActivity();
+        AppRate.initializeRater(mActivity);
+
+        rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.main_swipe_refresh);
+
+        Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) mActivity.findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                mActivity, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        // The ArrayAdapter will take data from a source and
+        // use it to populate the ListView it's attached to.
+
+        loadArguments();
+
+        if ((isTVBookmark || isMovieBookmark) && swipeRefreshLayout != null) {
+            swipeRefreshLayout.setEnabled(false);
         }
+
+        toolbar.setTitle(MODE);
 
         listAdapter =
                 new TVMovieArrayAdapter(

@@ -41,9 +41,9 @@ import java.util.Date;
 import java.util.Locale;
 
 import work.technie.popularmovies.Constants;
-import work.technie.popularmovies.FetchSeasonDetail;
 import work.technie.popularmovies.R;
 import work.technie.popularmovies.adapter.EpisodesTVArrayAdapter;
+import work.technie.popularmovies.asyntask.FetchSeasonDetail;
 import work.technie.popularmovies.data.MovieContract;
 import work.technie.popularmovies.utils.AsyncResponse;
 import work.technie.popularmovies.utils.PaletteTransformation;

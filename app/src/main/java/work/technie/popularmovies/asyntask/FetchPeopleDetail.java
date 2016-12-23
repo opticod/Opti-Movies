@@ -1,4 +1,4 @@
-package work.technie.popularmovies;
+package work.technie.popularmovies.asyntask;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import work.technie.popularmovies.BuildConfig;
 import work.technie.popularmovies.data.MovieContract.People;
 import work.technie.popularmovies.utils.AsyncResponse;
 
